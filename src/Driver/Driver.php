@@ -30,4 +30,10 @@ abstract class Driver
      * @return array
      */
     abstract public function request($url, $args, $method, Options $options);
+
+    /**
+     * @param array $urls
+     * @return array
+     */
+    abstract public function multiRequest(array $urls);
 }

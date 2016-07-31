@@ -78,6 +78,31 @@ class HttpClient
     }
 
     /**
+     * @param array $urls
+     * @param array $options
+     * @return array
+     */
+    public function multiRequest(array $urls, array $options = array())
+    {
+        $options = new Options(array_merge($this->_options->getArrayCopy(), $options));
+        $client  = $this->_getClient($options);
+
+        $httpResults = $client->multiRequest($urls, $options);
+
+        $results = array();
+        foreach ($httpResults as $resKey => $resultRow) {
+            list($code, $headers, $body) = $resultRow;
+
+            $results[$resKey] = new Response();
+            $results[$resKey]->setCode($code);
+            $results[$resKey]->setHeaders($headers);
+            $results[$resKey]->setBody($body);
+        }
+
+        return $results;
+    }
+
+    /**
      * @param Options $options
      * @return Driver
      * @throws Exception
