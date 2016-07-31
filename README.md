@@ -28,7 +28,7 @@ $client = new HttpClient([
     'headers'         => array(     // You custom headers
         'X-Custom-Header' => 42,
     ),
-    'driver'          => 'Auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
+    'driver'          => 'auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
     'timeout'         => 10,        // Wait in seconds
     'verify'          => false,     // check cert for SSL
     'exceptions'      => false,     // Show exceptions for 
