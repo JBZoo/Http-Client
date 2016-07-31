@@ -1,0 +1,42 @@
+{
+    "name"              : "jbzoo/http-client",
+    "type"              : "library",
+    "description"       : "Simple HTTP-client, wrapper for Guzzle and rmccue/requests",
+    "license"           : "MIT",
+    "keywords"          : [
+        "http", "https", "client", "guzzle", "guzzlehttp", "curl", "request", "requests", "rmccue"
+    ],
+    "minimum-stability" : "stable",
+    "authors"           : [
+        {
+            "name"  : "SmetDenis",
+            "email" : "denis@jbzoo.com",
+            "role"  : "lead"
+        }
+    ],
+    "require"           : {
+        "php"               : ">=5.3",
+        "jbzoo/data"        : "^1.4",
+        "guzzlehttp/guzzle" : "^5.3|^6.2",
+        "rmccue/requests"   : "^1.6"
+    },
+    "require-dev"       : {
+        "jbzoo/phpunit" : "1.x-dev"
+    },
+    "autoload"          : {
+        "psr-4" : {
+            "JBZoo\\HttpClient\\" : "src"
+        }
+    },
+    "extra"             : {
+        "branch-alias" : {
+            "dev-master" : "1.x-dev"
+        }
+    },
+    "config"            : {
+        "optimize-autoloader" : true
+    },
+    "support"           : {
+        "issues" : "https://github.com/JBZoo/Http-Client/issues"
+    }
+}
