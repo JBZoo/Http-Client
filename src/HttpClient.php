@@ -64,7 +64,7 @@ class HttpClient
 
         } catch (\Exception $e) {
 
-            if ($options->isExceptions() || $e->getCode() <= 99) {
+            if ($options->isExceptions()) {
                 throw new Exception($e->getMessage(), $e->getCode(), $e);
 
             } else {
