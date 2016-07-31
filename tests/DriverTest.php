@@ -76,24 +76,27 @@ abstract class DriverTest extends PHPUnit
 
     public function testPOSTPayload()
     {
-        if ($this->_isPHP53()) {
-            skip();
-        }
-
         $uniq    = uniqid();
         $payload = json_encode(array('key' => $uniq));
-        $url     = 'http://mockbin.org/request?key=value';
 
-        $result = $this->_getClient()->request($url, $payload, 'post', array(
-            'headers' => array(//'Content-Type'
-            )
-        ));
+        if ($this->_isPHP53()) {
+            $url    = 'http://httpbin.org/post?key=value';
+            $result = $this->_getClient()->request($url, $payload, 'post');
+            $body   = $result->getJSON();
 
-        $body = $result->getJSON();
+            isSame('value', $body->find('args.key'));
+            isSame('', $body->find('form.' . $payload));
+            isSame($url, $body->find('url'));
 
-        isSame($payload, $body->find('postData.text'));
-        isSame('value', $body->find('queryString.key'));
-        isSame('POST', $body->find('method'));
+        } else {
+            $url    = 'http://mockbin.org/request?key=value';
+            $result = $this->_getClient()->request($url, $payload, 'post');
+            $body   = $result->getJSON();
+
+            isSame($payload, $body->find('postData.text'));
+            isSame('value', $body->find('queryString.key'));
+            isSame('POST', $body->find('method'));
+        }
     }
 
     public function testAllMethods()
