@@ -315,19 +315,13 @@ abstract class DriverTest extends PHPUnit
     public function testMultiRequest()
     {
         $results = $this->_getClient()->multiRequest(array(
-            'request_1' => array(
-                'http://mockbin.org/request',
-                array(
-                    'args' => array('key' => 'value')
-                ),
-            ),
-            'request_2' => array(
-                'http://mockbin.org/request',
-                array(
-                    'method' => 'post',
-                    'args'   => array('key' => 'value')
-                )
-            )
+            'request_1' => array('http://mockbin.org/request', array(
+                'args' => array('key' => 'value')
+            )),
+            'request_2' => array('http://mockbin.org/request', array(
+                'method' => 'post',
+                'args'   => array('key' => 'value')
+            ))
         ));
 
         /** @var Response $body1 */
