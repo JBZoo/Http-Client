@@ -1,8 +1,8 @@
-# JBZoo Http-Client  [![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg?branch=master)](https://travis-ci.org/JBZoo/Http-Client)      [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Http-Client/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)
+# JBZoo Http Client  [![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg?branch=master)](https://travis-ci.org/JBZoo/Http-Client)      [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Http-Client/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)
 
-#### Simple HTTP-client. Usefull wrapper for Guzzle and rmccue/requests
+#### Useful wrapper for Guzzle and rmccue/requests
 
-[![License](https://poser.pugx.org/JBZoo/Http-Client/license)](https://packagist.org/packages/JBZoo/Http-Client)   [![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v/stable)](https://packagist.org/packages/JBZoo/Http-Client) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JBZoo/Http-Client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Http-Client/?branch=master)
+[![License](https://poser.pugx.org/JBZoo/Http-Client/license)](https://packagist.org/packages/JBZoo/Http-Client)   [![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v/stable)](https://packagist.org/packages/JBZoo/Http-Client) [![Build Status](https://scrutinizer-ci.com/g/JBZoo/Http-Client/badges/build.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Http-Client/build-status/master)
 
 ### Install
 ```sh
@@ -31,7 +31,7 @@ $client = new HttpClient([
     'driver'          => 'auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
     'timeout'         => 10,        // Wait in seconds
     'verify'          => false,     // check cert for SSL
-    'exceptions'      => false,     // Show exceptions for 
+    'exceptions'      => false,     // Show exceptions for statuses 4xx and 5xx
     'allow_redirects' => true,      // Show real 3xx-header or result?
     'max_redirects'   => 10,        // How much to reirect?
     'user_agent'      => 'JBZoo/Http-Client v1.x-dev', // Custom UA

@@ -64,7 +64,7 @@ class HttpClient
 
         } catch (\Exception $e) {
 
-            if ($options->get('exceptions', Options::DEFAULT_EXCEPTIONS, 'bool')) {
+            if ($options->isExceptions()) {
                 throw new Exception($e->getMessage(), $e->getCode(), $e);
 
             } else {

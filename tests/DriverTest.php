@@ -16,18 +16,32 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
+use JBZoo\Utils\Env;
 use JBZoo\Utils\Url;
 
 /**
- * Class HttpClientTest
+ * Class DriverTest
  * @package JBZoo\PHPUnit
  */
-class HttpClientTest extends PHPUnit
+abstract class DriverTest extends PHPUnit
 {
     /**
      * @var string
      */
-    protected $_defaultDriver = 'Auto'; // For quick toggle tests (Auto|Guzzle5|Guzzle6|Rmccue)
+    protected $_driver = 'Undefined'; // For quick toggle tests (Auto|Guzzle5|Guzzle6|Rmccue)
+
+    /**
+     * @var array
+     */
+    protected $_methods = array('GET', 'POST', 'PATCH', 'PUT', 'DELETE');
+
+    /**
+     * @return bool
+     */
+    protected function _isPHP53()
+    {
+        return version_compare(Env::getVersion(), '5.4', '<');
+    }
 
     /**
      * @param array $options
@@ -35,7 +49,7 @@ class HttpClientTest extends PHPUnit
      */
     protected function _getClient($options = array())
     {
-        $options['driver'] = $this->_defaultDriver;
+        $options['driver'] = $this->_driver;
 
         return new HttpClient($options);
     }
@@ -49,6 +63,72 @@ class HttpClientTest extends PHPUnit
         isSame('42', $result->find('headers.x-custom-header'));
         isSame('application/json; charset=utf-8', $result->find('headers.content-type'));
         isSame('{"great-answer": "42"}', $result->body);
+    }
+
+    public function testBinaryData()
+    {
+        $result = $this->_getClient()->request('https://httpbin.org/image/png');
+
+        isSame(200, $result->getCode());
+        isSame('image/png', $result->getHeader('Content-Type'));
+        isContain('PNG', $result->getBody());
+    }
+
+    public function testPOSTPayload()
+    {
+        $uniq    = uniqid();
+        $payload = json_encode(array('key' => $uniq));
+
+        if ($this->_isPHP53()) {
+            $url    = 'http://httpbin.org/post?key=value';
+            $result = $this->_getClient()->request($url, $payload, 'post');
+            $body   = $result->getJSON();
+
+            isSame('value', $body->find('args.key'));
+            isSame('', $body->find('form.' . $payload));
+            isSame($url, $body->find('url'));
+
+        } else {
+            $url    = 'http://mockbin.org/request?key=value';
+            $result = $this->_getClient()->request($url, $payload, 'post');
+            $body   = $result->getJSON();
+
+            isSame($payload, $body->find('postData.text'));
+            isSame('value', $body->find('queryString.key'));
+            isSame('POST', $body->find('method'));
+        }
+    }
+
+    public function testAllMethods()
+    {
+        foreach ($this->_methods as $method) {
+
+            $uniq    = uniqid();
+            $url     = 'http://mockbin.org/request?method=' . $method . '&qwerty=remove_me';
+            $args    = array('qwerty' => $uniq);
+            $message = 'Method: ' . $method;
+
+            $result = $this->_getClient()->request($url, $args, $method);
+            $body   = $result->getJSON();
+
+            if (!$result->getCode()) {
+                var_dump($result->getBody());
+            }
+
+            isSame(200, $result->getCode(), $message);
+            isContain('application/json', $result->getHeader('Content-Type'), $message);
+            isSame($method, $body->find('queryString.method'), $message);
+            isSame($method, $body->find('method'), $message);
+
+            if ($method === 'GET') {
+                isContain(Url::addArg($args, $url), $body->find('url'), $message);
+                isSame($uniq, $body->find('queryString.qwerty'), $message);
+
+            } else {
+                isContain($url, $body->find('url'), $message);
+                isSame($uniq, $body->find('postData.params.qwerty'), $message);
+            }
+        }
     }
 
     public function testAuth()
@@ -67,7 +147,7 @@ class HttpClientTest extends PHPUnit
     {
         $uniq = uniqid();
 
-        $siteUrl = 'http://httpbin.org/get';
+        $siteUrl = 'http://httpbin.org/get?key=value';
         $args    = array('qwerty' => $uniq);
         $url     = Url::addArg($args, $siteUrl);
         $result  = $this->_getClient()->request($url, $args);
@@ -78,24 +158,33 @@ class HttpClientTest extends PHPUnit
         $body = $result->getJSON();
         isSame(Url::addArg($args, $url), $body->find('url'));
         isSame($uniq, $body->find('args.qwerty'));
+        isSame('value', $body->find('args.key'));
+    }
 
-        isSame(Options::DEFAULT_USER_AGENT, $body->find('headers.User-Agent'));
+    public function testUserAgent()
+    {
+        $result = $this->_getClient()->request('https://httpbin.org/user-agent');
+        $body   = $result->getJSON();
+
+        isSame(200, $result->code);
+        isContain('application/json', $result->getHeader('Content-Type'));
+        isContain(Options::DEFAULT_USER_AGENT . ' (', $body->find('user-agent'));
     }
 
     public function testPost()
     {
         $uniq = uniqid();
-        $url  = 'http://httpbin.org/post';
+        $url  = 'http://httpbin.org/post?key=value';
         $args = array('qwerty' => $uniq);
 
         $result = $this->_getClient()->request($url, $args, 'post');
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         isContain('application/json', $result->find('headers.content-type'));
-
-        $body = $result->get('body', null, 'data');
-        isSame($body->find('url'), $url);
-        isSame($body->find('form.qwerty'), $uniq);
+        isSame($url, $body->find('url'));
+        isSame($uniq, $body->find('form.qwerty'));
+        isSame('value', $body->find('args.key'));
     }
 
     public function testStatus404()
@@ -118,7 +207,6 @@ class HttpClientTest extends PHPUnit
     public function testStatus500()
     {
         $result = $this->_getClient()->request('http://httpbin.org/status/500');
-
         isSame(500, $result->code);
     }
 
@@ -152,10 +240,9 @@ class HttpClientTest extends PHPUnit
             'headers' => array('X-Custom-Header' => $uniq)
         ))->request($url);
 
+        $body = $result->getJSON();
+
         isSame(200, $result->code);
-
-        $body = $result->get('body', null, 'data');
-
         isSame($uniq, $body->find('headers.X-Custom-Header'));
     }
 
@@ -164,11 +251,9 @@ class HttpClientTest extends PHPUnit
         $url = 'http://httpbin.org/gzip';
 
         $result = $this->_getClient()->request($url);
+        $body   = $result->get('body', null, 'data');
 
         isSame(200, $result->code);
-
-        $body = $result->get('body', null, 'data');
-
         isSame(true, $body->find('gzipped'));
     }
 
@@ -176,10 +261,9 @@ class HttpClientTest extends PHPUnit
     {
         $url    = 'http://httpbin.org/absolute-redirect/9';
         $result = $this->_getClient()->request($url);
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
-
-        $body = $result->get('body', null, 'data');
         isSame('http://httpbin.org/get', $body->get('url'));
     }
 
@@ -203,17 +287,16 @@ class HttpClientTest extends PHPUnit
 
         isSame(0, $result->getCode());
         isSame(array(), $result->getHeaders());
-        isTrue($result->getBody());
+        isTrue(is_string($result->getBody()));
     }
 
     public function testDelay()
     {
         $url    = 'http://httpbin.org/delay/5';
         $result = $this->_getClient()->request($url);
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
-
-        $body = $result->get('body', null, 'data');
         isSame($url, $body->get('url'));
     }
 

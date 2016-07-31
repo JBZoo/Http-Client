@@ -31,10 +31,20 @@ class Guzzle6 extends Guzzle
         $client = new Client();
 
         $headers               = $options->getHeaders();
-        $headers['User-Agent'] = $options->getUserAgent();
+        $headers['User-Agent'] = $options->getUserAgent('Guzzle6');
+
+        $body = $formParams = null;
+        if ('GET' !== $method) {
+            if (is_array($args)) {
+                $formParams = $args;
+            } else {
+                $body = $args;
+            }
+        }
 
         $httpResult = $client->request($method, $url, array(
-            'form_params'     => 'GET' !== $method ? (array)$args : null,
+            'form_params'     => $formParams,
+            'body'            => $body,
             'headers'         => $headers,
             'connect_timeout' => $options->getTimeout(),
             'timeout'         => $options->getTimeout(),

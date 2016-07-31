@@ -12,17 +12,15 @@
  * @link      https://github.com/JBZoo/Http-Client
  */
 
+namespace JBZoo\PHPUnit;
 
-if (!defined('ROOT_PATH')) { // for PHPUnit process isolation
-    define('ROOT_PATH', realpath('.'));
+/**
+ * Class RmccueDriverTest
+ * @package JBZoo\PHPUnit
+ */
+class RmccueDriverTest extends DriverTest
+{
+    protected $_driver = 'Rmccue';
+
+    protected $_methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
 }
-
-// main autoload
-if ($autoload = realpath('./vendor/autoload.php')) {
-    require_once $autoload;
-} else {
-    echo 'Please execute "composer update" !' . PHP_EOL;
-    exit(1);
-}
-
-require_once './tests/DriverTest.php';

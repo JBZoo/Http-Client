@@ -14,7 +14,6 @@
 
 namespace JBZoo\HttpClient\Driver;
 
-use JBZoo\HttpClient\Exception;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Env;
 
@@ -37,9 +36,6 @@ class Auto extends Driver
 
             } elseif (method_exists('\GuzzleHttp\Client', 'createRequest')) {
                 $client = new Guzzle5($options);
-
-            } else {
-                throw new Exception('JBZoo/HttpClient: Supported Guzzle version driver not found!');
             }
         }
 
