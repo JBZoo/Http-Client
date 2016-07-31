@@ -51,6 +51,15 @@ class HttpClientTest extends PHPUnit
         isSame('{"great-answer": "42"}', $result->body);
     }
 
+    public function testBinaryData()
+    {
+        $result = $this->_getClient()->request('https://httpbin.org/image/png');
+
+        isSame(200, $result->getCode());
+        isSame('image/png', $result->getHeader('Content-Type'));
+        isContain('PNG', $result->getBody());
+    }
+
     public function testPOSTPayload()
     {
         $payload = json_encode(array('key' => 'value'));
@@ -117,8 +126,17 @@ class HttpClientTest extends PHPUnit
         $body = $result->getJSON();
         isSame(Url::addArg($args, $url), $body->find('url'));
         isSame($uniq, $body->find('args.qwerty'));
+    }
 
-        isSame(Options::DEFAULT_USER_AGENT, $body->find('headers.User-Agent'));
+    public function testUserAgent()
+    {
+        $result = $this->_getClient()->request('https://httpbin.org/user-agent');
+
+        isSame(200, $result->code);
+        isContain('application/json', $result->getHeader('Content-Type'));
+
+        $body = $result->getJSON();
+        isSame(Options::DEFAULT_USER_AGENT, $body->find('user-agent'));
     }
 
     public function testPost()
