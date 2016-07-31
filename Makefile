@@ -39,6 +39,11 @@ test:
 	@php ./vendor/phpunit/phpunit/phpunit --configuration ./phpunit.xml.dist
 	@echo ""
 
+test-x:
+	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Run unit-tests with XDebug \033[0m"
+	@php-x ./vendor/phpunit/phpunit/phpunit --configuration ./phpunit.xml.dist --verbose
+	@echo ""
+
 phpmd:
 	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Check PHPmd \033[0m"
 	@php ./vendor/phpmd/phpmd/src/bin/phpmd ./src text  \
