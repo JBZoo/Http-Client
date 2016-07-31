@@ -63,6 +63,33 @@ class HttpClientTest extends PHPUnit
         isSame($payload, $body->find('postData.text'));
     }
 
+    public function testAllMethods()
+    {
+        $methods = array('get', 'post', 'post', 'put', 'delete');
+
+        foreach ($methods as $method) {
+
+            $uniq    = uniqid();
+            $url     = 'http://httpbin.org/' . $method;
+            $args    = array('qwerty' => $uniq);
+            $message = 'Method: ' . $method;
+
+            $result = $this->_getClient()->request($url, $args, $method);
+            $body   = $result->getJSON();
+
+            isSame(200, $result->getCode(), $message);
+            isContain('application/json', $result->getHeader('Content-Type'), $message);
+
+            if ($method === 'get') {
+                isSame(Url::addArg($args, $url), $body->find('url'), $message);
+                isSame($uniq, $body->find('args.qwerty'), $message);
+            } else {
+                isSame($url, $body->find('url'), $message);
+                isSame($uniq, $body->find('form.qwerty'), $message);
+            }
+        }
+    }
+
     public function testAuth()
     {
         $url    = 'http://httpbin.org/basic-auth/user/passwd';
