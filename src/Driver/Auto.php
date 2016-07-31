@@ -41,8 +41,9 @@ class Auto extends Driver
             } else {
                 throw new Exception('JBZoo/HttpClient: Supported Guzzle version driver not found!');
             }
+        }
 
-        } else {
+        if (!isset($client)) { // Fallback driver
             $client = new Rmccue($options);
         }
 
