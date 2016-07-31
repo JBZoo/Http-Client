@@ -2,7 +2,7 @@
 
 #### Useful wrapper for Guzzle and rmccue/requests
 
-[![License](https://poser.pugx.org/JBZoo/Http-Client/license)](https://packagist.org/packages/JBZoo/Http-Client)   [![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v/stable)](https://packagist.org/packages/JBZoo/Http-Client) [![Build Status](https://scrutinizer-ci.com/g/JBZoo/Http-Client/badges/build.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Http-Client/build-status/master)
+[![License](https://poser.pugx.org/JBZoo/Http-Client/license)](https://packagist.org/packages/JBZoo/Http-Client)   [![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v/stable)](https://packagist.org/packages/JBZoo/Http-Client) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JBZoo/Http-Client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Http-Client/?branch=master)
 
 ### Install
 ```sh
