@@ -14,7 +14,6 @@
 
 namespace JBZoo\HttpClient\Driver;
 
-use JBZoo\HttpClient\Exception;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Env;
 
