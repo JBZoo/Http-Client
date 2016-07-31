@@ -14,8 +14,11 @@
 
 namespace JBZoo\HttpClient\Driver;
 
+use GuzzleHttp\Message\Response;
 use GuzzleHttp\Client;
+use GuzzleHttp\Pool;
 use JBZoo\HttpClient\Options;
+use JBZoo\Utils\Url;
 
 /**
  * Class Guzzle5
@@ -30,18 +33,7 @@ class Guzzle5 extends Guzzle
     {
         $client = new Client();
 
-        $headers               = $options->getHeaders();
-        $headers['User-Agent'] = $options->getUserAgent('Guzzle5');
-
-        $httpRequest = $client->createRequest($method, $url, array(
-            'body'            => 'GET' !== $method ? $args : null,
-            'headers'         => $headers,
-            'exceptions'      => $options->isExceptions(),
-            'timeout'         => $options->getTimeout(),
-            'verify'          => $options->isVerify(),
-            'auth'            => $options->getAuth(),
-            'allow_redirects' => $this->_getAllowRedirects($options)
-        ));
+        $httpRequest = $client->createRequest($method, $url, $this->_getClientOptions($options, $method, $args));
 
         $httpResult = $client->send($httpRequest);
 
@@ -49,6 +41,70 @@ class Guzzle5 extends Guzzle
             $httpResult->getStatusCode(),
             $httpResult->getHeaders(),
             $httpResult->getBody()->getContents()
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function multiRequest(array $urls)
+    {
+        $client = new Client();
+
+        $requests = array();
+        foreach ($urls as $urlName => $urlData) {
+            $urlOptions = new Options($urlData[1]);
+
+            $method = $urlOptions->get('method', 'GET', 'up');
+            $args   = $urlOptions->get('args');
+            $url    = 'GET' === $method ? Url::addArg((array)$args, $urlData[0]) : $urlData[0];
+
+            $requests[$urlName] = $client->createRequest(
+                $method,
+                $url,
+                $this->_getClientOptions($urlOptions, $method, $args)
+            );
+        }
+
+        $httpResults = Pool::batch($client, $requests);
+
+        /** @var string $resName */
+        /** @var Response $httpResult */
+        $result = array();
+
+        $index = 0;
+        $keys  = array_keys($urls);
+        foreach ($keys as $resName) {
+            $httpResult       = $httpResults->offsetGet($index++);
+            $result[$resName] = array(
+                $httpResult->getStatusCode(),
+                $httpResult->getHeaders(),
+                $httpResult->getBody()->getContents()
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Options      $options
+     * @param string       $method
+     * @param string|array $args
+     * @return array
+     */
+    protected function _getClientOptions(Options $options, $method, $args)
+    {
+        $headers               = $options->getHeaders();
+        $headers['User-Agent'] = $options->getUserAgent('Guzzle5');
+
+        return array(
+            'body'            => 'GET' !== $method ? $args : null,
+            'headers'         => $headers,
+            'exceptions'      => $options->isExceptions(),
+            'timeout'         => $options->getTimeout(),
+            'verify'          => $options->isVerify(),
+            'auth'            => $options->getAuth(),
+            'allow_redirects' => $this->_getAllowRedirects($options)
         );
     }
 }

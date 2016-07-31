@@ -28,21 +28,37 @@ class Auto extends Driver
      */
     public function request($url, $args, $method, Options $options)
     {
+        return $this->_getClient()->request($url, $args, $method, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function multiRequest(array $urls)
+    {
+        return $this->_getClient()->multiRequest($urls);
+    }
+
+    /**
+     * @return Driver
+     */
+    protected function _getClient()
+    {
         if (class_exists('\GuzzleHttp\Client')
             && (version_compare(Env::getVersion(), '5.3', '>') || Env::isHHVM())
         ) {
             if (method_exists('\GuzzleHttp\Client', 'request')) {
-                $client = new Guzzle6($options);
+                $client = new Guzzle6();
 
             } elseif (method_exists('\GuzzleHttp\Client', 'createRequest')) {
-                $client = new Guzzle5($options);
+                $client = new Guzzle5();
             }
         }
 
         if (!isset($client)) { // Fallback driver
-            $client = new Rmccue($options);
+            $client = new Rmccue();
         }
 
-        return $client->request($url, $args, $method, $options);
+        return $client;
     }
 }
