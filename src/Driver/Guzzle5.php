@@ -34,7 +34,7 @@ class Guzzle5 extends Guzzle
         $headers['User-Agent'] = $options->getUserAgent();
 
         $httpRequest = $client->createRequest($method, $url, array(
-            'body'            => 'GET' !== $method ? (array)$args : null,
+            'body'            => 'GET' !== $method ? $args : null,
             'headers'         => $headers,
             'exceptions'      => $options->isExceptions(),
             'timeout'         => $options->getTimeout(),

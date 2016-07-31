@@ -51,6 +51,18 @@ class HttpClientTest extends PHPUnit
         isSame('{"great-answer": "42"}', $result->body);
     }
 
+    public function testPOSTPayload()
+    {
+        $payload = json_encode(array('key' => 'value'));
+
+        $result = $this->_getClient()->request('http://mockbin.org/request', $payload, 'post', array(
+            'verify' => false, // For travis ... =(
+        ));
+
+        $body = $result->getJSON();
+        isSame($payload, $body->find('postData.text'));
+    }
+
     public function testAuth()
     {
         $url    = 'http://httpbin.org/basic-auth/user/passwd';
