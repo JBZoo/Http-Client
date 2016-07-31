@@ -22,5 +22,5 @@ class RmccueDriverTest extends DriverTest
 {
     protected $_driver = 'Rmccue';
 
-    protected $_methods = array('get', 'post', 'post', 'put'); // TODO add 'delete'
+    protected $_methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
 }

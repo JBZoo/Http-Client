@@ -35,7 +35,7 @@ class Options extends JSON
      * @var array
      */
     protected $_default = array(
-        'auth'            => null,
+        'auth'            => false,
         'headers'         => array(),
         'driver'          => self::DEFAULT_DRIVER,
         'timeout'         => self::DEFAULT_TIMEOUT,
@@ -64,7 +64,7 @@ class Options extends JSON
      */
     public function getAuth()
     {
-        return $this->get('auth', array('', ''));
+        return $this->get('auth', false);
     }
 
     /**

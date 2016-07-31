@@ -33,7 +33,7 @@ abstract class DriverTest extends PHPUnit
     /**
      * @var array
      */
-    protected $_methods = array('get', 'post', 'post', 'put', 'delete');
+    protected $_methods = array('GET', 'POST', 'PATCH', 'PUT', 'DELETE');
 
     /**
      * @return bool
@@ -101,21 +101,29 @@ abstract class DriverTest extends PHPUnit
         foreach ($this->_methods as $method) {
 
             $uniq    = uniqid();
-            $url     = 'http://httpbin.org/' . $method;
+            $url     = 'http://mockbin.org/request?method=' . $method . '&qwerty=remove_me';
             $args    = array('qwerty' => $uniq);
             $message = 'Method: ' . $method;
 
             $result = $this->_getClient()->request($url, $args, $method);
             $body   = $result->getJSON();
 
+            if (!$result->getCode()) {
+                var_dump($result->getBody());
+            }
+
             isSame(200, $result->getCode(), $message);
             isContain('application/json', $result->getHeader('Content-Type'), $message);
+            isSame($method, $body->find('queryString.method'), $message);
+            isSame($method, $body->find('method'), $message);
 
-            if ($method === 'get') {
-                isSame($uniq, $body->find('args.qwerty'), $message);
+            if ($method === 'GET') {
+                isContain(Url::addArg($args, $url), $body->find('url'), $message);
+                isSame($uniq, $body->find('queryString.qwerty'), $message);
+
             } else {
                 isContain($url, $body->find('url'), $message);
-                isSame($uniq, $body->find('form.qwerty'), $message);
+                isSame($uniq, $body->find('postData.params.qwerty'), $message);
             }
         }
     }

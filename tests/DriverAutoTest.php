@@ -27,7 +27,7 @@ class DriverAutoTest extends DriverTest
         parent::setUp();
 
         if ($this->_isPHP53()) {
-            $this->_methods = array('get', 'post', 'post', 'put');
+            $this->_methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
         }
     }
 }
