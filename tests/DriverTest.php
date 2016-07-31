@@ -69,13 +69,14 @@ abstract class DriverTest extends PHPUnit
     {
         $uniq    = uniqid();
         $payload = json_encode(array('key' => $uniq));
+        $url     = 'http://httpbin.org/post?key=value';
 
-        $result = $this->_getClient()->request('http://mockbin.org/request', $payload, 'post', array(
-            'verify' => false, // For travis ... =(
-        ));
+        $result = $this->_getClient()->request($url, $payload, 'post');
 
         $body = $result->getJSON();
-        isSame($payload, $body->find('postData.text'));
+
+        isSame('', $body->find('form.' . $payload));
+        isSame('value', $body->find('args.key'));
     }
 
     public function testAllMethods()
