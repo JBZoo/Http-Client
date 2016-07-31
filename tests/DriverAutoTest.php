@@ -14,8 +14,6 @@
 
 namespace JBZoo\PHPUnit;
 
-use JBZoo\Utils\Env;
-
 /**
  * Class DriverAutoTest
  * @package JBZoo\PHPUnit
@@ -28,7 +26,7 @@ class DriverAutoTest extends DriverTest
     {
         parent::setUp();
 
-        if (version_compare(Env::getVersion(), '5.4', '<')) {
+        if ($this->_isPHP53()) {
             $this->_methods = array('get', 'post', 'post', 'put');
         }
     }

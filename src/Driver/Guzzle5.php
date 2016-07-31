@@ -31,7 +31,7 @@ class Guzzle5 extends Guzzle
         $client = new Client();
 
         $headers               = $options->getHeaders();
-        $headers['User-Agent'] = $options->getUserAgent();
+        $headers['User-Agent'] = $options->getUserAgent('Guzzle5');
 
         $httpRequest = $client->createRequest($method, $url, array(
             'body'            => 'GET' !== $method ? $args : null,

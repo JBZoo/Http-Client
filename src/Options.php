@@ -35,7 +35,7 @@ class Options extends JSON
      * @var array
      */
     protected $_default = array(
-        'auth'            => array('', ''),
+        'auth'            => null,
         'headers'         => array(),
         'driver'          => self::DEFAULT_DRIVER,
         'timeout'         => self::DEFAULT_TIMEOUT,
@@ -126,8 +126,8 @@ class Options extends JSON
     /**
      * @return string
      */
-    public function getUserAgent()
+    public function getUserAgent($suffix)
     {
-        return $this->get('user_agent', self::DEFAULT_USER_AGENT);
+        return $this->get('user_agent', self::DEFAULT_USER_AGENT) . " ({$suffix})";
     }
 }

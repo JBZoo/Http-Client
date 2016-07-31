@@ -31,7 +31,7 @@ class Guzzle6 extends Guzzle
         $client = new Client();
 
         $headers               = $options->getHeaders();
-        $headers['User-Agent'] = $options->getUserAgent();
+        $headers['User-Agent'] = $options->getUserAgent('Guzzle6');
 
         $body = $formParams = null;
         if ('GET' !== $method) {

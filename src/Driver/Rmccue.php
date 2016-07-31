@@ -36,7 +36,7 @@ class Rmccue extends Driver
             'verify'           => $options->isVerify(),
             'follow_redirects' => $options->isAllowRedirects(),
             'redirects'        => $options->getMaxRedirects(),
-            'useragent'        => $options->getUserAgent(),
+            'useragent'        => $options->getUserAgent('Rmccue'),
             'auth'             => $options->getAuth(),
         ));
 

@@ -16,6 +16,7 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
+use JBZoo\Utils\Env;
 use JBZoo\Utils\Url;
 
 /**
@@ -33,6 +34,14 @@ abstract class DriverTest extends PHPUnit
      * @var array
      */
     protected $_methods = array('get', 'post', 'post', 'put', 'delete');
+
+    /**
+     * @return bool
+     */
+    protected function _isPHP53()
+    {
+        return version_compare(Env::getVersion(), '5.4', '<');
+    }
 
     /**
      * @param array $options
@@ -67,16 +76,24 @@ abstract class DriverTest extends PHPUnit
 
     public function testPOSTPayload()
     {
+        if ($this->_isPHP53()) {
+            skip();
+        }
+
         $uniq    = uniqid();
         $payload = json_encode(array('key' => $uniq));
-        $url     = 'http://httpbin.org/post?key=value';
+        $url     = 'http://mockbin.org/request?key=value';
 
-        $result = $this->_getClient()->request($url, $payload, 'post');
+        $result = $this->_getClient()->request($url, $payload, 'post', array(
+            'headers' => array(//'Content-Type'
+            )
+        ));
 
         $body = $result->getJSON();
 
-        isSame('', $body->find('form.' . $payload));
-        isSame('value', $body->find('args.key'));
+        isSame($payload, $body->find('postData.text'));
+        isSame('value', $body->find('queryString.key'));
+        isSame('POST', $body->find('method'));
     }
 
     public function testAllMethods()
@@ -140,7 +157,7 @@ abstract class DriverTest extends PHPUnit
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('Content-Type'));
-        isSame(Options::DEFAULT_USER_AGENT, $body->find('user-agent'));
+        isContain(Options::DEFAULT_USER_AGENT . ' (', $body->find('user-agent'));
     }
 
     public function testPost()
