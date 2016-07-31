@@ -33,8 +33,18 @@ class Guzzle6 extends Guzzle
         $headers               = $options->getHeaders();
         $headers['User-Agent'] = $options->getUserAgent();
 
+        $body = $formParams = null;
+        if ('GET' !== $method) {
+            if (is_array($args)) {
+                $formParams = $args;
+            } else {
+                $body = $args;
+            }
+        }
+
         $httpResult = $client->request($method, $url, array(
-            'form_params'     => 'GET' !== $method ? (array)$args : null,
+            'form_params'     => $formParams,
+            'body'            => $body,
             'headers'         => $headers,
             'connect_timeout' => $options->getTimeout(),
             'timeout'         => $options->getTimeout(),

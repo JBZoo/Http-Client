@@ -51,6 +51,54 @@ class HttpClientTest extends PHPUnit
         isSame('{"great-answer": "42"}', $result->body);
     }
 
+    public function testBinaryData()
+    {
+        $result = $this->_getClient()->request('https://httpbin.org/image/png');
+
+        isSame(200, $result->getCode());
+        isSame('image/png', $result->getHeader('Content-Type'));
+        isContain('PNG', $result->getBody());
+    }
+
+    public function testPOSTPayload()
+    {
+        $payload = json_encode(array('key' => 'value'));
+
+        $result = $this->_getClient()->request('http://mockbin.org/request', $payload, 'post', array(
+            'verify' => false, // For travis ... =(
+        ));
+
+        $body = $result->getJSON();
+        isSame($payload, $body->find('postData.text'));
+    }
+
+    public function testAllMethods()
+    {
+        $methods = array('get', 'post', 'post', 'put', 'delete');
+
+        foreach ($methods as $method) {
+
+            $uniq    = uniqid();
+            $url     = 'http://httpbin.org/' . $method;
+            $args    = array('qwerty' => $uniq);
+            $message = 'Method: ' . $method;
+
+            $result = $this->_getClient()->request($url, $args, $method);
+            $body   = $result->getJSON();
+
+            isSame(200, $result->getCode(), $message);
+            isContain('application/json', $result->getHeader('Content-Type'), $message);
+
+            if ($method === 'get') {
+                isSame(Url::addArg($args, $url), $body->find('url'), $message);
+                isSame($uniq, $body->find('args.qwerty'), $message);
+            } else {
+                isSame($url, $body->find('url'), $message);
+                isSame($uniq, $body->find('form.qwerty'), $message);
+            }
+        }
+    }
+
     public function testAuth()
     {
         $url    = 'http://httpbin.org/basic-auth/user/passwd';
@@ -78,8 +126,17 @@ class HttpClientTest extends PHPUnit
         $body = $result->getJSON();
         isSame(Url::addArg($args, $url), $body->find('url'));
         isSame($uniq, $body->find('args.qwerty'));
+    }
 
-        isSame(Options::DEFAULT_USER_AGENT, $body->find('headers.User-Agent'));
+    public function testUserAgent()
+    {
+        $result = $this->_getClient()->request('https://httpbin.org/user-agent');
+
+        isSame(200, $result->code);
+        isContain('application/json', $result->getHeader('Content-Type'));
+
+        $body = $result->getJSON();
+        isSame(Options::DEFAULT_USER_AGENT, $body->find('user-agent'));
     }
 
     public function testPost()
