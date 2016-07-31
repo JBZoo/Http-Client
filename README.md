@@ -4,7 +4,14 @@
 
 [![License](https://poser.pugx.org/JBZoo/Http-Client/license)](https://packagist.org/packages/JBZoo/Http-Client)   [![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v/stable)](https://packagist.org/packages/JBZoo/Http-Client) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JBZoo/Http-Client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Http-Client/?branch=master)
 
-### Example
+### Install
+```sh
+composer require jbzoo/http-client
+```
+
+### Documentation
+
+"Talk is cheap. Show me the code!" (Linus Torvalds)
 
 ```php
 require_once './vendor/autoload.php'; // composer autoload.php
@@ -12,14 +19,53 @@ require_once './vendor/autoload.php'; // composer autoload.php
 // Get needed classes
 use JBZoo\HttpClient\HttpClient;
 
-// Just use it!
+// Configure client (no options required!)
 $client = new HttpClient([
-
+    'auth'            => array(     // Simple HTTP auth
+        'http-user-name',
+        'http-password'
+    ),
+    'headers'         => array(     // You custom headers
+        'X-Custom-Header' => 42,
+    ),
+    'driver'          => 'Auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
+    'timeout'         => 10,        // Wait in seconds
+    'verify'          => false,     // check cert for SSL
+    'exceptions'      => false,     // Show exceptions for 
+    'allow_redirects' => true,      // Show real 3xx-header or result?
+    'max_redirects'   => 10,        // How much to reirect?
+    'user_agent'      => 'JBZoo/Http-Client v1.x-dev', // Custom UA
 ]);
-$client->request('http://my.site.com/', [
+
+// Just request
+$response = $client->request('http://my.site.com/', [
     'key-1' => 'value-1'
     'key-2' => 'value-2'
 ], 'post');
+
+
+// Get code
+$code = $response->getCode();
+$code = $response->code;
+$code = $response['code'];
+
+// Get headers
+$headers = $response->getHeaders();
+$headers = $response->headers;
+$headers = $response['headers'];
+$header  = $response->getHeader('X-Custom-Header-Response');
+$header  = $response->find('headers.x-custom-header-response', 'default-value', 'trim');
+
+// Get body
+$body = $response->getBody();
+$body = $response->body;
+$body = $response->['body'];
+
+// Get body like JSON (see JBZoo/Data lib)
+$json = $response->getJSON();
+$value = $json->get('key', 'default', 'trim');
+$value = $json->find('key.nested', 'default', 'trim');
+
 ```
 
 ## Unit tests and check code style
@@ -27,7 +73,6 @@ $client->request('http://my.site.com/', [
 make
 make test-all
 ```
-
 
 ### License
 
