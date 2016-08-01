@@ -33,7 +33,7 @@ $httpClient = new HttpClient([
     ],
     'driver'          => 'auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
     'timeout'         => 10,        // Wait in seconds
-    'verify'          => false,     // check cert for SSL
+    'verify'          => false,     // Check cert for SSL
     'exceptions'      => false,     // Show exceptions for statuses 4xx and 5xx
     'allow_redirects' => true,      // Show real 3xx-header or result?
     'max_redirects'   => 10,        // How much to reirect?
@@ -76,8 +76,8 @@ $value = $json->find('key.nested', 'default', 'trim');
 ```php
 $httpClient = new HttpClient();
 
-$results = $httpClient->multiRequest([
-    'request_0' => ['http://mockbin.org/request'],
+$results = $httpClient->multiRequest(array(
+    'request_0' => 'http://mockbin.org/request',
     'request_1' => ['http://mockbin.org/request', [
         'args' => ['key' => 'value']
     ]],

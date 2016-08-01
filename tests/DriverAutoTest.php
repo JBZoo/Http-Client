@@ -26,6 +26,8 @@ class DriverAutoTest extends DriverTest
     {
         parent::setUp();
 
+        sleep(1); // for mockservers
+
         if ($this->_isPHP53()) {
             $this->_methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
         }
