@@ -24,16 +24,16 @@ use JBZoo\HttpClient\HttpClient;
 
 // Configure client (no options required!)
 $httpClient = new HttpClient([
-    'auth'            => array(     // Simple HTTP auth
+    'auth'            => [          // Simple HTTP auth
         'http-user-name',
         'http-password'
-    ),
-    'headers'         => array(     // You custom headers
+    ],
+    'headers'         => [          // You custom headers
         'X-Custom-Header' => 42,
-    ),
+    ],
     'driver'          => 'auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
     'timeout'         => 10,        // Wait in seconds
-    'verify'          => false,     // check cert for SSL
+    'verify'          => false,     // Check cert for SSL
     'exceptions'      => false,     // Show exceptions for statuses 4xx and 5xx
     'allow_redirects' => true,      // Show real 3xx-header or result?
     'max_redirects'   => 10,        // How much to reirect?
@@ -74,28 +74,27 @@ $value = $json->find('key.nested', 'default', 'trim');
 
 ## Asynchronous requests (multi curl, in parallel)
 ```php
-
 $httpClient = new HttpClient();
 
 $results = $httpClient->multiRequest(array(
     'request_0' => 'http://mockbin.org/request',
-    'request_1' => array('http://mockbin.org/request', array(
-        'args' => array('key' => 'value')
-    )),
-    'request_2' => array('http://mockbin.org/request', array(
+    'request_1' => ['http://mockbin.org/request', [
+        'args' => ['key' => 'value']
+    ]],
+    'request_2' => ['http://mockbin.org/request', [
         'method' => 'post',
-        'args'   => array('key' => 'value')
-        'headers'         => array(     // You custom headers
+        'args'   => ['key' => 'value']
+        'headers'         => [
             'X-Custom-Header' => 42,
-        ),
+        ],
         'timeout'         => 10,
         'verify'          => false,
         'exceptions'      => false,
         'allow_redirects' => true,
         'max_redirects'   => 10, 
         'user_agent'      => 'JBZoo/Http-Client v1.x-dev'
-    ))
-));
+    ]]
+]);
 
 $results['request_0']->getBody(); 
 $results['request_1']->getBody(); 
