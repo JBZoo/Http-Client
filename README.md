@@ -74,7 +74,6 @@ $value = $json->find('key.nested', 'default', 'trim');
 
 ## Asynchronous requests (multi curl, in parallel)
 ```php
-
 $httpClient = new HttpClient();
 
 $results = $httpClient->multiRequest([
