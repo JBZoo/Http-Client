@@ -79,7 +79,7 @@ $httpClient = new HttpClient();
 $results = $httpClient->multiRequest([
     'request_0' => ['http://mockbin.org/request'],
     'request_1' => ['http://mockbin.org/request', [
-        'args' => array('key' => 'value')
+        'args' => ['key' => 'value']
     ]],
     'request_2' => ['http://mockbin.org/request', [
         'method' => 'post',
