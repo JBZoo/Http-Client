@@ -60,6 +60,11 @@ class Rmccue extends Driver
     {
         $requests = array();
         foreach ($urls as $urlName => $urlData) {
+
+            if (is_string($urlData)) {
+                $urlData = array($urlData, array());
+            }
+
             $urlOptions = new Options($urlData[1]);
 
             $method = $urlOptions->get('method', 'GET', 'up');

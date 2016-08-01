@@ -78,7 +78,7 @@ $value = $json->find('key.nested', 'default', 'trim');
 $httpClient = new HttpClient();
 
 $results = $httpClient->multiRequest(array(
-    'request_0' => array('http://mockbin.org/request'),
+    'request_0' => 'http://mockbin.org/request',
     'request_1' => array('http://mockbin.org/request', array(
         'args' => array('key' => 'value')
     )),

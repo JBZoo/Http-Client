@@ -315,6 +315,7 @@ abstract class DriverTest extends PHPUnit
     public function testMultiRequest()
     {
         $results = $this->_getClient()->multiRequest(array(
+            'request_0' => 'http://mockbin.org/request?qwerty=123456',
             'request_1' => array('http://mockbin.org/request', array(
                 'args' => array('key' => 'value')
             )),
@@ -323,6 +324,11 @@ abstract class DriverTest extends PHPUnit
                 'args'   => array('key' => 'value')
             ))
         ));
+
+        /** @var Response $body1 */
+        $body1 = $results['request_0']->getJSON();
+        isSame('GET', $body1->find('method'));
+        isSame('123456', $body1->find('queryString.qwerty'));
 
         /** @var Response $body1 */
         $body1 = $results['request_1']->getJSON();
