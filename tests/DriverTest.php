@@ -16,6 +16,7 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
+use JBZoo\HttpClient\Response;
 use JBZoo\Utils\Env;
 use JBZoo\Utils\Url;
 
@@ -309,5 +310,28 @@ abstract class DriverTest extends PHPUnit
 
         isSame(200, $result->code);
         isContain('google', $result->body);
+    }
+
+    public function testMultiRequest()
+    {
+        $results = $this->_getClient()->multiRequest(array(
+            'request_1' => array('http://mockbin.org/request', array(
+                'args' => array('key' => 'value')
+            )),
+            'request_2' => array('http://mockbin.org/request', array(
+                'method' => 'post',
+                'args'   => array('key' => 'value')
+            ))
+        ));
+
+        /** @var Response $body1 */
+        $body1 = $results['request_1']->getJSON();
+        isSame('GET', $body1->find('method'));
+        isSame('value', $body1->find('queryString.key'));
+
+        /** @var Response $body2 */
+        $body2 = $results['request_2']->getJSON();
+        isSame('POST', $body2->find('method'));
+        isSame('value', $body2->find('postData.params.key'));
     }
 }

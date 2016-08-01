@@ -15,7 +15,10 @@
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
+use GuzzleHttp\Psr7\Response;
 use JBZoo\HttpClient\Options;
+use JBZoo\Utils\Url;
 
 /**
  * Class Guzzle6
@@ -30,6 +33,61 @@ class Guzzle6 extends Guzzle
     {
         $client = new Client();
 
+        $httpResult = $client->request($method, $url, $this->_getClientOptions($options, $method, $args));
+
+        return array(
+            $httpResult->getStatusCode(),
+            $httpResult->getHeaders(),
+            $httpResult->getBody()->getContents()
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function multiRequest(array $urls)
+    {
+        $client = new Client();
+
+        $promises = array();
+        foreach ($urls as $urlName => $urlData) {
+            $urlOptions = new Options($urlData[1]);
+
+            $method = $urlOptions->get('method', 'GET', 'up');
+            $args   = $urlOptions->get('args');
+            $url    = 'GET' === $method ? Url::addArg((array)$args, $urlData[0]) : $urlData[0];
+
+            $promises[$urlName] = $client->requestAsync(
+                $method,
+                $url,
+                $this->_getClientOptions($urlOptions, $method, $args)
+            );
+        }
+
+        $httpResults = Promise\unwrap($promises);
+
+        /** @var string $resName */
+        /** @var Response $httpResult */
+        $result = array();
+        foreach ($httpResults as $resName => $httpResult) {
+            $result[$resName] = array(
+                $httpResult->getStatusCode(),
+                $httpResult->getHeaders(),
+                $httpResult->getBody()->getContents()
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Options      $options
+     * @param string       $method
+     * @param string|array $args
+     * @return array
+     */
+    protected function _getClientOptions(Options $options, $method, $args)
+    {
         $headers               = $options->getHeaders();
         $headers['User-Agent'] = $options->getUserAgent('Guzzle6');
 
@@ -42,7 +100,7 @@ class Guzzle6 extends Guzzle
             }
         }
 
-        $httpResult = $client->request($method, $url, array(
+        return array(
             'form_params'     => $formParams,
             'body'            => $body,
             'headers'         => $headers,
@@ -52,12 +110,6 @@ class Guzzle6 extends Guzzle
             'exceptions'      => $options->isExceptions(),
             'auth'            => $options->getAuth(),
             'allow_redirects' => $this->_getAllowRedirects($options)
-        ));
-
-        return array(
-            $httpResult->getStatusCode(),
-            $httpResult->getHeaders(),
-            $httpResult->getBody()->getContents()
         );
     }
 }
