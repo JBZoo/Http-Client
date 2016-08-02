@@ -28,7 +28,7 @@ $httpClient = new HttpClient([
         'http-user-name',
         'http-password'
     ],
-    'headers'         => [          // You custom headers
+    'headers'         => [          // Your custom headers
         'X-Custom-Header' => 42,
     ],
     'driver'          => 'auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
