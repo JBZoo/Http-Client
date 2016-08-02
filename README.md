@@ -42,7 +42,7 @@ $httpClient = new HttpClient([
 
 // Just request
 $response = $httpClient->request('http://my.site.com/', [
-    'key-1' => 'value-1'
+    'key-1' => 'value-1',
     'key-2' => 'value-2'
 ], 'post');
 ```
