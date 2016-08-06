@@ -23,7 +23,7 @@
         "guzzlehttp/guzzle" : "For PHP 5.4+ please use versions ^5.3|^6.2"
     },
     "require-dev"       : {
-        "jbzoo/phpunit" : "1.x-dev"
+        "jbzoo/phpunit" : "^1.10"
     },
     "autoload"          : {
         "psr-4" : {
