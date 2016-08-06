@@ -17,7 +17,7 @@ namespace JBZoo\PHPUnit;
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Response;
-use JBZoo\Utils\Env;
+use JBZoo\Utils\Sys;
 use JBZoo\Utils\Url;
 
 /**
@@ -41,7 +41,7 @@ abstract class DriverTest extends PHPUnit
      */
     protected function _isPHP53()
     {
-        return version_compare(Env::getVersion(), '5.4', '<');
+        return Sys::isPHP53();
     }
 
     /**

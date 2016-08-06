@@ -25,6 +25,11 @@ use JBZoo\Utils\Filter;
 class Response extends Data
 {
     /**
+     * @var null|JSON
+     */
+    protected $_jsonData = null;
+
+    /**
      * Response constructor.
      * @param array|string $data
      */
@@ -33,6 +38,7 @@ class Response extends Data
         $data['code']    = 0;
         $data['headers'] = array();
         $data['body']    = '';
+        $this->_jsonData = null;
 
         parent::__construct($data);
     }
@@ -58,6 +64,8 @@ class Response extends Data
      */
     public function setBody($body)
     {
+        $this->_jsonData = null; // Force update getJSON() result
+
         $this['body'] = (string)$body;
     }
 
@@ -74,7 +82,12 @@ class Response extends Data
      */
     public function getJSON()
     {
-        return new JSON($this->getBody());
+        if (null === $this->_jsonData) {
+            $this->_jsonData = new JSON($this->get('body'));
+            $this->_jsonData->setFlags(\ArrayObject::ARRAY_AS_PROPS); // For JBZoo/Data less 1.4.2
+        }
+
+        return $this->_jsonData;
     }
 
     /**
