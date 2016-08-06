@@ -28,7 +28,7 @@ $httpClient = new HttpClient([
         'http-user-name',
         'http-password'
     ],
-    'headers'         => [          // You custom headers
+    'headers'         => [          // Your custom headers
         'X-Custom-Header' => 42,
     ],
     'driver'          => 'auto',    // (Auto|Guzzle5|Guzzle6|Rmccue)
@@ -41,12 +41,14 @@ $httpClient = new HttpClient([
 ]);
 
 // Just request
-$response = $client->request('http://my.site.com/', [
-    'key-1' => 'value-1'
+$response = $httpClient->request('http://my.site.com/', [
+    'key-1' => 'value-1',
     'key-2' => 'value-2'
 ], 'post');
+```
 
-
+Methods of response
+```php
 // Get code
 $code = $response->getCode();
 $code = $response->code;
@@ -68,22 +70,23 @@ $body = $response->['body'];
 $json = $response->getJSON();
 $value = $json->get('key', 'default', 'trim');
 $value = $json->find('key.nested', 'default', 'trim');
-
 ```
 
 
-## Asynchronous requests (multi curl, in parallel)
+## Asynchronous requests (curl_multi_* for parallels)
 ```php
 $httpClient = new HttpClient();
 
 $results = $httpClient->multiRequest(array(
     'request_0' => 'http://mockbin.org/request',
+    
     'request_1' => ['http://mockbin.org/request', [
         'args' => ['key' => 'value']
     ]],
+    
     'request_2' => ['http://mockbin.org/request', [
         'method' => 'post',
-        'args'   => ['key' => 'value']
+        'args'   => ['key' => 'value'],
         'headers'         => [
             'X-Custom-Header' => 42,
         ],
