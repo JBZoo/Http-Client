@@ -70,6 +70,9 @@ $body = $response->['body'];
 $json = $response->getJSON();
 $value = $json->get('key', 'default', 'trim');
 $value = $json->find('key.nested', 'default', 'trim');
+
+// Get body like JSON from XML (see JBZoo/Data lib)
+$json = $response->parseXml();
 ```
 
 
