@@ -91,6 +91,15 @@ class Response extends Data
     }
 
     /**
+     * @return JSON from XML
+     */
+    public function parseXml()
+    {
+        $bodyxml = simplexml_load_string($this->get('body', null));
+        return new JSON($bodyxml);
+    }
+
+    /**
      * @param array $headers
      * @return array
      */
