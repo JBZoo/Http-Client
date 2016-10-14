@@ -89,7 +89,17 @@ class Response extends Data
 
         return $this->_jsonData;
     }
-
+     
+    /**
+     * @return JSON from XML
+     */  
+    
+    public function getXMLtoJSON()
+    {
+		$bodyxml = simplexml_load_string($this->get('body', null));
+        return new JSON($bodyxml);
+    }
+    
     /**
      * @param array $headers
      * @return array
