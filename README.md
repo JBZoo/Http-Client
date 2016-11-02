@@ -64,7 +64,7 @@ $header  = $response->find('headers.x-custom-header-response', 'default-value', 
 // Get body
 $body = $response->getBody();
 $body = $response->body;
-$body = $response->['body'];
+$body = $response['body'];
 
 // Get body like JSON (see JBZoo/Data lib)
 $json = $response->getJSON();
