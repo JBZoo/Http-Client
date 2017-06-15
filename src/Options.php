@@ -52,10 +52,7 @@ class Options extends JSON
      */
     public function __construct($data = array())
     {
-        foreach ($this->_default as $key => $value) {
-            $this[$key] = $value;
-        }
-
+        $data = array_merge($this->_default, $data);
         parent::__construct($data);
     }
 
