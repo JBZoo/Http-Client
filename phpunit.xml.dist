@@ -8,7 +8,7 @@
 
     @package    Http-Client
     @license    MIT
-    @copyright  Copyright (C) JBZoo.com,  All rights reserved.
+    @copyright  Copyright (C) JBZoo.com, All rights reserved.
     @link       https://github.com/JBZoo/Http-Client
 -->
 <phpunit bootstrap="tests/autoload.php"
@@ -18,8 +18,8 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          syntaxCheck="true"
-         stopOnError="false"
-         stopOnFailure="false"
+         stopOnError="true"
+         stopOnFailure="true"
          stopOnIncomplete="false"
          stopOnSkipped="false"
          stopOnRisky="false"

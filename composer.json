@@ -17,14 +17,15 @@
     "require"           : {
         "php"             : ">=5.3",
         "jbzoo/data"      : "^1.4",
-        "rmccue/requests" : "^1.6"
+        "rmccue/requests" : "^1.6",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "suggest"           : {
         "guzzlehttp/guzzle" : "For PHP 5.4+ please use versions ^5.3|^6.2"
     },
     "require-dev"       : {
-        "jbzoo/phpunit" : "^1.10",
-        "jbzoo/utils"   : "^1.7.8"
+        "jbzoo/phpunit" : "^2.0",
+        "jbzoo/utils"   : "^1.7.8|^2.0"
     },
     "autoload"          : {
         "psr-4" : {

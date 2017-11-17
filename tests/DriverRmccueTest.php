@@ -6,10 +6,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   Http-Client
- * @license   MIT
- * @copyright Copyright (C) JBZoo.com,  All rights reserved.
- * @link      https://github.com/JBZoo/Http-Client
+ * @package    Http-Client
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Http-Client
  */
 
 namespace JBZoo\PHPUnit;
@@ -20,7 +20,7 @@ namespace JBZoo\PHPUnit;
  */
 class RmccueDriverTest extends DriverTest
 {
-    protected $_driver = 'Rmccue';
+    protected $driver = 'Rmccue';
 
-    protected $_methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
+    protected $methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
 }

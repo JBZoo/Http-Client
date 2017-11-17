@@ -6,10 +6,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   Http-Client
- * @license   MIT
- * @copyright Copyright (C) JBZoo.com,  All rights reserved.
- * @link      https://github.com/JBZoo/Http-Client
+ * @package    Http-Client
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Http-Client
  */
 
 namespace JBZoo\PHPUnit;
@@ -20,7 +20,7 @@ namespace JBZoo\PHPUnit;
  */
 class DriverAutoTest extends DriverTest
 {
-    protected $_driver = 'Auto';
+    protected $driver = 'Auto';
 
     protected function setUp()
     {
@@ -28,8 +28,8 @@ class DriverAutoTest extends DriverTest
 
         sleep(1); // for mockservers
 
-        if ($this->_isPHP53()) {
-            $this->_methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
+        if ($this->isPHP53()) {
+            $this->methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
         }
     }
 }

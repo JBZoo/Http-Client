@@ -6,19 +6,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   Http-Client
- * @license   MIT
- * @copyright Copyright (C) JBZoo.com,  All rights reserved.
- * @link      https://github.com/JBZoo/Http-Client
+ * @package    Http-Client
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Http-Client
  */
 
 namespace JBZoo\HttpClient\Driver;
 
 use JBZoo\HttpClient\Options;
-use JBZoo\Utils\Env;
+use JBZoo\Utils\Sys;
 
 /**
  * Class Auto
+ *
  * @package JBZoo\HttpClient
  */
 class Auto extends Driver
@@ -45,7 +46,7 @@ class Auto extends Driver
     protected function _getClient()
     {
         if (class_exists('\GuzzleHttp\Client')
-            && (version_compare(Env::getVersion(), '5.3', '>') || Env::isHHVM())
+            && (version_compare(Sys::getVersion(), '5.3', '>') || Sys::isHHVM())
         ) {
             if (method_exists('\GuzzleHttp\Client', 'request')) {
                 $client = new Guzzle6();
