@@ -15,12 +15,12 @@
         }
     ],
     "require"           : {
-        "php"             : ">=5.3",
+        "php"             : ">=7.0",
         "jbzoo/data"      : "^1.4",
         "rmccue/requests" : "^1.6"
     },
     "suggest"           : {
-        "guzzlehttp/guzzle" : "For PHP 5.4+ please use versions ^5.3|^6.2"
+        "guzzlehttp/guzzle" : "For PHP 5.4+ please use versions ^5.3|^6.3"
     },
     "require-dev"       : {
         "jbzoo/phpunit" : "^2.0",
