@@ -16,7 +16,7 @@
     ],
     "require"           : {
         "php"             : ">=7.0",
-        "jbzoo/data"      : "^1.4",
+        "jbzoo/data"      : "^1.4|^2.0",
         "rmccue/requests" : "^1.6"
     },
     "suggest"           : {
