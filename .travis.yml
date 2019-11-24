@@ -15,7 +15,6 @@ matrix:
       env: XDEBUG_OFF="yes"
 
 before_script:
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "5.3" ]; then composer require guzzlehttp/guzzle --no-update;  fi;'
   - if [[ $XDEBUG_OFF = yes ]]; then phpenv config-rm xdebug.ini; fi;
 
 script:

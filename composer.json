@@ -1,7 +1,7 @@
 {
     "name"              : "jbzoo/http-client",
     "type"              : "library",
-    "description"       : "Simple HTTP-client, wrapper for Guzzle and rmccue/requests",
+    "description"       : "Simple HTTP-client, wrapper around Guzzle and rmccue/requests",
     "license"           : "MIT",
     "keywords"          : [
         "http", "https", "client", "guzzle", "guzzlehttp", "curl", "request", "requests", "rmccue"
@@ -15,23 +15,21 @@
         }
     ],
     "require"           : {
-        "php"           : ">=7.1",
-        "ext-json"      : "*",
-        "ext-simplexml" : "*",
-
-        "jbzoo/data"    : "^3.0"
+        "php"               : ">=7.1",
+        "ext-json"          : "*",
+        "ext-simplexml"     : "*",
+        "jbzoo/data"        : "^3.0",
+        "guzzlehttp/guzzle" : "^6.4"
     },
 
     "require-dev"       : {
-        "jbzoo/phpunit"     : "^2.3|^3.0",
-        "jbzoo/utils"       : "^3.0",
-        "guzzlehttp/guzzle" : "^6.4",
-        "rmccue/requests"   : "^1.7"
+        "jbzoo/phpunit"   : "^2.3|^3.0",
+        "jbzoo/utils"     : "^3.0",
+        "rmccue/requests" : "^1.7"
     },
 
     "suggest"           : {
-        "guzzlehttp/guzzle" : "Strictly recommendation to use version ^6.4",
-        "rmccue/requests"   : "Only if you can't use guzzle. it's deprecated!"
+        "rmccue/requests" : "Only if you can't use guzzle. it's deprecated!"
     },
 
     "autoload"          : {
