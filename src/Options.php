@@ -23,7 +23,7 @@ use JBZoo\Data\JSON;
 class Options extends JSON
 {
     public const DEFAULT_METHOD          = 'GET';
-    public const DEFAULT_DRIVER          = 'Auto';
+    public const DEFAULT_DRIVER          = 'Guzzle';
     public const DEFAULT_TIMEOUT         = 10;
     public const DEFAULT_VERIFY          = false;
     public const DEFAULT_EXCEPTIONS      = false;

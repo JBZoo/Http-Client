@@ -27,4 +27,13 @@ class DriverAutoTest extends DriverTest
         parent::setUp();
         sleep(1); // for mockservers
     }
+
+    public function testCheckDefaultDriver()
+    {
+        $client = $this->getClient();
+
+        $response = $client->request('https://httpbin.org/user-agent');
+        isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->get('user-agent'));
+
+    }
 }
