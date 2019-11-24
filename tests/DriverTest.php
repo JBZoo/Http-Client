@@ -177,11 +177,10 @@ abstract class DriverTest extends PHPUnit
         isSame(404, $result->code);
     }
 
-    /**
-     * @expectedException \JBZoo\HttpClient\Exception
-     */
     public function testStatus404Exceptions()
     {
+        $this->expectException(\JBZoo\HttpClient\Exception::class);
+
         $this->getClient([
             'exceptions' => true,
         ])->request('http://httpbin.org/status/404');
@@ -193,11 +192,10 @@ abstract class DriverTest extends PHPUnit
         isSame(500, $result->code);
     }
 
-    /**
-     * @expectedException \JBZoo\HttpClient\Exception
-     */
     public function testStatus500Exceptions()
     {
+        $this->expectException(\JBZoo\HttpClient\Exception::class);
+
         $this->getClient([
             'exceptions' => true,
         ])->request('http://httpbin.org/status/500');
@@ -250,11 +248,10 @@ abstract class DriverTest extends PHPUnit
         isSame('https://httpbin.org/get', $body->get('url'));
     }
 
-    /**
-     * @expectedException \JBZoo\HttpClient\Exception
-     */
     public function testDelayError()
     {
+        $this->expectException(\JBZoo\HttpClient\Exception::class);
+
         $this->getClient([
             'timeout'    => 2,
             'exceptions' => true,
