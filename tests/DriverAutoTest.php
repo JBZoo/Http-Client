@@ -22,7 +22,7 @@ class DriverAutoTest extends DriverTest
 {
     protected $driver = 'Auto';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         sleep(1); // for mockservers

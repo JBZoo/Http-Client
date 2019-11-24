@@ -23,8 +23,8 @@
     },
 
     "require-dev"       : {
-        "jbzoo/phpunit"   : "^2.3|^3.0",
-        "jbzoo/utils"     : "^3.0",
+        "jbzoo/phpunit"   : "^3.0",
+        "jbzoo/utils"     : "^3.1",
         "rmccue/requests" : "^1.7"
     },
 

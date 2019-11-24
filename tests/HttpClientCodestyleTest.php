@@ -15,10 +15,10 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class CodestyleTest
+ * Class HttpClientCodestyleTest
  * @package JBZoo\PHPUnit
  */
-class CodestyleTest extends Codestyle
+class HttpClientCodestyleTest extends Codestyle
 {
     protected $_packageName = 'Http-Client';
     // protected $_packageAuthor = 'Denis Smetannikov <denis@jbzoo.com>';
