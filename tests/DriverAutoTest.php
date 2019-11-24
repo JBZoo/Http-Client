@@ -25,11 +25,6 @@ class DriverAutoTest extends DriverTest
     protected function setUp()
     {
         parent::setUp();
-
         sleep(1); // for mockservers
-
-        if ($this->isPHP53()) {
-            $this->methods = array('GET', 'POST', 'PATCH', 'PUT'); // TODO add 'DELETE'
-        }
     }
 }

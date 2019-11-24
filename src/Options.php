@@ -22,21 +22,21 @@ use JBZoo\Data\JSON;
  */
 class Options extends JSON
 {
-    const DEFAULT_METHOD          = 'GET';
-    const DEFAULT_DRIVER          = 'Auto';
-    const DEFAULT_TIMEOUT         = 10;
-    const DEFAULT_VERIFY          = false;
-    const DEFAULT_EXCEPTIONS      = false;
-    const DEFAULT_ALLOW_REDIRECTS = true;
-    const DEFAULT_MAX_REDIRECTS   = 10;
-    const DEFAULT_USER_AGENT      = 'JBZoo/Http-Client v1.x-dev';
+    public const DEFAULT_METHOD          = 'GET';
+    public const DEFAULT_DRIVER          = 'Auto';
+    public const DEFAULT_TIMEOUT         = 10;
+    public const DEFAULT_VERIFY          = false;
+    public const DEFAULT_EXCEPTIONS      = false;
+    public const DEFAULT_ALLOW_REDIRECTS = true;
+    public const DEFAULT_MAX_REDIRECTS   = 10;
+    public const DEFAULT_USER_AGENT      = 'JBZoo/Http-Client';
 
     /**
      * @var array
      */
-    protected $_default = array(
+    protected $_default = [
         'auth'            => false,
-        'headers'         => array(),
+        'headers'         => [],
         'driver'          => self::DEFAULT_DRIVER,
         'timeout'         => self::DEFAULT_TIMEOUT,
         'verify'          => self::DEFAULT_VERIFY,
@@ -44,13 +44,13 @@ class Options extends JSON
         'allow_redirects' => self::DEFAULT_ALLOW_REDIRECTS,
         'max_redirects'   => self::DEFAULT_MAX_REDIRECTS,
         'user_agent'      => self::DEFAULT_USER_AGENT,
-    );
+    ];
 
     /**
      * Response constructor.
      * @param array|string $data
      */
-    public function __construct($data = array())
+    public function __construct($data = [])
     {
         $data = array_merge($this->_default, $data);
         parent::__construct($data);
@@ -69,7 +69,7 @@ class Options extends JSON
      */
     public function getHeaders()
     {
-        return $this->get('headers', array());
+        return $this->get('headers', []);
     }
 
     /**

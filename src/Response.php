@@ -33,11 +33,11 @@ class Response extends Data
      * Response constructor.
      * @param array|string $data
      */
-    public function __construct($data = array())
+    public function __construct($data = [])
     {
-        $data['code']    = 0;
-        $data['headers'] = array();
-        $data['body']    = '';
+        $data['code'] = 0;
+        $data['headers'] = [];
+        $data['body'] = '';
         $this->_jsonData = null;
 
         parent::__construct($data);
@@ -95,20 +95,19 @@ class Response extends Data
      */
     public function parseXml()
     {
-        $bodyxml = simplexml_load_string($this->get('body', null));
-        return new JSON($bodyxml);
+        $bodyXml = simplexml_load_string($this->get('body', null));
+        return new JSON($bodyXml);
     }
 
     /**
      * @param array $headers
-     * @return array
+     * @return $this
      */
     public function setHeaders(array $headers)
     {
-        $result = array();
+        $result = [];
 
         foreach ($headers as $key => $value) {
-
             $key = strtolower($key);
             if (is_array($value)) {
                 $value = implode(';', $value);
@@ -118,6 +117,8 @@ class Response extends Data
         }
 
         $this['headers'] = $result;
+
+        return $this;
     }
 
     /**
@@ -134,6 +135,6 @@ class Response extends Data
      */
     public function getHeaders()
     {
-        return $this->get('headers', array());
+        return $this->get('headers', []);
     }
 }

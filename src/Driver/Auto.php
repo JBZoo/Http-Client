@@ -49,7 +49,7 @@ class Auto extends Driver
             && (version_compare(Sys::getVersion(), '5.3', '>') || Sys::isHHVM())
         ) {
             if (method_exists('\GuzzleHttp\Client', 'request')) {
-                $client = new Guzzle6();
+                $client = new Guzzle();
 
             } elseif (method_exists('\GuzzleHttp\Client', 'createRequest')) {
                 $client = new Guzzle5();

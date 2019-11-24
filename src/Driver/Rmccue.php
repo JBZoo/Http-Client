@@ -18,6 +18,7 @@ use JBZoo\HttpClient\Exception;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Filter;
 use JBZoo\Utils\Url;
+use Requests;
 
 /**
  * Class Rmccue
@@ -30,27 +31,27 @@ class Rmccue extends Driver
      */
     public function request($url, $args, $method, Options $options)
     {
-        $headers = $options->get('headers', array());
-        $method  = Filter::up($method);
-        $args    = 'GET' !== $method ? $args : array();
+        $headers = $options->get('headers', []);
+        $method = Filter::up($method);
+        $args = 'GET' !== $method ? $args : [];
 
-        $httpResult = \Requests::request(
+        $httpResult = Requests::request(
             $url,
             $headers,
             $args,
             $method,
-            $this->_getClientOptions($options)
+            $this->getClientOptions($options)
         );
 
-        if ($options->isExceptions() && $httpResult->status_code >= 400) {
+        if ($httpResult->status_code >= 400 && $options->isExceptions()) {
             throw new Exception($httpResult->body, $httpResult->status_code);
         }
 
-        return array(
+        return [
             $httpResult->status_code,
             $httpResult->headers->getAll(),
             $httpResult->body
-        );
+        ];
     }
 
     /**
@@ -58,40 +59,40 @@ class Rmccue extends Driver
      */
     public function multiRequest(array $urls)
     {
-        $requests = array();
+        $requests = [];
         foreach ($urls as $urlName => $urlData) {
 
             if (is_string($urlData)) {
-                $urlData = array($urlData, array());
+                $urlData = [$urlData, []];
             }
 
             $urlOptions = new Options($urlData[1]);
 
             $method = $urlOptions->get('method', 'GET', 'up');
-            $args   = $urlOptions->get('args');
-            $url    = 'GET' === $method ? Url::addArg((array)$args, $urlData[0]) : $urlData[0];
-            $args   = 'GET' !== $method ? $args : array();
+            $args = $urlOptions->get('args');
+            $url = 'GET' === $method ? Url::addArg((array)$args, $urlData[0]) : $urlData[0];
+            $args = 'GET' !== $method ? $args : [];
 
-            $requests[$urlName] = array(
+            $requests[$urlName] = [
                 'url'     => $url,
                 'headers' => $urlOptions->getHeaders(),
                 'data'    => $args,
                 'type'    => $method,
-                'options' => $this->_getClientOptions($urlOptions),
-            );
+                'options' => $this->getClientOptions($urlOptions),
+            ];
         }
 
-        $httpResults = \Requests::request_multiple($requests);
+        $httpResults = Requests::request_multiple($requests);
 
         /** @var string $resName */
         /** @var \Requests_Response $httpResult */
-        $result = array();
+        $result = [];
         foreach ($httpResults as $resName => $httpResult) {
-            $result[$resName] = array(
+            $result[$resName] = [
                 $httpResult->status_code,
                 $httpResult->headers->getAll(),
                 $httpResult->body
-            );
+            ];
         }
 
         return $result;
@@ -101,15 +102,15 @@ class Rmccue extends Driver
      * @param Options $options
      * @return array
      */
-    protected function _getClientOptions(Options $options)
+    protected function getClientOptions(Options $options)
     {
-        return array(
+        return [
             'timeout'          => $options->getTimeout(),
             'verify'           => $options->isVerify(),
             'follow_redirects' => $options->isAllowRedirects(),
             'redirects'        => $options->getMaxRedirects(),
             'useragent'        => $options->getUserAgent('Rmccue'),
             'auth'             => $options->getAuth(),
-        );
+        ];
     }
 }

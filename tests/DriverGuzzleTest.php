@@ -15,10 +15,10 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class DriverRmccueTest
+ * Class RmccueDriverTest
  * @package JBZoo\PHPUnit
  */
-class DriverRmccueTest extends DriverTest
+class DriverGuzzleTest extends DriverTest
 {
-    protected $driver = 'Rmccue';
+    protected $driver = 'Guzzle';
 }

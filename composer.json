@@ -15,30 +15,36 @@
         }
     ],
     "require"           : {
-        "php"             : ">=7.0",
-        "jbzoo/data"      : "^1.4|^2.0",
-        "rmccue/requests" : "^1.6"
+        "php"           : ">=7.1",
+        "ext-json"      : "*",
+        "ext-simplexml" : "*",
+
+        "jbzoo/data"    : "^3.0"
     },
-    "suggest"           : {
-        "guzzlehttp/guzzle" : "For PHP 5.4+ please use versions ^5.3|^6.3"
-    },
+
     "require-dev"       : {
-        "jbzoo/phpunit" : "^2.0",
-        "jbzoo/utils"   : "^1.7.8|^2.0"
+        "jbzoo/phpunit"     : "^2.3|^3.0",
+        "jbzoo/utils"       : "^3.0",
+        "guzzlehttp/guzzle" : "^6.4",
+        "rmccue/requests"   : "^1.7"
     },
+
+    "suggest"           : {
+        "guzzlehttp/guzzle" : "Strictly recommendation to use version ^6.4",
+        "rmccue/requests"   : "Only if you can't use guzzle. it's deprecated!"
+    },
+
     "autoload"          : {
-        "psr-4" : {
+        "classmap" : ["tests"],
+        "psr-4"    : {
             "JBZoo\\HttpClient\\" : "src"
         }
     },
-    "extra"             : {
-        "branch-alias" : {
-            "dev-master" : "1.x-dev"
-        }
-    },
+
     "config"            : {
         "optimize-autoloader" : true
     },
+
     "support"           : {
         "issues" : "https://github.com/JBZoo/Http-Client/issues"
     }

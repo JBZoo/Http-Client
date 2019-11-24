@@ -17,7 +17,6 @@ namespace JBZoo\PHPUnit;
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Response;
-use JBZoo\Utils\Sys;
 use JBZoo\Utils\Url;
 
 /**
@@ -30,20 +29,12 @@ abstract class DriverTest extends PHPUnit
     /**
      * @var string
      */
-    protected $driver = 'Undefined'; // For quick toggle tests (Auto|Guzzle5|Guzzle6|Rmccue)
+    protected $driver = 'Undefined'; // For quick toggle tests (Auto|Guzzle|Rmccue)
 
     /**
      * @var array
      */
     protected $methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'];
-
-    /**
-     * @return bool
-     */
-    protected function isPHP53()
-    {
-        return Sys::isPHP53();
-    }
 
     /**
      * @param array $options
@@ -81,24 +72,13 @@ abstract class DriverTest extends PHPUnit
         $uniq = uniqid('', true);
         $payload = json_encode(['key' => $uniq]);
 
-        if ($this->isPHP53()) {
-            $url = 'http://httpbin.org/post?key=value';
-            $result = $this->getClient()->request($url, $payload, 'post');
-            $body = $result->getJSON();
+        $url = 'http://mockbin.org/request?key=value';
+        $result = $this->getClient()->request($url, $payload, 'post');
+        $body = $result->getJSON();
 
-            isSame('value', $body->find('args.key'));
-            isSame('', $body->find('form.' . $payload));
-            isSame($url, $body->find('url'));
-
-        } else {
-            $url = 'http://mockbin.org/request?key=value';
-            $result = $this->getClient()->request($url, $payload, 'post');
-            $body = $result->getJSON();
-
-            isSame($payload, $body->find('postData.text'));
-            isSame('value', $body->find('queryString.key'));
-            isSame('POST', $body->find('method'));
-        }
+        isSame($payload, $body->find('postData.text'));
+        isSame('value', $body->find('queryString.key'));
+        isSame('POST', $body->find('method'));
     }
 
     public function testAllMethods()
@@ -106,7 +86,7 @@ abstract class DriverTest extends PHPUnit
         foreach ($this->methods as $method) {
 
             $uniq = uniqid('', true);
-            $url = 'http://mockbin.org/request?method=' . $method . '&qwerty=remove_me';
+            $url = "http://mockbin.org/request?method={$method}&qwerty=remove_me";
             $args = ['qwerty' => $uniq];
             $message = 'Method: ' . $method;
 
@@ -114,7 +94,7 @@ abstract class DriverTest extends PHPUnit
             $body = $result->getJSON();
 
             if (!$result->getCode()) {
-                var_dump($result->getBody());
+                fail($message . ' Body: ' . $result->getBody());
             }
 
             isSame(200, $result->getCode(), $message);
@@ -149,7 +129,7 @@ abstract class DriverTest extends PHPUnit
     {
         $uniq = uniqid('', true);
 
-        $siteUrl = 'http://httpbin.org/get?key=value';
+        $siteUrl = 'https://httpbin.org/get?key=value';
         $args = ['qwerty' => $uniq];
         $url = Url::addArg($args, $siteUrl);
         $result = $this->getClient()->request($url, $args);
@@ -176,7 +156,7 @@ abstract class DriverTest extends PHPUnit
     public function testPost()
     {
         $uniq = uniqid('', true);
-        $url = 'http://httpbin.org/post?key=value';
+        $url = 'https://httpbin.org/post?key=value';
         $args = ['qwerty' => $uniq];
 
         $result = $this->getClient()->request($url, $args, 'post');
@@ -266,7 +246,7 @@ abstract class DriverTest extends PHPUnit
         $body = $result->getJSON();
 
         isSame(200, $result->code);
-        isSame('http://httpbin.org/get', $body->get('url'));
+        isSame('https://httpbin.org/get', $body->get('url'));
     }
 
     /**
@@ -294,7 +274,7 @@ abstract class DriverTest extends PHPUnit
 
     public function testDelay()
     {
-        $url = 'http://httpbin.org/delay/5';
+        $url = 'https://httpbin.org/delay/5';
         $result = $this->getClient()->request($url);
         $body = $result->getJSON();
 

@@ -27,15 +27,15 @@ class HttpClient
     /**
      * @var Options
      */
-    protected $_options;
+    protected $options;
 
     /**
      * HttpClient constructor.
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
-        $this->_options = new Options($options);
+        $this->options = new Options($options);
     }
 
     /**
@@ -46,32 +46,31 @@ class HttpClient
      * @return Response
      * @throws Exception
      */
-    public function request($url, $args = null, $method = Options::DEFAULT_METHOD, array $options = array())
+    public function request($url, $args = null, $method = Options::DEFAULT_METHOD, array $options = []): Response
     {
-        $method  = Filter::up($method);
-        $url     = 'GET' === $method ? Url::addArg((array)$args, $url) : $url;
-        $options = new Options(array_merge($this->_options->getArrayCopy(), $options));
+        $method = Filter::up($method);
+        $url = 'GET' === $method ? Url::addArg((array)$args, $url) : $url;
 
-        $client   = $this->_getClient($options);
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $options = new Options(array_merge($this->options->getArrayCopy(), $options));
+
+        $client = $this->getClient($options);
         $response = new Response();
 
         try {
-            list($code, $headers, $body) = $client->request($url, $args, $method, $options);
+            [$code, $headers, $body] = $client->request($url, $args, $method, $options);
 
             $response->setCode($code);
             $response->setHeaders($headers);
             $response->setBody($body);
-
         } catch (\Exception $e) {
-
             if ($options->isExceptions()) {
                 throw new Exception($e->getMessage(), $e->getCode(), $e);
-
-            } else {
-                $response->setCode($e->getCode());
-                $response->setHeaders(array());
-                $response->setBody($e->getMessage());
             }
+
+            $response->setCode($e->getCode());
+            $response->setHeaders([]);
+            $response->setBody($e->getMessage());
         }
 
         return $response;
@@ -80,18 +79,20 @@ class HttpClient
     /**
      * @param array $urls
      * @param array $options
-     * @return array
+     * @return Response[]
+     * @throws Exception
      */
-    public function multiRequest(array $urls, array $options = array())
+    public function multiRequest(array $urls, array $options = [])
     {
-        $options = new Options(array_merge($this->_options->getArrayCopy(), $options));
-        $client  = $this->_getClient($options);
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $options = new Options(array_merge($this->options->getArrayCopy(), $options));
+        $client = $this->getClient($options);
 
-        $httpResults = $client->multiRequest($urls, $options);
+        $httpResults = $client->multiRequest($urls);
 
-        $results = array();
+        $results = [];
         foreach ($httpResults as $resKey => $resultRow) {
-            list($code, $headers, $body) = $resultRow;
+            [$code, $headers, $body] = $resultRow;
 
             $results[$resKey] = new Response();
             $results[$resKey]->setCode($code);
@@ -107,7 +108,7 @@ class HttpClient
      * @return Driver
      * @throws Exception
      */
-    protected function _getClient(Options $options)
+    protected function getClient(Options $options)
     {
         $className = '\JBZoo\HttpClient\\Driver\\' . $options->getDriver();
 
