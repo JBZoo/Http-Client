@@ -245,7 +245,7 @@ abstract class DriverTest extends PHPUnit
         $body = $result->getJSON();
 
         isSame(200, $result->code);
-        isSame('https://httpbin.org/get', $body->get('url'));
+        isSame('http://httpbin.org/get', $body->get('url'));
     }
 
     public function testDelayError()
