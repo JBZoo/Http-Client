@@ -25,23 +25,28 @@ use Requests;
  * Class Rmccue
  * @package JBZoo\HttpClient
  */
-class Rmccue extends Driver
+class Rmccue extends AbstractDriver
 {
     private const INVALID_CODE_LINE = 400;
 
     /**
      * @inheritdoc
      */
-    public function request($url, $args, $method, Options $options)
+    public function request(string $url, $args, string $method, Options $options)
     {
         $headers = $options->get('headers', []);
         $method = Filter::up($method);
         $args = 'GET' !== $method ? $args : [];
 
+        /**
+         * @psalm-suppress PossiblyInvalidArgument
+         * @phpstan-ignore-next-line
+         */
         $httpResult = Requests::request(
             $url,
             (array)$headers,
-            (array)$args,
+            /** @phan-suppress-next-line PhanPartialTypeMismatchArgument */
+            $args,
             $method,
             $this->getClientOptions($options)
         );
@@ -52,6 +57,7 @@ class Rmccue extends Driver
 
         return [
             $httpResult->status_code,
+            /** @phan-suppress-next-line PhanPossiblyNonClassMethodCall */
             $httpResult->headers->getAll(),
             $httpResult->body
         ];
@@ -84,7 +90,6 @@ class Rmccue extends Driver
             ];
         }
 
-        /** @var \Requests_Response[] $httpResults */
         $httpResults = Requests::request_multiple($requests);
 
         $result = [];

@@ -23,18 +23,18 @@ use JBZoo\HttpClient\Options;
  *
  * @package JBZoo\HttpClient
  */
-class Auto extends Driver
+class Auto extends AbstractDriver
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function request($url, $args, $method, Options $options)
+    public function request(string $url, $args, string $method, Options $options)
     {
         return $this->getClient()->request($url, $args, $method, $options);
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function multiRequest(array $urls)
     {
@@ -42,7 +42,7 @@ class Auto extends Driver
     }
 
     /**
-     * @return Driver
+     * @return AbstractDriver
      */
     protected function getClient()
     {

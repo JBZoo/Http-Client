@@ -15,7 +15,7 @@
 
 namespace JBZoo\HttpClient;
 
-use JBZoo\HttpClient\Driver\Driver;
+use JBZoo\HttpClient\Driver\AbstractDriver;
 use JBZoo\Utils\Filter;
 use JBZoo\Utils\Url;
 
@@ -106,19 +106,21 @@ class HttpClient
 
     /**
      * @param Options $options
-     * @return Driver
+     * @return AbstractDriver
      * @throws Exception
+     * @psalm-suppress MoreSpecificReturnType
      */
-    protected function getClient(Options $options): Driver
+    protected function getClient(Options $options): AbstractDriver
     {
         $driverName = $options->getDriver();
 
-        $className = "\\JBZoo\\HttpClient\\Driver\\{$driverName}";
+        $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
 
         if (class_exists($className)) {
-            return new $className($options);
+            /** @psalm-suppress LessSpecificReturnStatement */
+            return  new $className($options);
         }
 
-        throw new Exception("Driver '$driverName' not found");
+        throw new Exception("Driver '{$driverName}' not found");
     }
 }

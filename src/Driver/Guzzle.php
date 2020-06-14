@@ -16,22 +16,22 @@
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Promise;
-use GuzzleHttp\Psr7\Response;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Url;
 use Throwable;
+
+use function GuzzleHttp\Promise\unwrap;
 
 /**
  * Class Guzzle
  * @package JBZoo\HttpClient
  */
-class Guzzle extends Driver
+class Guzzle extends AbstractDriver
 {
     /**
      * @inheritdoc
      */
-    public function request($url, $args, $method, Options $options)
+    public function request(string $url, $args, string $method, Options $options)
     {
         $client = new Client();
 
@@ -75,8 +75,7 @@ class Guzzle extends Driver
             );
         }
 
-        /** @var Response[] $httpResults */
-        $httpResults = Promise\unwrap($promises);
+        $httpResults = unwrap($promises);
 
         $result = [];
         foreach ($httpResults as $resName => $httpResult) {

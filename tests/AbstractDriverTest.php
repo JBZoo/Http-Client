@@ -25,7 +25,7 @@ use JBZoo\Utils\Url;
  *
  * @package JBZoo\PHPUnit
  */
-abstract class DriverTest extends PHPUnit
+abstract class AbstractDriverTest extends PHPUnit
 {
     /**
      * @var string

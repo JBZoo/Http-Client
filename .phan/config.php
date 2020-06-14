@@ -22,6 +22,7 @@ return array_merge($default, [
         'vendor/jbzoo/data',
         'vendor/jbzoo/utils',
         'vendor/guzzlehttp/guzzle',
+        'vendor/guzzlehttp/promises',
         'vendor/psr/http-message',
         'vendor/rmccue/requests',
     ]

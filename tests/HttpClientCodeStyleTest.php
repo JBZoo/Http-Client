@@ -16,7 +16,7 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class PathCodeStyleTest
+ * Class HttpClientCodeStyleTest
  *
  * @package JBZoo\PHPUnit
  */

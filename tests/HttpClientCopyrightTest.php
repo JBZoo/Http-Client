@@ -16,7 +16,7 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class PathCopyrightTest
+ * Class HttpClientCopyrightTest
  *
  * @package JBZoo\PHPUnit
  */

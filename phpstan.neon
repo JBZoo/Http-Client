@@ -1,0 +1,20 @@
+#
+# JBZoo Toolbox - Http-Client
+#
+# This file is part of the JBZoo Toolbox project.
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
+#
+# @package    Http-Client
+# @license    MIT
+# @copyright  Copyright (C) JBZoo.com, All rights reserved.
+# @link       https://github.com/JBZoo/Http-Client
+#
+
+includes:
+    - vendor/jbzoo/codestyle/phpstan.neon
+
+parameters:
+    excludes_analyse:
+        # PHPUnit v9-10 comatibility
+        - src/functions/aliases.php

@@ -8,15 +8,14 @@
     ],
     "authors"           : [
         {
-            "name"  : "SmetDenis",
-            "email" : "denis@jbzoo.com",
+            "name"  : "Denis Smetannikov",
+            "email" : "admin@jbzoo.com",
             "role"  : "lead"
         }
     ],
     "require"           : {
         "php"               : ">=7.2",
         "ext-json"          : "*",
-        "ext-simplexml"     : "*",
 
         "jbzoo/data"        : "4.0.x-dev",
         "guzzlehttp/guzzle" : "^6.4"
@@ -25,7 +24,7 @@
     "require-dev"       : {
         "jbzoo/toolbox-dev" : "1.1.x-dev",
         "jbzoo/utils"       : "4.0.x-dev",
-        "rmccue/requests"   : "^1.7"
+        "rmccue/requests"   : "^1.7.0"
     },
 
     "suggest"           : {

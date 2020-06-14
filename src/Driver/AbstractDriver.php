@@ -18,10 +18,10 @@ namespace JBZoo\HttpClient\Driver;
 use JBZoo\HttpClient\Options;
 
 /**
- * Class Driver
+ * Class AbstractDriver
  * @package JBZoo\HttpClient
  */
-abstract class Driver
+abstract class AbstractDriver
 {
     /**
      * @param string            $url

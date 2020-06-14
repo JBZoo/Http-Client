@@ -19,14 +19,14 @@ namespace JBZoo\PHPUnit;
  * Class DriverAutoTest
  * @package JBZoo\PHPUnit
  */
-class DriverAutoTest extends DriverTest
+class DriverAutoTest extends AbstractDriverTest
 {
     protected $driver = 'Auto';
 
     protected function setUp(): void
     {
         parent::setUp();
-        sleep(1); // for mockservers
+        //sleep(1); // for mockservers
     }
 
     public function testCheckDefaultDriver()
@@ -35,6 +35,5 @@ class DriverAutoTest extends DriverTest
 
         $response = $client->request('https://httpbin.org/user-agent');
         isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->get('user-agent'));
-
     }
 }
