@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Http-Client
+ * JBZoo Toolbox - Http-Client
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -15,11 +16,14 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class HttpClientCodestyleTest
+ * Class PathCopyrightTest
+ *
  * @package JBZoo\PHPUnit
  */
-class HttpClientCodestyleTest extends Codestyle
+class HttpClientCopyrightTest extends AbstractCopyrightTest
 {
-    protected $_packageName = 'Http-Client';
-    // protected $_packageAuthor = 'Denis Smetannikov <denis@jbzoo.com>';
+    /**
+     * @var string
+     */
+    protected $packageName = 'Http-Client';
 }

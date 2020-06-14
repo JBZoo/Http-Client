@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Http-Client
+ * JBZoo Toolbox - Http-Client
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -23,13 +24,13 @@ use JBZoo\HttpClient\Options;
 abstract class Driver
 {
     /**
-     * @param string  $url
-     * @param array   $args
-     * @param string  $method
-     * @param Options $options
+     * @param string            $url
+     * @param array|string|null $args
+     * @param string            $method
+     * @param Options           $options
      * @return array
      */
-    abstract public function request($url, $args, $method, Options $options);
+    abstract public function request(string $url, $args, string $method, Options $options);
 
     /**
      * @param array $urls

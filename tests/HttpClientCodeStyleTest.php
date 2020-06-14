@@ -16,10 +16,10 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class RmccueDriverTest
+ * Class PathCodeStyleTest
+ *
  * @package JBZoo\PHPUnit
  */
-class DriverGuzzleTest extends DriverTest
+class HttpClientCodeStyleTest extends AbstractCodestyleTest
 {
-    protected $driver = 'Guzzle';
 }

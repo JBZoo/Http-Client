@@ -13,13 +13,16 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
-namespace JBZoo\PHPUnit;
+$default = include __DIR__ . '/../vendor/jbzoo/codestyle/src/phan/default.php';
 
-/**
- * Class RmccueDriverTest
- * @package JBZoo\PHPUnit
- */
-class DriverGuzzleTest extends DriverTest
-{
-    protected $driver = 'Guzzle';
-}
+return array_merge($default, [
+    'directory_list' => [
+        'src',
+
+        'vendor/jbzoo/data',
+        'vendor/jbzoo/utils',
+        'vendor/guzzlehttp/guzzle',
+        'vendor/psr/http-message',
+        'vendor/rmccue/requests',
+    ]
+]);

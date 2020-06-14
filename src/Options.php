@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Http-Client
+ * JBZoo Toolbox - Http-Client
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -34,7 +35,7 @@ class Options extends JSON
     /**
      * @var array
      */
-    protected $_default = [
+    protected $default = [
         'auth'            => false,
         'headers'         => [],
         'driver'          => self::DEFAULT_DRIVER,
@@ -48,11 +49,11 @@ class Options extends JSON
 
     /**
      * Response constructor.
-     * @param array|string $data
+     * @param array $data
      */
     public function __construct($data = [])
     {
-        $data = array_merge($this->_default, $data);
+        $data = array_merge($this->default, $data);
         parent::__construct($data);
     }
 
@@ -99,7 +100,7 @@ class Options extends JSON
     /**
      * @return bool
      */
-    public function isExceptions()
+    public function showException()
     {
         return $this->get('exceptions', self::DEFAULT_EXCEPTIONS, 'bool');
     }
@@ -121,6 +122,7 @@ class Options extends JSON
     }
 
     /**
+     * @param string $suffix
      * @return string
      */
     public function getUserAgent($suffix)

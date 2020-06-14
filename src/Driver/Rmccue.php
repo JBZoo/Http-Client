@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Http-Client
+ * JBZoo Toolbox - Http-Client
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -26,6 +27,8 @@ use Requests;
  */
 class Rmccue extends Driver
 {
+    private const INVALID_CODE_LINE = 400;
+
     /**
      * @inheritdoc
      */
@@ -37,14 +40,14 @@ class Rmccue extends Driver
 
         $httpResult = Requests::request(
             $url,
-            $headers,
-            $args,
+            (array)$headers,
+            (array)$args,
             $method,
             $this->getClientOptions($options)
         );
 
-        if ($httpResult->status_code >= 400 && $options->isExceptions()) {
-            throw new Exception($httpResult->body, $httpResult->status_code);
+        if ($httpResult->status_code >= self::INVALID_CODE_LINE && $options->showException()) {
+            throw new Exception($httpResult->body, (int)$httpResult->status_code);
         }
 
         return [
@@ -61,7 +64,6 @@ class Rmccue extends Driver
     {
         $requests = [];
         foreach ($urls as $urlName => $urlData) {
-
             if (is_string($urlData)) {
                 $urlData = [$urlData, []];
             }
@@ -82,10 +84,9 @@ class Rmccue extends Driver
             ];
         }
 
+        /** @var \Requests_Response[] $httpResults */
         $httpResults = Requests::request_multiple($requests);
 
-        /** @var string $resName */
-        /** @var \Requests_Response $httpResult */
         $result = [];
         foreach ($httpResults as $resName => $httpResult) {
             $result[$resName] = [

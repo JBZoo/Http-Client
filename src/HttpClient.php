@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Http-Client
+ * JBZoo Toolbox - Http-Client
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -63,14 +64,14 @@ class HttpClient
             $response->setCode($code);
             $response->setHeaders($headers);
             $response->setBody($body);
-        } catch (\Exception $e) {
-            if ($options->isExceptions()) {
-                throw new Exception($e->getMessage(), $e->getCode(), $e);
+        } catch (\Exception $exception) {
+            if ($options->showException()) {
+                throw new Exception($exception->getMessage(), (int)$exception->getCode(), $exception);
             }
 
-            $response->setCode($e->getCode());
+            $response->setCode((int)$exception->getCode());
             $response->setHeaders([]);
-            $response->setBody($e->getMessage());
+            $response->setBody($exception->getMessage());
         }
 
         return $response;
@@ -108,10 +109,16 @@ class HttpClient
      * @return Driver
      * @throws Exception
      */
-    protected function getClient(Options $options)
+    protected function getClient(Options $options): Driver
     {
-        $className = '\JBZoo\HttpClient\\Driver\\' . $options->getDriver();
+        $driverName = $options->getDriver();
 
-        return new $className($options);
+        $className = "\\JBZoo\\HttpClient\\Driver\\{$driverName}";
+
+        if (class_exists($className)) {
+            return new $className($options);
+        }
+
+        throw new Exception("Driver '$driverName' not found");
     }
 }

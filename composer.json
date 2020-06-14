@@ -6,7 +6,6 @@
     "keywords"          : [
         "http", "https", "client", "guzzle", "guzzlehttp", "curl", "request", "requests", "rmccue"
     ],
-    "minimum-stability" : "stable",
     "authors"           : [
         {
             "name"  : "SmetDenis",
@@ -15,35 +14,44 @@
         }
     ],
     "require"           : {
-        "php"               : ">=7.1",
+        "php"               : ">=7.2",
         "ext-json"          : "*",
         "ext-simplexml"     : "*",
-        "jbzoo/data"        : "^3.0",
+
+        "jbzoo/data"        : "4.0.x-dev",
         "guzzlehttp/guzzle" : "^6.4"
     },
 
     "require-dev"       : {
-        "jbzoo/phpunit"   : "^3.0",
-        "jbzoo/utils"     : "^3.1",
-        "rmccue/requests" : "^1.7"
+        "jbzoo/toolbox-dev" : "1.1.x-dev",
+        "jbzoo/utils"       : "4.0.x-dev",
+        "rmccue/requests"   : "^1.7"
     },
 
     "suggest"           : {
-        "rmccue/requests" : "Only if you can't use guzzle. it's deprecated!"
+        "rmccue/requests" : "Only if you can't use guzzle guzzlehttp/guzzle^6.4"
     },
 
     "autoload"          : {
-        "classmap" : ["tests"],
-        "psr-4"    : {
+        "psr-4" : {
             "JBZoo\\HttpClient\\" : "src"
         }
+    },
+
+    "minimum-stability" : "dev",
+    "prefer-stable"     : true,
+
+    "autoload-dev"      : {
+        "classmap" : ["tests"]
     },
 
     "config"            : {
         "optimize-autoloader" : true
     },
 
-    "support"           : {
-        "issues" : "https://github.com/JBZoo/Http-Client/issues"
+    "extra"             : {
+        "branch-alias" : {
+            "dev-master" : "3.0.x-dev"
+        }
     }
 }

@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Http-Client
+ * JBZoo Toolbox - Http-Client
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -34,7 +35,11 @@ class Guzzle extends Driver
     {
         $client = new Client();
 
-        $httpResult = $client->request($method, $url, $this->getClientOptions($options, $method, $args));
+        $httpResult = $client->request(
+            $method,
+            $url,
+            $this->getClientOptions($options, $method, $args)
+        );
 
         return [
             $httpResult->getStatusCode(),
@@ -70,10 +75,9 @@ class Guzzle extends Driver
             );
         }
 
+        /** @var Response[] $httpResults */
         $httpResults = Promise\unwrap($promises);
 
-        /** @var string $resName */
-        /** @var Response $httpResult */
         $result = [];
         foreach ($httpResults as $resName => $httpResult) {
             $result[$resName] = [
@@ -87,9 +91,9 @@ class Guzzle extends Driver
     }
 
     /**
-     * @param Options      $options
-     * @param string       $method
-     * @param string|array $args
+     * @param Options           $options
+     * @param string            $method
+     * @param string|array|null $args
      * @return array
      */
     protected function getClientOptions(Options $options, $method, $args)
@@ -114,9 +118,9 @@ class Guzzle extends Driver
             'connect_timeout' => $options->getTimeout(),
             'timeout'         => $options->getTimeout(),
             'verify'          => $options->isVerify(),
-            'exceptions'      => $options->isExceptions(),
+            'exceptions'      => $options->showException(),
             'auth'            => $options->getAuth(),
-            'allow_redirects' => $this->_getAllowRedirects($options)
+            'allow_redirects' => $this->getAllowRedirects($options)
         ];
     }
 
@@ -124,7 +128,7 @@ class Guzzle extends Driver
      * @param Options $options
      * @return array|bool
      */
-    protected function _getAllowRedirects(Options $options)
+    protected function getAllowRedirects(Options $options)
     {
         $allowRedirects = false;
 

@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Http-Client
+ * JBZoo Toolbox - Http-Client
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -27,26 +28,26 @@ class Response extends Data
     /**
      * @var null|JSON
      */
-    protected $_jsonData = null;
+    protected $jsonData = null;
 
     /**
      * Response constructor.
-     * @param array|string $data
+     * @param array $data
      */
     public function __construct($data = [])
     {
         $data['code'] = 0;
         $data['headers'] = [];
         $data['body'] = '';
-        $this->_jsonData = null;
+        $this->jsonData = null;
 
         parent::__construct($data);
     }
 
     /**
-     * @param $code
+     * @param int $code
      */
-    public function setCode($code)
+    public function setCode($code): void
     {
         $this['code'] = Filter::int($code);
     }
@@ -60,12 +61,11 @@ class Response extends Data
     }
 
     /**
-     * @param $body
+     * @param string $body
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
-        $this->_jsonData = null; // Force update getJSON() result
-
+        $this->jsonData = null; // Force update getJSON() result
         $this['body'] = (string)$body;
     }
 
@@ -82,28 +82,19 @@ class Response extends Data
      */
     public function getJSON()
     {
-        if (null === $this->_jsonData) {
-            $this->_jsonData = new JSON($this->get('body'));
-            $this->_jsonData->setFlags(\ArrayObject::ARRAY_AS_PROPS); // For JBZoo/Data less 1.4.2
+        if (null === $this->jsonData) {
+            $this->jsonData = new JSON($this->get('body'));
+            $this->jsonData->setFlags(\ArrayObject::ARRAY_AS_PROPS); // For JBZoo/Data less 1.4.2
         }
 
-        return $this->_jsonData;
-    }
-
-    /**
-     * @return JSON from XML
-     */
-    public function parseXml()
-    {
-        $bodyXml = simplexml_load_string($this->get('body', null));
-        return new JSON($bodyXml);
+        return $this->jsonData;
     }
 
     /**
      * @param array $headers
-     * @return $this
+     * @return Response
      */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): Response
     {
         $result = [];
 
