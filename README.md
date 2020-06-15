@@ -1,8 +1,8 @@
-# JBZoo Http Client  [![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg?branch=master)](https://travis-ci.org/JBZoo/Http-Client)      [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Http-Client/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)
+# JBZoo - Http-Client
+ 
+[![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg?branch=master)](https://travis-ci.org/JBZoo/Http-Client)    [![Coverage Status](https://coveralls.io/repos/JBZoo/Http-Client/badge.svg)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![Codacy Badge](https://app.codacy.com/project/badge/Grade/68dfbc5c587743ac82f0f8c75f46279d)](https://www.codacy.com/gh/JBZoo/Http-Client)    
+[![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v)](https://packagist.org/packages/JBZoo/Http-Client)    [![Latest Unstable Version](https://poser.pugx.org/JBZoo/Http-Client/v/unstable)](https://packagist.org/packages/JBZoo/Http-Client)    [![Dependents](https://poser.pugx.org/JBZoo/Http-Client/dependents)](https://packagist.org/packages/JBZoo/Http-Client/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/JBZoo/Http-Client)](https://github.com/JBZoo/Http-Client/issues)    [![Total Downloads](https://poser.pugx.org/JBZoo/Http-Client/downloads)](https://packagist.org/packages/JBZoo/Http-Client/stats)    [![GitHub License](https://img.shields.io/github/license/JBZoo/Http-Client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
 
-## Useful wrapper for Guzzle and rmccue/requests
-
-[![License](https://poser.pugx.org/JBZoo/Http-Client/license)](https://packagist.org/packages/JBZoo/Http-Client)   [![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v/stable)](https://packagist.org/packages/JBZoo/Http-Client) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JBZoo/Http-Client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Http-Client/?branch=master)
 
 ## Install
 ```sh

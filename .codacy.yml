@@ -11,10 +11,8 @@
 # @link       https://github.com/JBZoo/Http-Client
 #
 
-includes:
-    - vendor/jbzoo/codestyle/phpstan.neon
-
-parameters:
-    excludes_analyse:
-        # PHPUnit v9-10 comatibility
-        - src/functions/aliases.php
+exclude_paths:
+  - vendor/**/*
+  - tests/**/*
+  - build/**/*
+  - .phan/**/*

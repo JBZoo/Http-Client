@@ -166,7 +166,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
         isSame(200, $result->code);
         isContain('application/json', $result->find('headers.content-type'));
-        isSame($url, $body->find('url'));
+        isContain('httpbin.org/post?key=value', $body->find('url'));
         isSame($uniq, $body->find('form.qwerty'));
         isSame('value', $body->find('args.key'));
     }
