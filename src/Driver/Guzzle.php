@@ -16,6 +16,7 @@
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
+use JBZoo\Data\Data;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Url;
 use Throwable;
@@ -62,16 +63,17 @@ class Guzzle extends AbstractDriver
                 $urlData = [$urlData, []];
             }
 
-            $urlOptions = new Options($urlData[1]);
+            $requestOptions = new Options($urlData[1]);
+            $urlParams = new Data($urlData[1]);
 
-            $method = $urlOptions->get('method', 'GET', 'up');
-            $args = $urlOptions->get('args');
+            $method = $urlParams->get('method', 'GET', 'up');
+            $args = $urlParams->get('args');
             $url = 'GET' === $method ? Url::addArg((array)$args, $urlData[0]) : $urlData[0];
 
             $promises[$urlName] = $client->requestAsync(
                 $method,
                 $url,
-                $this->getClientOptions($urlOptions, $method, $args)
+                $this->getClientOptions($requestOptions, $method, $args)
             );
         }
 
@@ -117,7 +119,7 @@ class Guzzle extends AbstractDriver
             'connect_timeout' => $options->getTimeout(),
             'timeout'         => $options->getTimeout(),
             'verify'          => $options->isVerify(),
-            'exceptions'      => $options->showException(),
+            'exceptions'      => $options->allowException(),
             'auth'            => $options->getAuth(),
             'allow_redirects' => $this->getAllowRedirects($options)
         ];

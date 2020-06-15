@@ -47,13 +47,17 @@ class HttpClient
      * @return Response
      * @throws Exception
      */
-    public function request($url, $args = null, $method = Options::DEFAULT_METHOD, array $options = []): Response
-    {
+    public function request(
+        string $url,
+        $args = null,
+        string $method = Options::DEFAULT_METHOD,
+        array $options = []
+    ): Response {
         $method = Filter::up($method);
         $url = 'GET' === $method ? Url::addArg((array)$args, $url) : $url;
 
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $options = new Options(array_merge($this->options->getArrayCopy(), $options));
+        $options = new Options(array_merge($this->options->toArray(), $options));
 
         $client = $this->getClient($options);
         $response = new Response();
@@ -61,11 +65,11 @@ class HttpClient
         try {
             [$code, $headers, $body] = $client->request($url, $args, $method, $options);
 
-            $response->setCode($code);
-            $response->setHeaders($headers);
-            $response->setBody($body);
+            $response->setCode((int)$code);
+            $response->setHeaders((array)$headers);
+            $response->setBody((string)$body);
         } catch (\Exception $exception) {
-            if ($options->showException()) {
+            if ($options->allowException()) {
                 throw new Exception($exception->getMessage(), (int)$exception->getCode(), $exception);
             }
 
@@ -86,19 +90,21 @@ class HttpClient
     public function multiRequest(array $urls, array $options = [])
     {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $options = new Options(array_merge($this->options->getArrayCopy(), $options));
+        $options = new Options(array_merge($this->options->toArray(), $options));
         $client = $this->getClient($options);
 
         $httpResults = $client->multiRequest($urls);
 
         $results = [];
+
+        /** @var array $resultRow */
         foreach ($httpResults as $resKey => $resultRow) {
             [$code, $headers, $body] = $resultRow;
 
             $results[$resKey] = new Response();
-            $results[$resKey]->setCode($code);
-            $results[$resKey]->setHeaders($headers);
-            $results[$resKey]->setBody($body);
+            $results[$resKey]->setCode((int)$code);
+            $results[$resKey]->setHeaders((array)$headers);
+            $results[$resKey]->setBody((string)$body);
         }
 
         return $results;
@@ -109,6 +115,7 @@ class HttpClient
      * @return AbstractDriver
      * @throws Exception
      * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
      */
     protected function getClient(Options $options): AbstractDriver
     {
@@ -117,8 +124,7 @@ class HttpClient
         $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
 
         if (class_exists($className)) {
-            /** @psalm-suppress LessSpecificReturnStatement */
-            return  new $className($options);
+            return new $className($options);
         }
 
         throw new Exception("Driver '{$driverName}' not found");

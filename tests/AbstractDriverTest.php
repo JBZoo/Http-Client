@@ -30,7 +30,7 @@ abstract class AbstractDriverTest extends PHPUnit
     /**
      * @var string
      */
-    protected $driver = 'Undefined'; // For quick toggling tests (Auto|Guzzle|Rmccue)
+    protected $driver = 'Auto';
 
     /**
      * @var array
@@ -74,7 +74,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $payload = json_encode(['key' => $uniq]);
 
         $url = 'http://mockbin.org/request?key=value';
-        $result = $this->getClient()->request($url, $payload, 'post');
+        $result = $this->getClient(['exceptions' => true])->request($url, $payload, 'post');
         $body = $result->getJSON();
 
         isSame($payload, $body->find('postData.text'));

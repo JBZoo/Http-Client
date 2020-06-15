@@ -15,6 +15,7 @@
 
 namespace JBZoo\HttpClient\Driver;
 
+use JBZoo\Data\Data;
 use JBZoo\HttpClient\Exception;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Filter;
@@ -34,7 +35,7 @@ class Rmccue extends AbstractDriver
      */
     public function request(string $url, $args, string $method, Options $options)
     {
-        $headers = $options->get('headers', []);
+        $headers = $options->getHeaders();
         $method = Filter::up($method);
         $args = 'GET' !== $method ? $args : [];
 
@@ -44,14 +45,15 @@ class Rmccue extends AbstractDriver
          */
         $httpResult = Requests::request(
             $url,
-            (array)$headers,
+            $headers,
             /** @phan-suppress-next-line PhanPartialTypeMismatchArgument */
             $args,
             $method,
             $this->getClientOptions($options)
         );
 
-        if ($httpResult->status_code >= self::INVALID_CODE_LINE && $options->showException()) {
+
+        if ($httpResult->status_code >= self::INVALID_CODE_LINE && $options->allowException()) {
             throw new Exception($httpResult->body, (int)$httpResult->status_code);
         }
 
@@ -69,33 +71,38 @@ class Rmccue extends AbstractDriver
     public function multiRequest(array $urls)
     {
         $requests = [];
+
+        /** @var array|string $urlData */
         foreach ($urls as $urlName => $urlData) {
             if (is_string($urlData)) {
                 $urlData = [$urlData, []];
             }
 
-            $urlOptions = new Options($urlData[1]);
+            $requestOptions = new Options((array)$urlData[1]);
+            $urlParams = new Data((array)$urlData[1]);
 
-            $method = $urlOptions->get('method', 'GET', 'up');
-            $args = $urlOptions->get('args');
-            $url = 'GET' === $method ? Url::addArg((array)$args, $urlData[0]) : $urlData[0];
+            $method = (string)$urlParams->get('method', 'GET', 'up');
+            $args = (array)$urlParams->get('args');
+
+            $url = 'GET' === $method ? Url::addArg($args, (string)$urlData[0]) : (string)$urlData[0];
             $args = 'GET' !== $method ? $args : [];
 
             $requests[$urlName] = [
                 'url'     => $url,
-                'headers' => $urlOptions->getHeaders(),
+                'headers' => $requestOptions->getHeaders(),
                 'data'    => $args,
                 'type'    => $method,
-                'options' => $this->getClientOptions($urlOptions),
+                'options' => $this->getClientOptions($requestOptions),
             ];
         }
 
         $httpResults = Requests::request_multiple($requests);
 
         $result = [];
+
         foreach ($httpResults as $resName => $httpResult) {
             $result[$resName] = [
-                $httpResult->status_code,
+                (int)$httpResult->status_code,
                 $httpResult->headers->getAll(),
                 $httpResult->body
             ];
@@ -116,7 +123,7 @@ class Rmccue extends AbstractDriver
             'follow_redirects' => $options->isAllowRedirects(),
             'redirects'        => $options->getMaxRedirects(),
             'useragent'        => $options->getUserAgent('Rmccue'),
-            'auth'             => $options->getAuth(),
+            'auth'             => $options->getAuth() ?: false,
         ];
     }
 }

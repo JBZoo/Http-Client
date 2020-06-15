@@ -15,13 +15,16 @@
 
 namespace JBZoo\HttpClient;
 
-use JBZoo\Data\JSON;
+use JBZoo\Data\Data;
+
+use function JBZoo\Utils\bool;
+use function JBZoo\Utils\int;
 
 /**
  * Class Options
  * @package JBZoo\HttpClient
  */
-class Options extends JSON
+class Options
 {
     public const DEFAULT_METHOD          = 'GET';
     public const DEFAULT_DRIVER          = 'Guzzle';
@@ -36,7 +39,7 @@ class Options extends JSON
      * @var array
      */
     protected $default = [
-        'auth'            => false,
+        'auth'            => [],
         'headers'         => [],
         'driver'          => self::DEFAULT_DRIVER,
         'timeout'         => self::DEFAULT_TIMEOUT,
@@ -48,85 +51,98 @@ class Options extends JSON
     ];
 
     /**
+     * @var Data
+     */
+    protected $data;
+
+    /**
      * Response constructor.
      * @param array $data
      */
-    public function __construct($data = [])
+    public function __construct(array $data = [])
     {
-        $data = array_merge($this->default, $data);
-        parent::__construct($data);
+        $this->data = new Data(array_merge($this->default, $data));
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAuth(): ?array
+    {
+        return (array)$this->data->get('auth', []) ?: null;
     }
 
     /**
      * @return array
      */
-    public function getAuth()
+    public function getHeaders(): array
     {
-        return $this->get('auth', false);
-    }
-
-    /**
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->get('headers', []);
+        return (array)$this->data->get('headers', []);
     }
 
     /**
      * @return string
      */
-    public function getDriver()
+    public function getDriver(): string
     {
-        return $this->get('driver', self::DEFAULT_DRIVER, 'ucfirst');
+        return (string)$this->data->get('driver', self::DEFAULT_DRIVER, 'ucfirst');
     }
 
     /**
      * @return int
      */
-    public function getTimeout()
+    public function getTimeout(): int
     {
-        return $this->get('timeout', self::DEFAULT_TIMEOUT, 'int');
+        return int($this->data->get('timeout', self::DEFAULT_TIMEOUT, 'int'));
     }
 
     /**
      * @return bool
      */
-    public function isVerify()
+    public function isVerify(): bool
     {
-        return $this->get('verify', self::DEFAULT_VERIFY, 'bool');
+        return bool($this->data->get('verify', self::DEFAULT_VERIFY, 'bool'));
     }
 
     /**
      * @return bool
      */
-    public function showException()
+    public function allowException(): bool
     {
-        return $this->get('exceptions', self::DEFAULT_EXCEPTIONS, 'bool');
+        return bool($this->data->get('exceptions', self::DEFAULT_EXCEPTIONS, 'bool'));
     }
 
     /**
      * @return bool
      */
-    public function isAllowRedirects()
+    public function isAllowRedirects(): bool
     {
-        return $this->get('allow_redirects', self::DEFAULT_ALLOW_REDIRECTS, 'bool');
+        return bool($this->data->get('allow_redirects', self::DEFAULT_ALLOW_REDIRECTS, 'bool'));
     }
 
     /**
      * @return int
      */
-    public function getMaxRedirects()
+    public function getMaxRedirects(): int
     {
-        return $this->get('max_redirects', self::DEFAULT_MAX_REDIRECTS, 'int');
+        return int($this->data->get('max_redirects', self::DEFAULT_MAX_REDIRECTS, 'int'));
     }
 
     /**
      * @param string $suffix
      * @return string
      */
-    public function getUserAgent($suffix)
+    public function getUserAgent(string $suffix): string
     {
-        return $this->get('user_agent', self::DEFAULT_USER_AGENT) . " ({$suffix})";
+        $packageName = (string)$this->data->get('user_agent', self::DEFAULT_USER_AGENT);
+        return "{$packageName} ({$suffix})";
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->data->getArrayCopy();
     }
 }
