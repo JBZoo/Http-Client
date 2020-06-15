@@ -103,10 +103,10 @@ abstract class AbstractDriverTest extends PHPUnit
             isSame($method, $body->find('method'), $message);
 
             if ($method === 'GET') {
-                isContain(Url::addArg($args, $url), $body->find('url'), $message);
+                $this->isSameUrl(Url::addArg($args, $url), $body->find('url'), $message);
                 isSame($uniq, $body->find('queryString.qwerty'), $message);
             } else {
-                isContain($url, $body->find('url'), $message);
+                $this->isContainUrl($url, $body->find('url'), $message);
                 if ($this->driver === 'Rmccue' && $method === 'DELETE') {
                     skip('DELETE is not supported with Rmccue/Requests correctly');
                 }
@@ -140,7 +140,7 @@ abstract class AbstractDriverTest extends PHPUnit
         isContain('application/json', $result->getHeader('Content-Type'));
 
         $body = $result->getJSON();
-        isSame(Url::addArg($args, $url), $body->find('url'));
+        $this->isSameUrl(Url::addArg($args, $url), $body->find('url'));
         isSame($uniq, $body->find('args.qwerty'));
         isSame('value', $body->find('args.key'));
     }
@@ -166,7 +166,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
         isSame(200, $result->code);
         isContain('application/json', $result->find('headers.content-type'));
-        isContain('httpbin.org/post?key=value', $body->find('url'));
+        $this->isSameUrl('//httpbin.org/post?key=value', $body->find('url'));
         isSame($uniq, $body->find('form.qwerty'));
         isSame('value', $body->find('args.key'));
     }
@@ -246,7 +246,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $body = $result->getJSON();
 
         isSame(200, $result->code);
-        isSame('http://httpbin.org/get', $body->get('url'));
+        $this->isSameUrl('http://httpbin.org/get', $body->get('url'));
     }
 
     public function testDelayError()
@@ -278,7 +278,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $body = $result->getJSON();
 
         isSame(200, $result->code);
-        isSame($url, $body->get('url'));
+        $this->isSameUrl($url, $body->get('url'));
     }
 
     public function testSSL()
@@ -325,5 +325,34 @@ abstract class AbstractDriverTest extends PHPUnit
         $body2 = $results['request_2']->getJSON();
         isSame('POST', $body2->find('method'));
         isSame('value', $body2->find('postData.params.key'));
+    }
+
+    /**
+     * @param string $expected
+     * @param string $actual
+     * @param string $message
+     */
+    private function isSameUrl(string $expected, string $actual, string $message = '')
+    {
+        isSame(
+            str_replace(['https://', 'http://'], '//', $expected),
+            str_replace(['https://', 'http://'], '//', $actual),
+            $message
+        );
+    }
+
+    /**
+     * @param string $expected
+     * @param string $actual
+     * @param string $message
+     */
+    private function isContainUrl(string $expected, string $actual, string $message = '')
+    {
+        isContain(
+            str_replace(['https://', 'http://'], '//', $expected),
+            str_replace(['https://', 'http://'], '//', $actual),
+            false,
+            $message
+        );
     }
 }
