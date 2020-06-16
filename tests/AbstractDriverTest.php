@@ -17,7 +17,6 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
-use JBZoo\HttpClient\Response;
 use JBZoo\Utils\Url;
 
 /**
@@ -41,10 +40,9 @@ abstract class AbstractDriverTest extends PHPUnit
      * @param array $options
      * @return HttpClient
      */
-    protected function getClient($options = [])
+    protected function getClient(array $options = []): HttpClient
     {
         $options['driver'] = $this->driver;
-
         return new HttpClient($options);
     }
 
@@ -283,9 +281,13 @@ abstract class AbstractDriverTest extends PHPUnit
     public function testSSL()
     {
         $url = 'https://www.google.com';
-        $result = $this->getClient([
-            'verify' => false,
-        ])->request($url);
+        $result = $this->getClient(['verify' => false])->request($url);
+
+        isSame(200, $result->code);
+        isContain('google', $result->body);
+
+        $url = 'https://www.google.com';
+        $result = $this->getClient(['verify' => true])->request($url);
 
         isSame(200, $result->code);
         isContain('google', $result->body);
@@ -293,34 +295,58 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testMultiRequest()
     {
-        $results = $this->getClient()->multiRequest([
-            'request_0' => 'http://mockbin.org/request?qwerty=123456',
-            'request_1' => [
-                'http://mockbin.org/request',
-                [
-                    'args' => ['key' => 'value'],
-                ],
-            ],
+        $responseList = $this->getClient(['user_agent' => 'Qwerty Agent v123'])->multiRequest([
+            'request_0' => ['http://mockbin.org/request?qwerty=123456'],
+            'request_1' => ['http://mockbin.org/request', ['key' => 'value']],
             'request_2' => [
                 'http://mockbin.org/request',
+                ['key' => 'value'],
+                'post',
                 [
-                    'method' => 'post',
-                    'args'   => ['key' => 'value'],
-                ],
+                    'user_agent' => 'Qwerty Agent v456',
+                    'headers'    => [
+                        'x-custom-header' => '123'
+                    ]
+                ]
             ],
         ]);
 
-        $body1 = $results['request_0']->getJSON();
-        isSame('GET', $body1->find('method'));
-        isSame('123456', $body1->find('queryString.qwerty'));
+        // Response - 0
+        $request0 = $responseList['request_0']->getRequest();
+        isSame('http://mockbin.org/request?qwerty=123456', $request0->get('url'));
+        isSame('Qwerty Agent v123', $request0->find('options.user_agent'));
+        isSame('GET', $request0->get('method'));
 
-        $body1 = $results['request_1']->getJSON();
-        isSame('GET', $body1->find('method'));
-        isSame('value', $body1->find('queryString.key'));
+        $jsonBody0 = $responseList['request_0']->getJSON();
+        isSame('http://mockbin.org/request?qwerty=123456', $jsonBody0->find('url'));
+        isSame('GET', $jsonBody0->find('method'));
+        isSame('123456', $jsonBody0->find('queryString.qwerty'));
 
-        $body2 = $results['request_2']->getJSON();
-        isSame('POST', $body2->find('method'));
-        isSame('value', $body2->find('postData.params.key'));
+
+        // Response - 1
+        $request1 = $responseList['request_1']->getRequest();
+        isSame('http://mockbin.org/request?key=value', $request1->get('url'));
+        isSame('Qwerty Agent v123', $request1->find('options.user_agent'));
+        isSame('GET', $request1->get('method'));
+
+        $jsonBody1 = $responseList['request_1']->getJSON();
+        isSame('http://mockbin.org/request?key=value', $jsonBody1->find('url'));
+        isSame('GET', $jsonBody1->find('method'));
+        isSame('value', $jsonBody1->find('queryString.key'));
+
+
+        // Response - 2
+        $request2 = $responseList['request_2']->getRequest();
+        isSame('http://mockbin.org/request', $request2->get('url'));
+        isSame('Qwerty Agent v456', $request2->find('options.user_agent'));
+        isSame('123', $request2->find('options.headers.x-custom-header'));
+        isSame('POST', $request2->get('method'));
+
+        $jsonBody2 = $responseList['request_2']->getJSON();
+        isSame('123', $jsonBody2->find('headers.x-custom-header'));
+        isSame('http://mockbin.org/request', $jsonBody2->find('url'));
+        isSame('POST', $jsonBody2->find('method'));
+        isSame('value', $jsonBody2->find('postData.params.key'));
     }
 
     /**

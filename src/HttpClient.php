@@ -68,7 +68,13 @@ class HttpClient
             $response
                 ->setCode((int)$code)
                 ->setHeaders((array)$headers)
-                ->setBody((string)$body);
+                ->setBody((string)$body)
+                ->setRequest([
+                    'url'     => $url,
+                    'args'    => $args,
+                    'method'  => $method,
+                    'options' => $options->toArray()
+                ]);
         } catch (\Exception $exception) {
             if ($options->allowException()) {
                 throw new Exception($exception->getMessage(), (int)$exception->getCode(), $exception);
@@ -84,29 +90,51 @@ class HttpClient
     }
 
     /**
-     * @param array $urls
+     * @param array $requestList
      * @param array $options
      * @return Response[]
      * @throws Exception
      */
-    public function multiRequest(array $urls, array $options = [])
+    public function multiRequest(array $requestList, array $options = [])
     {
+        $cleanedRequestList = [];
+        foreach ($requestList as $requestName => $requestData) {
+            $args = $requestData[1] ?? null;
+            $method = strtoupper($requestData[2] ?? 'GET') ?: 'GET';
+            $requestOptions = new Options(array_merge($this->options->toArray(), (array)($requestData[3] ?? [])));
+
+            $url = (string)($requestData[0] ?? '');
+            $fullUri = $url;
+            if ('GET' === $method) {
+                $fullUri = Url::addArg((array)$args, $url);
+                $args = null;
+            }
+
+            $cleanedRequestList[$requestName] = [$fullUri, $args, $method, $requestOptions];
+        }
+
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $options = new Options(array_merge($this->options->toArray(), $options));
         $client = $this->getDriver($options);
 
-        $httpResults = $client->multiRequest($urls);
+        $responses = $client->multiRequest($cleanedRequestList);
 
         $results = [];
 
-        /** @var array $resultRow */
-        foreach ($httpResults as $resKey => $resultRow) {
-            [$code, $headers, $body] = $resultRow;
+        foreach ($responses as $responseName => $responseData) {
+            [$code, $headers, $body] = $responseData;
+            [$uri, $args, $method, $options] = $cleanedRequestList[$responseName];
 
-            $results[$resKey] = (new Response())
+            $results[$responseName] = (new Response())
                 ->setCode((int)$code)
                 ->setHeaders((array)$headers)
-                ->setBody((string)$body);
+                ->setBody((string)$body)
+                ->setRequest([
+                    'url'     => $uri,
+                    'args'    => $args,
+                    'method'  => $method,
+                    'options' => $options->toArray()
+                ]);
         }
 
         return $results;

@@ -16,9 +16,7 @@
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
-use JBZoo\Data\Data;
 use JBZoo\HttpClient\Options;
-use JBZoo\Utils\Url;
 use Throwable;
 
 use function GuzzleHttp\Promise\unwrap;
@@ -53,27 +51,18 @@ class Guzzle extends AbstractDriver
      * @inheritdoc
      * @throws Throwable
      */
-    public function multiRequest(array $urls)
+    public function multiRequest(array $requestList)
     {
         $client = new Client();
 
         $promises = [];
-        foreach ($urls as $urlName => $urlData) {
-            if (is_string($urlData)) {
-                $urlData = [$urlData, []];
-            }
+        foreach ($requestList as $requestName => $requestParams) {
+            [$uri, $args, $method, $options] = $requestParams;
 
-            $requestOptions = new Options($urlData[1]);
-            $urlParams = new Data($urlData[1]);
-
-            $method = $urlParams->get('method', 'GET', 'up');
-            $args = $urlParams->get('args');
-            $url = 'GET' === $method ? Url::addArg((array)$args, $urlData[0]) : $urlData[0];
-
-            $promises[$urlName] = $client->requestAsync(
+            $promises[$requestName] = $client->requestAsync(
                 $method,
-                $url,
-                $this->getDriverOptions($requestOptions, $method, $args)
+                $uri,
+                $this->getDriverOptions($options, $method, $args)
             );
         }
 

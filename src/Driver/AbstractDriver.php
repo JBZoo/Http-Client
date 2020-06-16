@@ -24,6 +24,20 @@ use JBZoo\HttpClient\Options;
 abstract class AbstractDriver
 {
     /**
+     * @var Options
+     */
+    protected $options;
+
+    /**
+     * AbstractDriver constructor.
+     * @param Options|null $options
+     */
+    public function __construct(Options $options = null)
+    {
+        $this->options = $options ?: new Options();
+    }
+
+    /**
      * @param string            $url
      * @param array|string|null $args
      * @param string            $method
@@ -33,8 +47,8 @@ abstract class AbstractDriver
     abstract public function request(string $url, $args, string $method, Options $options);
 
     /**
-     * @param array $urls
+     * @param array $requestList
      * @return array
      */
-    abstract public function multiRequest(array $urls);
+    abstract public function multiRequest(array $requestList);
 }

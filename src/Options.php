@@ -29,39 +29,34 @@ class Options
     public const DEFAULT_METHOD          = 'GET';
     public const DEFAULT_DRIVER          = 'Guzzle';
     public const DEFAULT_TIMEOUT         = 10;
-    public const DEFAULT_VERIFY          = false;
+    public const DEFAULT_VERIFY          = true;
     public const DEFAULT_EXCEPTIONS      = false;
     public const DEFAULT_ALLOW_REDIRECTS = true;
     public const DEFAULT_MAX_REDIRECTS   = 10;
     public const DEFAULT_USER_AGENT      = 'JBZoo/Http-Client';
 
     /**
-     * @var array
-     */
-    protected $default = [
-        'auth'            => [],
-        'headers'         => [],
-        'driver'          => self::DEFAULT_DRIVER,
-        'timeout'         => self::DEFAULT_TIMEOUT,
-        'verify'          => self::DEFAULT_VERIFY,
-        'exceptions'      => self::DEFAULT_EXCEPTIONS,
-        'allow_redirects' => self::DEFAULT_ALLOW_REDIRECTS,
-        'max_redirects'   => self::DEFAULT_MAX_REDIRECTS,
-        'user_agent'      => self::DEFAULT_USER_AGENT,
-    ];
-
-    /**
      * @var Data
      */
-    protected $data;
+    protected $options;
 
     /**
      * Response constructor.
-     * @param array $data
+     * @param array $options
      */
-    public function __construct(array $data = [])
+    public function __construct(array $options = [])
     {
-        $this->data = new Data(array_merge($this->default, $data));
+        $this->options = new Data(array_merge([
+            'auth'            => [],
+            'headers'         => [],
+            'driver'          => self::DEFAULT_DRIVER,
+            'timeout'         => self::DEFAULT_TIMEOUT,
+            'verify'          => self::DEFAULT_VERIFY,
+            'exceptions'      => self::DEFAULT_EXCEPTIONS,
+            'allow_redirects' => self::DEFAULT_ALLOW_REDIRECTS,
+            'max_redirects'   => self::DEFAULT_MAX_REDIRECTS,
+            'user_agent'      => self::DEFAULT_USER_AGENT,
+        ], $options));
     }
 
     /**
@@ -69,7 +64,7 @@ class Options
      */
     public function getAuth(): ?array
     {
-        return (array)$this->data->get('auth', []) ?: null;
+        return (array)$this->options->get('auth', []) ?: null;
     }
 
     /**
@@ -77,7 +72,7 @@ class Options
      */
     public function getHeaders(): array
     {
-        return (array)$this->data->get('headers', []);
+        return (array)$this->options->get('headers', []);
     }
 
     /**
@@ -85,7 +80,7 @@ class Options
      */
     public function getDriver(): string
     {
-        return (string)$this->data->get('driver', self::DEFAULT_DRIVER, 'ucfirst');
+        return (string)$this->options->get('driver', self::DEFAULT_DRIVER, 'ucfirst');
     }
 
     /**
@@ -93,7 +88,7 @@ class Options
      */
     public function getTimeout(): int
     {
-        return int($this->data->get('timeout', self::DEFAULT_TIMEOUT, 'int'));
+        return int($this->options->get('timeout', self::DEFAULT_TIMEOUT, 'int'));
     }
 
     /**
@@ -101,7 +96,7 @@ class Options
      */
     public function isVerify(): bool
     {
-        return bool($this->data->get('verify', self::DEFAULT_VERIFY, 'bool'));
+        return bool($this->options->get('verify', self::DEFAULT_VERIFY, 'bool'));
     }
 
     /**
@@ -109,7 +104,7 @@ class Options
      */
     public function allowException(): bool
     {
-        return bool($this->data->get('exceptions', self::DEFAULT_EXCEPTIONS, 'bool'));
+        return bool($this->options->get('exceptions', self::DEFAULT_EXCEPTIONS, 'bool'));
     }
 
     /**
@@ -117,7 +112,7 @@ class Options
      */
     public function isAllowRedirects(): bool
     {
-        return bool($this->data->get('allow_redirects', self::DEFAULT_ALLOW_REDIRECTS, 'bool'));
+        return bool($this->options->get('allow_redirects', self::DEFAULT_ALLOW_REDIRECTS, 'bool'));
     }
 
     /**
@@ -125,7 +120,7 @@ class Options
      */
     public function getMaxRedirects(): int
     {
-        return int($this->data->get('max_redirects', self::DEFAULT_MAX_REDIRECTS, 'int'));
+        return int($this->options->get('max_redirects', self::DEFAULT_MAX_REDIRECTS, 'int'));
     }
 
     /**
@@ -134,8 +129,12 @@ class Options
      */
     public function getUserAgent(string $suffix): string
     {
-        $packageName = (string)$this->data->get('user_agent', self::DEFAULT_USER_AGENT);
-        return "{$packageName} ({$suffix})";
+        $userAgent = (string)$this->options->get('user_agent', self::DEFAULT_USER_AGENT);
+        if (self::DEFAULT_USER_AGENT === $userAgent) {
+            return "{$userAgent} ({$suffix})";
+        }
+
+        return $userAgent;
     }
 
     /**
@@ -143,6 +142,6 @@ class Options
      */
     public function toArray(): array
     {
-        return $this->data->getArrayCopy();
+        return $this->options->getArrayCopy();
     }
 }

@@ -36,15 +36,15 @@ class Auto extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function multiRequest(array $urls)
+    public function multiRequest(array $requestList)
     {
-        return $this->getClient()->multiRequest($urls);
+        return $this->getClient()->multiRequest($requestList);
     }
 
     /**
      * @return AbstractDriver
      */
-    protected function getClient()
+    protected function getClient(): AbstractDriver
     {
         if (class_exists(Client::class) && method_exists(Client::class, 'request')) {
             return new Guzzle();

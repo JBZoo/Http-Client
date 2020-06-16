@@ -48,6 +48,11 @@ class Response
     private $parsedJsonData;
 
     /**
+     * @var JSON|null
+     */
+    private $originalRequest;
+
+    /**
      * @param int $code
      * @return $this
      */
@@ -164,5 +169,23 @@ class Response
         }
 
         return $headers[$headerKey] ?? null;
+    }
+
+    /**
+     * @param array $requestData
+     * @return $this
+     */
+    public function setRequest(array $requestData): self
+    {
+        $this->originalRequest = new JSON($requestData);
+        return $this;
+    }
+
+    /**
+     * @return JSON|null
+     */
+    public function getRequest(): ?JSON
+    {
+        return $this->originalRequest;
     }
 }

@@ -15,11 +15,9 @@
 
 namespace JBZoo\HttpClient\Driver;
 
-use JBZoo\Data\Data;
 use JBZoo\HttpClient\Exception;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Filter;
-use JBZoo\Utils\Url;
 use Requests;
 
 /**
@@ -68,38 +66,24 @@ class Rmccue extends AbstractDriver
     /**
      * @inheritdoc
      */
-    public function multiRequest(array $urls)
+    public function multiRequest(array $requestList)
     {
-        $requests = [];
+        $requestResults = [];
+        foreach ($requestList as $requestName => $requestParams) {
+            [$uri, $args, $method, $options] = $requestParams;
 
-        /** @var array|string $urlData */
-        foreach ($urls as $urlName => $urlData) {
-            if (is_string($urlData)) {
-                $urlData = [$urlData, []];
-            }
-
-            $requestOptions = new Options((array)$urlData[1]);
-            $urlParams = new Data((array)$urlData[1]);
-
-            $method = (string)$urlParams->get('method', 'GET', 'up');
-            $args = (array)$urlParams->get('args');
-
-            $url = 'GET' === $method ? Url::addArg($args, (string)$urlData[0]) : (string)$urlData[0];
-            $args = 'GET' !== $method ? $args : [];
-
-            $requests[$urlName] = [
-                'url'     => $url,
-                'headers' => $requestOptions->getHeaders(),
+            $requestResults[$requestName] = [
+                'url'     => $uri,
                 'data'    => $args,
                 'type'    => $method,
-                'options' => $this->getDriverOptions($requestOptions),
+                'headers' => $options->getHeaders(),
+                'options' => $this->getDriverOptions($options),
             ];
         }
 
-        $httpResults = Requests::request_multiple($requests);
+        $httpResults = Requests::request_multiple($requestResults);
 
         $result = [];
-
         foreach ($httpResults as $resName => $httpResult) {
             $result[$resName] = [
                 (int)$httpResult->status_code,
