@@ -39,7 +39,7 @@ class Guzzle extends AbstractDriver
         $httpResult = $client->request(
             $method,
             $url,
-            $this->getClientOptions($options, $method, $args)
+            $this->getDriverOptions($options, $method, $args)
         );
 
         return [
@@ -73,7 +73,7 @@ class Guzzle extends AbstractDriver
             $promises[$urlName] = $client->requestAsync(
                 $method,
                 $url,
-                $this->getClientOptions($requestOptions, $method, $args)
+                $this->getDriverOptions($requestOptions, $method, $args)
             );
         }
 
@@ -97,7 +97,7 @@ class Guzzle extends AbstractDriver
      * @param string|array|null $args
      * @return array
      */
-    protected function getClientOptions(Options $options, $method, $args)
+    protected function getDriverOptions(Options $options, $method, $args)
     {
         $headers = $options->getHeaders();
         $headers['User-Agent'] = $options->getUserAgent('Guzzle');

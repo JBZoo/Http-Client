@@ -49,7 +49,7 @@ class Rmccue extends AbstractDriver
             /** @phan-suppress-next-line PhanPartialTypeMismatchArgument */
             $args,
             $method,
-            $this->getClientOptions($options)
+            $this->getDriverOptions($options)
         );
 
 
@@ -92,7 +92,7 @@ class Rmccue extends AbstractDriver
                 'headers' => $requestOptions->getHeaders(),
                 'data'    => $args,
                 'type'    => $method,
-                'options' => $this->getClientOptions($requestOptions),
+                'options' => $this->getDriverOptions($requestOptions),
             ];
         }
 
@@ -115,7 +115,7 @@ class Rmccue extends AbstractDriver
      * @param Options $options
      * @return array
      */
-    protected function getClientOptions(Options $options)
+    protected function getDriverOptions(Options $options)
     {
         return [
             'timeout'          => $options->getTimeout(),

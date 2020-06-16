@@ -15,91 +15,65 @@
 
 namespace JBZoo\HttpClient;
 
-use JBZoo\Data\Data;
 use JBZoo\Data\JSON;
-use JBZoo\Utils\Filter;
 
 /**
  * Class Response
  * @package JBZoo\HttpClient
+ *
+ * @property int    $code
+ * @property array  $headers
+ * @property string $body
  */
-class Response extends Data
+class Response
 {
     /**
-     * @var null|JSON
+     * @var int
      */
-    protected $jsonData = null;
+    private $internalCode = 0;
 
     /**
-     * Response constructor.
-     * @param array $data
+     * @var string[]
      */
-    public function __construct($data = [])
-    {
-        $data['code'] = 0;
-        $data['headers'] = [];
-        $data['body'] = '';
-        $this->jsonData = null;
+    private $internalHeaders = [];
 
-        parent::__construct($data);
-    }
+    /**
+     * @var string|null
+     */
+    private $internalBody;
+
+    /**
+     * @var JSON|null
+     */
+    private $parsedJsonData;
 
     /**
      * @param int $code
+     * @return $this
      */
-    public function setCode($code): void
+    public function setCode(int $code): self
     {
-        $this['code'] = Filter::int($code);
+        $this->internalCode = $code;
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getCode()
+    public function getCode(): int
     {
-        return $this->get('code', 0, 'int');
-    }
-
-    /**
-     * @param string $body
-     */
-    public function setBody($body): void
-    {
-        $this->jsonData = null; // Force update getJSON() result
-        $this['body'] = (string)$body;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->get('body', null);
-    }
-
-    /**
-     * @return JSON
-     */
-    public function getJSON()
-    {
-        if (null === $this->jsonData) {
-            $this->jsonData = new JSON($this->get('body'));
-            $this->jsonData->setFlags(\ArrayObject::ARRAY_AS_PROPS); // For JBZoo/Data less 1.4.2
-        }
-
-        return $this->jsonData;
+        return $this->internalCode;
     }
 
     /**
      * @param array $headers
-     * @return Response
+     * @return $this
      */
-    public function setHeaders(array $headers): Response
+    public function setHeaders(array $headers): self
     {
         $result = [];
 
         foreach ($headers as $key => $value) {
-            $key = strtolower($key);
             if (is_array($value)) {
                 $value = implode(';', $value);
             }
@@ -107,25 +81,88 @@ class Response extends Data
             $result[$key] = $value;
         }
 
-        $this['headers'] = $result;
-
+        $this->internalHeaders = $result;
         return $this;
-    }
-
-    /**
-     * @param string $key
-     * @return string
-     */
-    public function getHeader($key)
-    {
-        return $this->find('headers.' . strtolower($key));
     }
 
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
-        return $this->get('headers', []);
+        return $this->internalHeaders;
+    }
+
+    /**
+     * @param string $body
+     * @return $this
+     */
+    public function setBody(string $body): self
+    {
+        $this->internalBody = $body;
+        $this->parsedJsonData = null;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBody(): ?string
+    {
+        return $this->internalBody;
+    }
+
+    /**
+     * @return JSON|null
+     */
+    public function getJSON(): ?JSON
+    {
+        if (null === $this->parsedJsonData && $this->internalBody) {
+            $this->parsedJsonData = new JSON($this->internalBody);
+        }
+
+        return $this->parsedJsonData;
+    }
+
+    /**
+     * @param string $name
+     * @return array|int|string|string[]|null
+     */
+    public function __get($name)
+    {
+        if ('code' === $name) {
+            return $this->getCode();
+        }
+
+        if ('headers' === $name) {
+            return $this->getHeaders();
+        }
+
+        if ('body' === $name) {
+            return $this->getBody();
+        }
+
+        throw new Exception("Property '{$name}' not defined");
+    }
+
+    /**
+     * @param string $headerKey
+     * @param bool   $ignoreCase
+     * @return string|null
+     */
+    public function getHeader(string $headerKey, bool $ignoreCase = true): ?string
+    {
+        if ($ignoreCase) {
+            $headers = [];
+            $headerKey = strtolower($headerKey);
+            foreach ($this->getHeaders() as $key => $value) {
+                $key = strtolower($key);
+                $headers[$key] = $value;
+            }
+        } else {
+            $headers = $this->getHeaders();
+        }
+
+        return $headers[$headerKey] ?? null;
     }
 }

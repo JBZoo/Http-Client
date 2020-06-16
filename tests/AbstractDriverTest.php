@@ -54,8 +54,8 @@ abstract class AbstractDriverTest extends PHPUnit
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
-        isSame('42', $result->find('headers.x-custom-header'));
-        isContain('application/json', $result->find('headers.content-type'));
+        isSame('42', $result->getHeader('x-custom-header'));
+        isContain('application/json', $result->getHeader('content-type'));
         isSame('{"great-answer": "42"}', $result->body);
     }
 
@@ -64,7 +64,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $result = $this->getClient()->request('https://httpbin.org/image/png');
 
         isSame(200, $result->getCode());
-        isSame('image/png', $result->getHeader('Content-Type'));
+        isSame('image/png', $result->getHeader('CONTENT-TYPE'));
         isContain('PNG', $result->getBody());
     }
 
@@ -165,7 +165,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $body = $result->getJSON();
 
         isSame(200, $result->code);
-        isContain('application/json', $result->find('headers.content-type'));
+        isContain('application/json', $result->getHeader('content-type'));
         $this->isSameUrl('//httpbin.org/post?key=value', $body->find('url'));
         isSame($uniq, $body->find('form.qwerty'));
         isSame('value', $body->find('args.key'));
@@ -209,7 +209,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
-        isContain('text/html', $result->find('headers.content-type'));
+        isContain('text/html', $result->getHeader('content-type'));
         isContain('Example', $result->body);
     }
 
@@ -233,10 +233,9 @@ abstract class AbstractDriverTest extends PHPUnit
         $url = 'http://httpbin.org/gzip';
 
         $result = $this->getClient()->request($url);
-        $body = $result->get('body', null, 'data');
 
         isSame(200, $result->code);
-        isSame(true, $body->find('gzipped'));
+        isSame(true, $result->getJSON()->find('gzipped'));
     }
 
     public function testMultiRedirects()
@@ -311,17 +310,14 @@ abstract class AbstractDriverTest extends PHPUnit
             ],
         ]);
 
-        /** @var Response $body1 */
         $body1 = $results['request_0']->getJSON();
         isSame('GET', $body1->find('method'));
         isSame('123456', $body1->find('queryString.qwerty'));
 
-        /** @var Response $body1 */
         $body1 = $results['request_1']->getJSON();
         isSame('GET', $body1->find('method'));
         isSame('value', $body1->find('queryString.key'));
 
-        /** @var Response $body2 */
         $body2 = $results['request_2']->getJSON();
         isSame('POST', $body2->find('method'));
         isSame('value', $body2->find('postData.params.key'));

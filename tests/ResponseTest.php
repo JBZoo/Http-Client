@@ -23,13 +23,13 @@ use JBZoo\HttpClient\Response;
  */
 class ResponseTest extends PHPUnit
 {
-    protected $_json = '{"key-1":"value-1","key-2":"value-2"}';
+    protected $jsonFixture = '{"key-1":"value-1","key-2":"value-2"}';
 
     public function testGetSameJSON()
     {
         $resp = new Response();
 
-        $resp->setBody($this->_json);
+        $resp->setBody($this->jsonFixture);
 
         $json1 = $resp->getJSON();
         $json2 = $resp->getJSON();
@@ -40,7 +40,7 @@ class ResponseTest extends PHPUnit
         isSame($json1, $resp->getJSON());
         isSame($json2, $resp->getJSON());
 
-        $resp->setBody($this->_json);
+        $resp->setBody($this->jsonFixture);
         isNotSame($json1, $resp->getJSON());
         isNotSame($json2, $resp->getJSON());
         isSame($resp->getJSON(), $resp->getJSON());

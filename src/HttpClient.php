@@ -59,23 +59,25 @@ class HttpClient
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $options = new Options(array_merge($this->options->toArray(), $options));
 
-        $client = $this->getClient($options);
+        $client = $this->getDriver($options);
         $response = new Response();
 
         try {
             [$code, $headers, $body] = $client->request($url, $args, $method, $options);
 
-            $response->setCode((int)$code);
-            $response->setHeaders((array)$headers);
-            $response->setBody((string)$body);
+            $response
+                ->setCode((int)$code)
+                ->setHeaders((array)$headers)
+                ->setBody((string)$body);
         } catch (\Exception $exception) {
             if ($options->allowException()) {
                 throw new Exception($exception->getMessage(), (int)$exception->getCode(), $exception);
             }
 
-            $response->setCode((int)$exception->getCode());
-            $response->setHeaders([]);
-            $response->setBody($exception->getMessage());
+            $response
+                ->setCode((int)$exception->getCode())
+                ->setHeaders([])
+                ->setBody($exception->getMessage());
         }
 
         return $response;
@@ -91,7 +93,7 @@ class HttpClient
     {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $options = new Options(array_merge($this->options->toArray(), $options));
-        $client = $this->getClient($options);
+        $client = $this->getDriver($options);
 
         $httpResults = $client->multiRequest($urls);
 
@@ -101,10 +103,10 @@ class HttpClient
         foreach ($httpResults as $resKey => $resultRow) {
             [$code, $headers, $body] = $resultRow;
 
-            $results[$resKey] = new Response();
-            $results[$resKey]->setCode((int)$code);
-            $results[$resKey]->setHeaders((array)$headers);
-            $results[$resKey]->setBody((string)$body);
+            $results[$resKey] = (new Response())
+                ->setCode((int)$code)
+                ->setHeaders((array)$headers)
+                ->setBody((string)$body);
         }
 
         return $results;
@@ -117,7 +119,7 @@ class HttpClient
      * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
      */
-    protected function getClient(Options $options): AbstractDriver
+    protected function getDriver(Options $options): AbstractDriver
     {
         $driverName = $options->getDriver();
 
