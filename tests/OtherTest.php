@@ -235,4 +235,29 @@ class OtherTest extends PHPUnit
 
         isSame(2, $counter);
     }
+
+    public function testEventManagerException()
+    {
+        $eManager = new EventManager();
+        EventManager::setDefault($eManager);
+
+        $client = new HttpClient(['exceptions' => true]);
+        $client->setEventManager($eManager);
+
+        $counter = 0;
+        $eManager
+            ->once('jbzoo.http.exception', function (\Exception $exception) use (&$counter) {
+                isSame(404, $exception->getCode());
+                $counter++;
+            });
+
+        try {
+            $client->request('http://httpbin.org/status/404');
+            fail();
+        } catch (\Exception $exception) {
+            success();
+        }
+
+        isSame(1, $counter);
+    }
 }

@@ -15,11 +15,26 @@
 
 namespace JBZoo\HttpClient;
 
+use JBZoo\Event\EventManager;
+
 /**
  * Class Exception
  * @package JBZoo\HttpClient
  */
 class Exception extends \RuntimeException
 {
-    
+    /**
+     * Exception constructor.
+     * @param string          $message
+     * @param int             $code
+     * @param \Throwable|null $previous
+     */
+    public function __construct($message = '', $code = 0, \Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+
+        if (class_exists(EventManager::class) && $eManager = EventManager::getDefault()) {
+            $eManager->trigger('jbzoo.http.exception', [$this]);
+        }
+    }
 }
