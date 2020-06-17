@@ -216,4 +216,21 @@ class Response
         $this->time = $time;
         return $this;
     }
+
+    /**
+     * @param bool $parseJson
+     * @return array
+     */
+    public function toArray(bool $parseJson = false): array
+    {
+        return [
+            'request'  => $this->getRequest()->toArray(),
+            'response' => [
+                'code'    => $this->getCode(),
+                'body'    => $parseJson ? $this->getBody() : $this->getJSON()->getArrayCopy(),
+                'headers' => $this->getHeaders(),
+                'time'    => $this->getTime(),
+            ]
+        ];
+    }
 }

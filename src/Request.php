@@ -193,4 +193,18 @@ class Request
     {
         return new Options($this->options->toArray());
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'uri'     => $this->getUri(),
+            'method'  => $this->getMethod(),
+            'args'    => $this->getArgs(),
+            'headers' => $this->getHeaders(),
+            'options' => $this->getOptions()->toArray()
+        ];
+    }
 }

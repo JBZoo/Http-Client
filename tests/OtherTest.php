@@ -191,6 +191,13 @@ class OtherTest extends PHPUnit
             "max_redirects"   => 10,
             "user_agent"      => 'Custom Agent'
         ], $request->getOptions()->toArray());
+
+
+        isSame($request->toArray(), $response->toArray()['request']);
+
+        isSame(['uri', 'method', 'args', 'headers', 'options'], array_keys($request->toArray()));
+        isSame(['request', 'response'], array_keys($response->toArray()));
+        isSame(['code', 'body', 'headers', 'time'], array_keys($response->toArray()['response']));
     }
 
     public function testCheckDefaultDriver()
@@ -215,12 +222,13 @@ class OtherTest extends PHPUnit
                 isSame('https://httpbin.org/get', $request->getUri());
                 $counter++;
             })
-            ->once('jbzoo.http.request.after', function (HttpClient $client, Response $response, Request $request) use (&$counter) {
-                isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
-                isSame('https://httpbin.org/get', $request->getUri());
-                isSame('httpbin.org', $response->getJSON()->find('headers.Host'));
-                $counter++;
-            });
+            ->once('jbzoo.http.request.after',
+                function (HttpClient $client, Response $response, Request $request) use (&$counter) {
+                    isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
+                    isSame('https://httpbin.org/get', $request->getUri());
+                    isSame('httpbin.org', $response->getJSON()->find('headers.Host'));
+                    $counter++;
+                });
 
         $response = $client->request('https://httpbin.org/get');
         isSame('httpbin.org', $response->getJSON()->find('headers.Host'));
