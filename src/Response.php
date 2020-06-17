@@ -223,11 +223,19 @@ class Response
      */
     public function toArray(bool $parseJson = false): array
     {
+        $request = $this->getRequest();
+        $requestArray = $request ? $request->toArray() : null;
+
+        $body = $this->getBody();
+        if ($parseJson && $jsonBody = $this->getJSON()) {
+            $body = $jsonBody;
+        }
+
         return [
-            'request'  => $this->getRequest()->toArray(),
+            'request'  => $requestArray,
             'response' => [
                 'code'    => $this->getCode(),
-                'body'    => $parseJson ? $this->getBody() : $this->getJSON()->getArrayCopy(),
+                'body'    => $body,
                 'headers' => $this->getHeaders(),
                 'time'    => $this->getTime(),
             ]
