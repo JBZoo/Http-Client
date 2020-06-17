@@ -313,9 +313,9 @@ abstract class AbstractDriverTest extends PHPUnit
 
         // Response - 0
         $request0 = $responseList['request_0']->getRequest();
-        isSame('http://mockbin.org/request?qwerty=123456', $request0->get('url'));
-        isSame('Qwerty Agent v123', $request0->find('options.user_agent'));
-        isSame('GET', $request0->get('method'));
+        isSame('http://mockbin.org/request?qwerty=123456', $request0->getUri());
+        isSame('Qwerty Agent v123', $request0->getOptions()->getUserAgent());
+        isSame('GET', $request0->getMethod());
 
         $jsonBody0 = $responseList['request_0']->getJSON();
         isSame('http://mockbin.org/request?qwerty=123456', $jsonBody0->find('url'));
@@ -325,9 +325,9 @@ abstract class AbstractDriverTest extends PHPUnit
 
         // Response - 1
         $request1 = $responseList['request_1']->getRequest();
-        isSame('http://mockbin.org/request?key=value', $request1->get('url'));
-        isSame('Qwerty Agent v123', $request1->find('options.user_agent'));
-        isSame('GET', $request1->get('method'));
+        isSame('http://mockbin.org/request?key=value', $request1->getUri());
+        isSame('Qwerty Agent v123', $request1->getOptions()->getUserAgent());
+        isSame('GET', $request1->getMethod());
 
         $jsonBody1 = $responseList['request_1']->getJSON();
         isSame('http://mockbin.org/request?key=value', $jsonBody1->find('url'));
@@ -337,10 +337,10 @@ abstract class AbstractDriverTest extends PHPUnit
 
         // Response - 2
         $request2 = $responseList['request_2']->getRequest();
-        isSame('http://mockbin.org/request', $request2->get('url'));
-        isSame('Qwerty Agent v456', $request2->find('options.user_agent'));
-        isSame('123', $request2->find('options.headers.x-custom-header'));
-        isSame('POST', $request2->get('method'));
+        isSame('http://mockbin.org/request', $request2->getUri());
+        isSame('Qwerty Agent v456', $request2->getOptions()->getUserAgent());
+        isSame('123', $request2->getHeaders()['x-custom-header']);
+        isSame('POST', $request2->getMethod());
 
         $jsonBody2 = $responseList['request_2']->getJSON();
         isSame('123', $jsonBody2->find('headers.x-custom-header'));

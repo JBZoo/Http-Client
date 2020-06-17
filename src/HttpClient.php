@@ -15,9 +15,8 @@
 
 namespace JBZoo\HttpClient;
 
+use JBZoo\Event\EventManager;
 use JBZoo\HttpClient\Driver\AbstractDriver;
-use JBZoo\Utils\Filter;
-use JBZoo\Utils\Url;
 
 /**
  * Class HttpClient
@@ -28,7 +27,22 @@ class HttpClient
     /**
      * @var Options
      */
-    protected $options;
+    private $options;
+
+    /**
+     * @var EventManager|null
+     */
+    private $eManager;
+
+    /**
+     * @var Request|null
+     */
+    private $lastRequest;
+
+    /**
+     * @var Response|null
+     */
+    private $lastResponse;
 
     /**
      * HttpClient constructor.
@@ -45,46 +59,42 @@ class HttpClient
      * @param string            $method
      * @param array             $options
      * @return Response
-     * @throws Exception
      */
     public function request(
         string $url,
         $args = null,
-        string $method = Options::DEFAULT_METHOD,
+        string $method = Request::DEFAULT_METHOD,
         array $options = []
     ): Response {
-        $method = Filter::up($method);
-        $url = 'GET' === $method ? Url::addArg((array)$args, $url) : $url;
+        $this->lastRequest = (new Request())
+            ->setUrl($url)
+            ->setArgs($args)
+            ->setMethod($method)
+            ->setOptions(array_merge($this->options->toArray(), $options));
 
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $options = new Options(array_merge($this->options->toArray(), $options));
-
-        $client = $this->getDriver($options);
-        $response = new Response();
+        $startTime = microtime(true);
 
         try {
-            [$code, $headers, $body] = $client->request($url, $args, $method, $options);
-
-            $response
-                ->setCode((int)$code)
-                ->setHeaders((array)$headers)
-                ->setBody((string)$body)
-                ->setRequest([
-                    'url'     => $url,
-                    'args'    => $args,
-                    'method'  => $method,
-                    'options' => $options->toArray()
-                ]);
+            $this->trigger('request.before', [$this->lastRequest]);
+            $response = $this->getDriver()->request($this->lastRequest);
+            $this->trigger('request.after', [$response, $this->lastRequest]);
         } catch (\Exception $exception) {
-            if ($options->allowException()) {
+            if ($this->lastRequest->getOptions()->allowException()) {
                 throw new Exception($exception->getMessage(), (int)$exception->getCode(), $exception);
             }
 
-            $response
+            $response = (new Response())
                 ->setCode((int)$exception->getCode())
                 ->setHeaders([])
-                ->setBody($exception->getMessage());
+                ->setBody($exception->getMessage())
+                ->setRequest($this->lastRequest);
         }
+
+        if (null === $response->time) {
+            $response->setTime(microtime(true) - $startTime);
+        }
+
+        $this->lastResponse = $response;
 
         return $response;
     }
@@ -93,70 +103,91 @@ class HttpClient
      * @param array $requestList
      * @param array $options
      * @return Response[]
-     * @throws Exception
      */
     public function multiRequest(array $requestList, array $options = [])
     {
+        /** @var Request[] $cleanedRequestList */
         $cleanedRequestList = [];
-        foreach ($requestList as $requestName => $requestData) {
-            $args = $requestData[1] ?? null;
-            $method = strtoupper($requestData[2] ?? 'GET') ?: 'GET';
-            $requestOptions = new Options(array_merge($this->options->toArray(), (array)($requestData[3] ?? [])));
 
-            $url = (string)($requestData[0] ?? '');
-            $fullUri = $url;
-            if ('GET' === $method) {
-                $fullUri = Url::addArg((array)$args, $url);
-                $args = null;
-            }
+        foreach ($requestList as $name => $requestData) {
+            $requestOptions = array_merge($this->options->toArray(), $options, (array)($requestData[3] ?? []));
 
-            $cleanedRequestList[$requestName] = [$fullUri, $args, $method, $requestOptions];
+            $cleanedRequestList[$name] = (new Request())
+                ->setUrl($requestData[0] ?? '')
+                ->setArgs($requestData[1] ?? null)
+                ->setMethod($requestData[2] ?? Request::DEFAULT_METHOD)
+                ->setHeaders($requestOptions['headers'] ?? [])
+                ->setOptions($requestOptions);
         }
 
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $options = new Options(array_merge($this->options->toArray(), $options));
-        $client = $this->getDriver($options);
+        $this->trigger('multi-request.before', [$cleanedRequestList]);
 
-        $responses = $client->multiRequest($cleanedRequestList);
+        $responseList = $this->getDriver()->multiRequest($cleanedRequestList);
 
-        $results = [];
+        $this->trigger('multi-request.after', [$responseList, $cleanedRequestList]);
 
-        foreach ($responses as $responseName => $responseData) {
-            [$code, $headers, $body] = $responseData;
-            [$uri, $args, $method, $options] = $cleanedRequestList[$responseName];
-
-            $results[$responseName] = (new Response())
-                ->setCode((int)$code)
-                ->setHeaders((array)$headers)
-                ->setBody((string)$body)
-                ->setRequest([
-                    'url'     => $uri,
-                    'args'    => $args,
-                    'method'  => $method,
-                    'options' => $options->toArray()
-                ]);
-        }
-
-        return $results;
+        return $responseList;
     }
 
     /**
-     * @param Options $options
      * @return AbstractDriver
      * @throws Exception
      * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
      */
-    protected function getDriver(Options $options): AbstractDriver
+    protected function getDriver(): AbstractDriver
     {
-        $driverName = $options->getDriver();
+        $driverName = $this->options->getDriver();
 
         $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
 
         if (class_exists($className)) {
-            return new $className($options);
+            return new $className();
         }
 
         throw new Exception("Driver '{$driverName}' not found");
+    }
+
+    /**
+     * @param EventManager $eManager
+     * @return $this
+     */
+    public function setEventManager(EventManager $eManager)
+    {
+        $this->eManager = $eManager;
+        return $this;
+    }
+
+    /**
+     * @param string        $eventName
+     * @param array         $context
+     * @param \Closure|null $callback
+     * @return int|string
+     */
+    public function trigger(string $eventName, array $context = [], ?\Closure $callback = null)
+    {
+        if (!$this->eManager) {
+            return 0;
+        }
+
+        array_unshift($context, $this);
+
+        return $this->eManager->trigger("jbzoo.http.{$eventName}", $context, $callback);
+    }
+
+    /**
+     * @return Response|null
+     */
+    public function getLastResponse(): ?Response
+    {
+        return $this->lastResponse;
+    }
+
+    /**
+     * @return Request|null
+     */
+    public function getLastRequest(): ?Request
+    {
+        return $this->lastRequest;
     }
 }

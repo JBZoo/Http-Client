@@ -26,7 +26,6 @@ use function JBZoo\Utils\int;
  */
 class Options
 {
-    public const DEFAULT_METHOD          = 'GET';
     public const DEFAULT_DRIVER          = 'Guzzle';
     public const DEFAULT_TIMEOUT         = 10;
     public const DEFAULT_VERIFY          = true;
@@ -124,13 +123,13 @@ class Options
     }
 
     /**
-     * @param string $suffix
+     * @param string|null $suffix
      * @return string
      */
-    public function getUserAgent(string $suffix): string
+    public function getUserAgent(?string $suffix = null): string
     {
         $userAgent = (string)$this->options->get('user_agent', self::DEFAULT_USER_AGENT);
-        if (self::DEFAULT_USER_AGENT === $userAgent) {
+        if ($suffix && self::DEFAULT_USER_AGENT === $userAgent) {
             return "{$userAgent} ({$suffix})";
         }
 

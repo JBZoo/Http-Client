@@ -15,7 +15,9 @@
 
 namespace JBZoo\PHPUnit;
 
+use JBZoo\Event\EventManager;
 use JBZoo\HttpClient\HttpClient;
+use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
 
 /**
@@ -55,9 +57,9 @@ class OtherTest extends PHPUnit
         isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame('https://httpbin.org/get', $request->get('url'));
-        isSame(null, $request->get('args'));
-        isSame('GET', $request->get('method'));
+        isSame('https://httpbin.org/get', $request->getUri());
+        isSame(null, $request->getArgs());
+        isSame('GET', $request->getMethod());
         isSame([
             'auth'            => [],
             'headers'         => [],
@@ -68,7 +70,7 @@ class OtherTest extends PHPUnit
             'allow_redirects' => true,
             'max_redirects'   => 10,
             'user_agent'      => 'JBZoo/Http-Client'
-        ], $request->get('options'));
+        ], $request->getOptions()->toArray());
     }
 
     public function testGetRequestGlobalOptions()
@@ -79,9 +81,9 @@ class OtherTest extends PHPUnit
         isSame('Qwerty Client', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame('https://httpbin.org/get?param=value', $request->get('url'));
-        isSame(['param' => 'value'], $request->get('args'));
-        isSame('GET', $request->get('method'));
+        isSame('https://httpbin.org/get?param=value', $request->getUri());
+        isSame(null, $request->getArgs());
+        isSame('GET', $request->getMethod());
         isSame([
             "auth"            => [],
             "headers"         => [],
@@ -92,7 +94,7 @@ class OtherTest extends PHPUnit
             "allow_redirects" => true,
             "max_redirects"   => 10,
             "user_agent"      => 'Qwerty Client'
-        ], $request->get('options'));
+        ], $request->getOptions()->toArray());
     }
 
     public function testGetRequestRequestOptions()
@@ -105,9 +107,9 @@ class OtherTest extends PHPUnit
         isSame('Qwerty Client2', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame('https://httpbin.org/post', $request->get('url'));
-        isSame(['param' => 'value'], $request->get('args'));
-        isSame('POST', $request->get('method'));
+        isSame('https://httpbin.org/post', $request->getUri());
+        isSame(['param' => 'value'], $request->getArgs());
+        isSame('POST', $request->getMethod());
         isSame([
             "auth"            => [],
             "headers"         => [],
@@ -118,7 +120,7 @@ class OtherTest extends PHPUnit
             "allow_redirects" => true,
             "max_redirects"   => 10,
             "user_agent"      => 'Qwerty Client2'
-        ], $request->get('options'));
+        ], $request->getOptions()->toArray());
     }
 
     public function testGetRequestRequestOptionsWithPostBody()
@@ -131,9 +133,9 @@ class OtherTest extends PHPUnit
         isSame('Qwerty Client2', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame('https://httpbin.org/post', $request->get('url'));
-        isSame('qwerty', $request->get('args'));
-        isSame('POST', $request->get('method'));
+        isSame('https://httpbin.org/post', $request->getUri());
+        isSame('qwerty', $request->getArgs());
+        isSame('POST', $request->getMethod());
         isSame([
             "auth"            => [],
             "headers"         => [],
@@ -144,7 +146,7 @@ class OtherTest extends PHPUnit
             "allow_redirects" => true,
             "max_redirects"   => 10,
             "user_agent"      => 'Qwerty Client2'
-        ], $request->get('options'));
+        ], $request->getOptions()->toArray());
     }
 
     public function testGetRequestMergingOptions()
@@ -156,18 +158,28 @@ class OtherTest extends PHPUnit
             'driver'     => 'Rmccue'
         ]);
 
-        $response = $client->request('https://httpbin.org/get', ['param' => 'value'], 'GET', [
+        $response = $client->request('https://httpbin.org/get?key=val', ['param' => 'value'], 'GET', [
             'user_agent' => 'Custom Agent',
             'headers'    => ['X-Custom-Header' => $randomValue]
         ]);
 
-        isSame('Custom Agent', $response->getJSON()->find('headers.User-Agent'));
-        isSame((string)$randomValue, $response->getJSON()->find('headers.X-Custom-Header'));
+        isSame($response->code, $response->getCode());
+        isSame(200, $response->code);
+        isSame($response->headers, $response->getHeaders());
+        isSame($response->body, $response->getBody());
+        isSame($response->time, $response->getTime());
+        isTrue($response->time > 0);
 
-        $request = $response->getRequest();
-        isSame('https://httpbin.org/get?param=value', $request->get('url'));
-        isSame(['param' => 'value'], $request->get('args'));
-        isSame('GET', $request->get('method'));
+        isSame($response, $client->getLastResponse());
+        isSame($client->getLastRequest(), $client->getLastResponse()->getRequest());
+
+        isSame('Custom Agent', $client->getLastResponse()->getJSON()->find('headers.User-Agent'));
+        isSame((string)$randomValue, $client->getLastResponse()->getJSON()->find('headers.X-Custom-Header'));
+
+        $request = $client->getLastRequest();
+        isSame('https://httpbin.org/get?key=val&param=value', $request->getUri());
+        isSame(null, $request->getArgs());
+        isSame('GET', $request->getMethod());
         isSame([
             "auth"            => [],
             "headers"         => ['X-Custom-Header' => $randomValue],
@@ -178,7 +190,7 @@ class OtherTest extends PHPUnit
             "allow_redirects" => true,
             "max_redirects"   => 10,
             "user_agent"      => 'Custom Agent'
-        ], $request->get('options'));
+        ], $request->getOptions()->toArray());
     }
 
     public function testCheckDefaultDriver()
@@ -187,5 +199,32 @@ class OtherTest extends PHPUnit
 
         $response = $client->request('https://httpbin.org/user-agent');
         isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->get('user-agent'));
+    }
+
+    public function testEventManager()
+    {
+        $eManager = new EventManager();
+
+        $client = new HttpClient();
+        $client->setEventManager($eManager);
+
+        $counter = 0;
+        $eManager
+            ->once('jbzoo.http.request.before', function (HttpClient $client, Request $request) use (&$counter) {
+                isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
+                isSame('https://httpbin.org/get', $request->getUri());
+                $counter++;
+            })
+            ->once('jbzoo.http.request.after', function (HttpClient $client, Response $response, Request $request) use (&$counter) {
+                isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
+                isSame('https://httpbin.org/get', $request->getUri());
+                isSame('httpbin.org', $response->getJSON()->find('headers.Host'));
+                $counter++;
+            });
+
+        $response = $client->request('https://httpbin.org/get');
+        isSame('httpbin.org', $response->getJSON()->find('headers.Host'));
+
+        isSame(2, $counter);
     }
 }

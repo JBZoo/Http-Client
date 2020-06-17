@@ -17,7 +17,8 @@ namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
 use JBZoo\HttpClient\Options;
-use Throwable;
+use JBZoo\HttpClient\Request;
+use JBZoo\HttpClient\Response;
 
 use function GuzzleHttp\Promise\unwrap;
 
@@ -28,53 +29,63 @@ use function GuzzleHttp\Promise\unwrap;
 class Guzzle extends AbstractDriver
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function request(string $url, $args, string $method, Options $options)
+    public function request(Request $request): Response
     {
         $client = new Client();
 
+        $start = microtime(true);
+
         $httpResult = $client->request(
-            $method,
-            $url,
-            $this->getDriverOptions($options, $method, $args)
+            $request->getMethod(),
+            $request->getUri(),
+            $this->getDriverOptions(
+                $request->getOptions(),
+                $request->getHeaders(),
+                $request->getMethod(),
+                $request->getArgs()
+            )
         );
 
-        return [
-            $httpResult->getStatusCode(),
-            $httpResult->getHeaders(),
-            $httpResult->getBody()->getContents()
-        ];
+        return (new Response())
+            ->setCode($httpResult->getStatusCode())
+            ->setHeaders($httpResult->getHeaders())
+            ->setBody($httpResult->getBody()->getContents())
+            ->setRequest($request)
+            ->setTime(microtime(true) - $start);
     }
 
     /**
-     * @inheritdoc
-     * @throws Throwable
+     * @inheritDoc
      */
-    public function multiRequest(array $requestList)
+    public function multiRequest(array $requestList): array
     {
         $client = new Client();
 
         $promises = [];
-        foreach ($requestList as $requestName => $requestParams) {
-            [$uri, $args, $method, $options] = $requestParams;
-
-            $promises[$requestName] = $client->requestAsync(
-                $method,
-                $uri,
-                $this->getDriverOptions($options, $method, $args)
+        foreach ($requestList as $name => $request) {
+            $promises[$name] = $client->requestAsync(
+                $request->getMethod(),
+                $request->getUri(),
+                $this->getDriverOptions(
+                    $request->getOptions(),
+                    $request->getHeaders(),
+                    $request->getMethod(),
+                    $request->getArgs()
+                )
             );
         }
 
         $httpResults = unwrap($promises);
 
         $result = [];
-        foreach ($httpResults as $resName => $httpResult) {
-            $result[$resName] = [
-                $httpResult->getStatusCode(),
-                $httpResult->getHeaders(),
-                $httpResult->getBody()->getContents()
-            ];
+        foreach ($httpResults as $name => $httpResult) {
+            $result[$name] = (new Response())
+                ->setCode($httpResult->getStatusCode())
+                ->setHeaders($httpResult->getHeaders())
+                ->setBody($httpResult->getBody()->getContents())
+                ->setRequest($requestList[$name]);
         }
 
         return $result;
@@ -82,18 +93,18 @@ class Guzzle extends AbstractDriver
 
     /**
      * @param Options           $options
+     * @param array             $headers
      * @param string            $method
      * @param string|array|null $args
      * @return array
      */
-    protected function getDriverOptions(Options $options, $method, $args)
+    protected function getDriverOptions(Options $options, array $headers, string $method, $args)
     {
-        $headers = $options->getHeaders();
         $headers['User-Agent'] = $options->getUserAgent('Guzzle');
 
         $body = $formParams = null;
 
-        if ('GET' !== $method) {
+        if (Request::GET !== $method) {
             if (is_array($args)) {
                 $formParams = $args;
             } else {

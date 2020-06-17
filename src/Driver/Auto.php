@@ -16,7 +16,8 @@
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
-use JBZoo\HttpClient\Options;
+use JBZoo\HttpClient\Request;
+use JBZoo\HttpClient\Response;
 
 /**
  * Class Auto
@@ -28,15 +29,15 @@ class Auto extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function request(string $url, $args, string $method, Options $options)
+    public function request(Request $request): Response
     {
-        return $this->getClient()->request($url, $args, $method, $options);
+        return $this->getClient()->request($request);
     }
 
     /**
      * @inheritDoc
      */
-    public function multiRequest(array $requestList)
+    public function multiRequest(array $requestList): array
     {
         return $this->getClient()->multiRequest($requestList);
     }

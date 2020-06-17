@@ -14,21 +14,23 @@
         }
     ],
     "require"           : {
-        "php"               : ">=7.2",
-        "ext-json"          : "*",
+        "php"        : ">=7.2",
+        "ext-json"   : "*",
 
-        "jbzoo/data"        : "4.0.x-dev",
-        "guzzlehttp/guzzle" : "^6.4"
+        "jbzoo/data" : "4.0.x-dev"
     },
 
     "require-dev"       : {
         "jbzoo/toolbox-dev" : "1.1.x-dev",
         "jbzoo/utils"       : "4.0.x-dev",
+        "jbzoo/event"       : "3.0.x-dev",
         "rmccue/requests"   : "^1.7.0"
     },
 
     "suggest"           : {
-        "rmccue/requests" : "Only if you can't use guzzle guzzlehttp/guzzle^6.4"
+        "rmccue/requests"   : "Only if you can't use guzzle guzzlehttp/guzzle^6.4",
+        "guzzlehttp/guzzle" : "Recommended default http-driver",
+        "jbzoo/event"       : ">=3.0"
     },
 
     "autoload"          : {

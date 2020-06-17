@@ -17,7 +17,8 @@ namespace JBZoo\HttpClient\Driver;
 
 use JBZoo\HttpClient\Exception;
 use JBZoo\HttpClient\Options;
-use JBZoo\Utils\Filter;
+use JBZoo\HttpClient\Request;
+use JBZoo\HttpClient\Response;
 use Requests;
 
 /**
@@ -29,67 +30,63 @@ class Rmccue extends AbstractDriver
     private const INVALID_CODE_LINE = 400;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function request(string $url, $args, string $method, Options $options)
+    public function request(Request $request): Response
     {
-        $headers = $options->getHeaders();
-        $method = Filter::up($method);
-        $args = 'GET' !== $method ? $args : [];
+        $options = $request->getOptions();
 
         /**
          * @psalm-suppress PossiblyInvalidArgument
          * @phpstan-ignore-next-line
          */
         $httpResult = Requests::request(
-            $url,
-            $headers,
+            $request->getUri(),
+            $request->getHeaders(),
             /** @phan-suppress-next-line PhanPartialTypeMismatchArgument */
-            $args,
-            $method,
+            $request->getArgs(),
+            $request->getMethod(),
             $this->getDriverOptions($options)
         );
-
 
         if ($httpResult->status_code >= self::INVALID_CODE_LINE && $options->allowException()) {
             throw new Exception($httpResult->body, (int)$httpResult->status_code);
         }
 
-        return [
-            $httpResult->status_code,
+        return (new Response())
+            ->setCode((int)$httpResult->status_code)
             /** @phan-suppress-next-line PhanPossiblyNonClassMethodCall */
-            $httpResult->headers->getAll(),
-            $httpResult->body
-        ];
+            ->setHeaders($httpResult->headers->getAll())
+            ->setBody($httpResult->body)
+            ->setRequest($request);
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function multiRequest(array $requestList)
+    public function multiRequest(array $requestList): array
     {
         $requestResults = [];
-        foreach ($requestList as $requestName => $requestParams) {
-            [$uri, $args, $method, $options] = $requestParams;
-
-            $requestResults[$requestName] = [
-                'url'     => $uri,
-                'data'    => $args,
-                'type'    => $method,
-                'headers' => $options->getHeaders(),
-                'options' => $this->getDriverOptions($options),
+        foreach ($requestList as $name => $request) {
+            $requestResults[$name] = [
+                'url'     => $request->getUri(),
+                'data'    => $request->getArgs(),
+                'type'    => $request->getMethod(),
+                'headers' => $request->getHeaders(),
+                'options' => $this->getDriverOptions($request->getOptions()),
             ];
         }
 
         $httpResults = Requests::request_multiple($requestResults);
 
         $result = [];
-        foreach ($httpResults as $resName => $httpResult) {
-            $result[$resName] = [
-                (int)$httpResult->status_code,
-                $httpResult->headers->getAll(),
-                $httpResult->body
-            ];
+        foreach ($httpResults as $name => $httpResult) {
+            $result[$name] = (new Response())
+                ->setCode((int)$httpResult->status_code)
+                /** @phan-suppress-next-line PhanPossiblyNonClassMethodCall */
+                ->setHeaders($httpResult->headers->getAll())
+                ->setBody($httpResult->body)
+                ->setRequest($requestList[$name]);
         }
 
         return $result;

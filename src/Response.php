@@ -21,9 +21,10 @@ use JBZoo\Data\JSON;
  * Class Response
  * @package JBZoo\HttpClient
  *
- * @property int    $code
- * @property array  $headers
- * @property string $body
+ * @property int        $code
+ * @property array      $headers
+ * @property string     $body
+ * @property float|null $time
  */
 class Response
 {
@@ -48,7 +49,12 @@ class Response
     private $parsedJsonData;
 
     /**
-     * @var JSON|null
+     * @var float|null
+     */
+    private $time;
+
+    /**
+     * @var Request|null
      */
     private $originalRequest;
 
@@ -131,7 +137,7 @@ class Response
 
     /**
      * @param string $name
-     * @return array|int|string|string[]|null
+     * @return array|string|float|int|string[]|null
      */
     public function __get($name)
     {
@@ -145,6 +151,10 @@ class Response
 
         if ('body' === $name) {
             return $this->getBody();
+        }
+
+        if ('time' === $name) {
+            return $this->getTime();
         }
 
         throw new Exception("Property '{$name}' not defined");
@@ -172,20 +182,38 @@ class Response
     }
 
     /**
-     * @param array $requestData
+     * @param Request $request
      * @return $this
      */
-    public function setRequest(array $requestData): self
+    public function setRequest(Request $request): self
     {
-        $this->originalRequest = new JSON($requestData);
+        $this->originalRequest = $request;
         return $this;
     }
 
     /**
-     * @return JSON|null
+     * @return Request|null
      */
-    public function getRequest(): ?JSON
+    public function getRequest(): ?Request
     {
         return $this->originalRequest;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTime(): ?float
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param float $time
+     * @return $this
+     */
+    public function setTime(float $time): self
+    {
+        $this->time = $time;
+        return $this;
     }
 }

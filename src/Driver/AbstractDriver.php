@@ -15,7 +15,8 @@
 
 namespace JBZoo\HttpClient\Driver;
 
-use JBZoo\HttpClient\Options;
+use JBZoo\HttpClient\Request;
+use JBZoo\HttpClient\Response;
 
 /**
  * Class AbstractDriver
@@ -24,31 +25,14 @@ use JBZoo\HttpClient\Options;
 abstract class AbstractDriver
 {
     /**
-     * @var Options
+     * @param Request $request
+     * @return Response
      */
-    protected $options;
+    abstract public function request(Request $request): Response;
 
     /**
-     * AbstractDriver constructor.
-     * @param Options|null $options
+     * @param Request[] $requestList
+     * @return Response[]
      */
-    public function __construct(Options $options = null)
-    {
-        $this->options = $options ?: new Options();
-    }
-
-    /**
-     * @param string            $url
-     * @param array|string|null $args
-     * @param string            $method
-     * @param Options           $options
-     * @return array
-     */
-    abstract public function request(string $url, $args, string $method, Options $options);
-
-    /**
-     * @param array $requestList
-     * @return array
-     */
-    abstract public function multiRequest(array $requestList);
+    abstract public function multiRequest(array $requestList): array;
 }
