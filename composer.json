@@ -25,7 +25,7 @@
         "jbzoo/utils"       : "4.0.x-dev",
         "jbzoo/event"       : "3.0.x-dev",
         "rmccue/requests"   : "^1.7.0",
-        "guzzlehttp/guzzle" : "^6.4.1"
+        "guzzlehttp/guzzle" : "^6.4.1||^7.0"
     },
 
     "suggest"           : {
