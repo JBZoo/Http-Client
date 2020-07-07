@@ -202,7 +202,8 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testRedirect()
     {
-        $url = Url::addArg(['url' => 'http://example.com'], 'http://httpbin.org/redirect-to');
+        skip('Waiting for https://github.com/postmanlabs/httpbin/issues/617');
+        $url = Url::addArg(['url' => 'https://google.com'], 'https://httpbin.org/redirect-to');
 
         $result = $this->getClient()->request($url);
 
@@ -238,6 +239,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testMultiRedirects()
     {
+        skip('Waiting for https://github.com/postmanlabs/httpbin/issues/617');
         $url = 'http://httpbin.org/absolute-redirect/9';
         $result = $this->getClient()->request($url);
         $body = $result->getJSON();
