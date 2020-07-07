@@ -104,7 +104,7 @@ class HttpClient
      * @param array $options
      * @return Response[]
      */
-    public function multiRequest(array $requestList, array $options = [])
+    public function multiRequest(array $requestList, array $options = []): array
     {
         /** @var Request[] $cleanedRequestList */
         $cleanedRequestList = [];

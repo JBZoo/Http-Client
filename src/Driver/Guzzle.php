@@ -40,7 +40,7 @@ class Guzzle extends AbstractDriver
         $httpResult = $client->request(
             $request->getMethod(),
             $request->getUri(),
-            $this->getDriverOptions(
+            self::getDriverOptions(
                 $request->getOptions(),
                 $request->getHeaders(),
                 $request->getMethod(),
@@ -68,7 +68,7 @@ class Guzzle extends AbstractDriver
             $promises[$name] = $client->requestAsync(
                 $request->getMethod(),
                 $request->getUri(),
-                $this->getDriverOptions(
+                self::getDriverOptions(
                     $request->getOptions(),
                     $request->getHeaders(),
                     $request->getMethod(),
@@ -98,7 +98,7 @@ class Guzzle extends AbstractDriver
      * @param string|array|null $args
      * @return array
      */
-    protected function getDriverOptions(Options $options, array $headers, string $method, $args)
+    protected static function getDriverOptions(Options $options, array $headers, string $method, $args): array
     {
         $headers['User-Agent'] = $options->getUserAgent('Guzzle');
 
@@ -121,7 +121,7 @@ class Guzzle extends AbstractDriver
             'verify'          => $options->isVerify(),
             'exceptions'      => $options->allowException(),
             'auth'            => $options->getAuth(),
-            'allow_redirects' => $this->getAllowRedirects($options)
+            'allow_redirects' => self::getAllowRedirects($options)
         ];
     }
 
@@ -129,7 +129,7 @@ class Guzzle extends AbstractDriver
      * @param Options $options
      * @return array|bool
      */
-    protected function getAllowRedirects(Options $options)
+    protected static function getAllowRedirects(Options $options)
     {
         $allowRedirects = false;
 

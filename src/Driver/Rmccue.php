@@ -46,7 +46,7 @@ class Rmccue extends AbstractDriver
             /** @phan-suppress-next-line PhanPartialTypeMismatchArgument */
             $request->getArgs(),
             $request->getMethod(),
-            $this->getDriverOptions($options)
+            self::getDriverOptions($options)
         );
 
         if ($httpResult->status_code >= self::INVALID_CODE_LINE && $options->allowException()) {
@@ -73,7 +73,7 @@ class Rmccue extends AbstractDriver
                 'data'    => $request->getArgs(),
                 'type'    => $request->getMethod(),
                 'headers' => $request->getHeaders(),
-                'options' => $this->getDriverOptions($request->getOptions()),
+                'options' => self::getDriverOptions($request->getOptions()),
             ];
         }
 
@@ -83,7 +83,6 @@ class Rmccue extends AbstractDriver
         foreach ($httpResults as $name => $httpResult) {
             $result[$name] = (new Response())
                 ->setCode((int)$httpResult->status_code)
-                /** @phan-suppress-next-line PhanPossiblyNonClassMethodCall */
                 ->setHeaders($httpResult->headers->getAll())
                 ->setBody($httpResult->body)
                 ->setRequest($requestList[$name]);
@@ -96,7 +95,7 @@ class Rmccue extends AbstractDriver
      * @param Options $options
      * @return array
      */
-    protected function getDriverOptions(Options $options)
+    protected static function getDriverOptions(Options $options): array
     {
         return [
             'timeout'          => $options->getTimeout(),

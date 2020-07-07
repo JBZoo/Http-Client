@@ -31,7 +31,7 @@ class Auto extends AbstractDriver
      */
     public function request(Request $request): Response
     {
-        return $this->getClient()->request($request);
+        return static::getClient()->request($request);
     }
 
     /**
@@ -39,13 +39,13 @@ class Auto extends AbstractDriver
      */
     public function multiRequest(array $requestList): array
     {
-        return $this->getClient()->multiRequest($requestList);
+        return static::getClient()->multiRequest($requestList);
     }
 
     /**
      * @return AbstractDriver
      */
-    protected function getClient(): AbstractDriver
+    protected static function getClient(): AbstractDriver
     {
         if (class_exists(Client::class) && method_exists(Client::class, 'request')) {
             return new Guzzle();
