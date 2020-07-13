@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg?branch=master)](https://travis-ci.org/JBZoo/Http-Client)    [![Coverage Status](https://coveralls.io/repos/JBZoo/Http-Client/badge.svg)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    
 [![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v)](https://packagist.org/packages/JBZoo/Http-Client)    [![Latest Unstable Version](https://poser.pugx.org/JBZoo/Http-Client/v/unstable)](https://packagist.org/packages/JBZoo/Http-Client)    [![Dependents](https://poser.pugx.org/JBZoo/Http-Client/dependents)](https://packagist.org/packages/JBZoo/Http-Client/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/JBZoo/Http-Client)](https://github.com/JBZoo/Http-Client/issues)    [![Total Downloads](https://poser.pugx.org/JBZoo/Http-Client/downloads)](https://packagist.org/packages/JBZoo/Http-Client/stats)    [![GitHub License](https://img.shields.io/github/license/JBZoo/Http-Client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
 
+Just make HTTP requests in one line and don't care about terrible syntax of GuzzleHttp ;)
+
 
 ## Install
 ```sh
@@ -10,16 +12,8 @@ composer require guzzlehttp/guzzle --no-update # Recomended, but not required
 composer require jbzoo/http-client
 ```
 
-## Documentation
-
-"Talk is cheap. Show me the code!" (Linus Torvalds)
-
-
-#### Simple request
+### Usage
 ```php
-require_once './vendor/autoload.php'; // composer autoload.php
-
-// Get needed classes
 use JBZoo\HttpClient\HttpClient;
 
 // Configure client (no options required!)
@@ -37,7 +31,7 @@ $httpClient = new HttpClient([
     'exceptions'      => false,     // Show exceptions for statuses 4xx and 5xx
     'allow_redirects' => true,      // Show real 3xx-header or result?
     'max_redirects'   => 10,        // How much to reirect?
-    'user_agent'      => 'JBZoo/Http-Client v1.x-dev', // Custom UA
+    'user_agent'      => "It's me", // Custom UserAgent
 ]);
 
 // Just request
@@ -106,7 +100,7 @@ $results['request_2']->getBody();
 
 ## Unit tests and check code style
 ```sh
-make
+make update
 make test-all
 ```
 
