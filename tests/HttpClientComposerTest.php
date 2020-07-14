@@ -16,11 +16,11 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class HttpClientReadmeTest
+ * Class HttpClientComposerTest
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientReadmeTest extends AbstractReadmeTest
+class HttpClientComposerTest extends AbstractComposerTest
 {
-    protected $packageName = 'Http-Client';
+
 }

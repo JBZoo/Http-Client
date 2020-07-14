@@ -1,7 +1,9 @@
 # JBZoo / Http-Client
- 
+
 [![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg?branch=master)](https://travis-ci.org/JBZoo/Http-Client)    [![Coverage Status](https://coveralls.io/repos/JBZoo/Http-Client/badge.svg)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    
-[![Latest Stable Version](https://poser.pugx.org/JBZoo/Http-Client/v)](https://packagist.org/packages/JBZoo/Http-Client)    [![Latest Unstable Version](https://poser.pugx.org/JBZoo/Http-Client/v/unstable)](https://packagist.org/packages/JBZoo/Http-Client)    [![Dependents](https://poser.pugx.org/JBZoo/Http-Client/dependents)](https://packagist.org/packages/JBZoo/Http-Client/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/JBZoo/Http-Client)](https://github.com/JBZoo/Http-Client/issues)    [![Total Downloads](https://poser.pugx.org/JBZoo/Http-Client/downloads)](https://packagist.org/packages/JBZoo/Http-Client/stats)    [![GitHub License](https://img.shields.io/github/license/JBZoo/Http-Client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
+[![Stable Version](https://poser.pugx.org/jbzoo/http-client/version)](https://packagist.org/packages/jbzoo/http-client)    [![Latest Unstable Version](https://poser.pugx.org/jbzoo/http-client/v/unstable)](https://packagist.org/packages/jbzoo/http-client)    [![Dependents](https://poser.pugx.org/jbzoo/http-client/dependents)](https://packagist.org/packages/jbzoo/http-client/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/jbzoo/http-client)](https://github.com/JBZoo/Http-Client/issues)    [![Total Downloads](https://poser.pugx.org/jbzoo/http-client/downloads)](https://packagist.org/packages/jbzoo/http-client/stats)    [![GitHub License](https://img.shields.io/github/license/jbzoo/http-client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
+
+
 
 Just make HTTP requests in one line and don't care about terrible syntax of GuzzleHttp ;)
 
