@@ -17,13 +17,13 @@
         "php"        : ">=7.2",
         "ext-json"   : "*",
 
-        "jbzoo/data" : "4.0.x-dev"
+        "jbzoo/data" : "^4.0.0"
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev" : "1.1.x-dev",
-        "jbzoo/utils"       : "4.0.x-dev",
-        "jbzoo/event"       : "3.0.x-dev",
+        "jbzoo/toolbox-dev" : "^2.0.0",
+        "jbzoo/utils"       : "^4.0.0",
+        "jbzoo/event"       : "^3.0.0",
         "rmccue/requests"   : "^1.7.0",
         "guzzlehttp/guzzle" : "^6.4.1||^7.0"
     },
