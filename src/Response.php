@@ -16,6 +16,7 @@
 namespace JBZoo\HttpClient;
 
 use JBZoo\Data\JSON;
+use JBZoo\Utils\Xml;
 
 /**
  * Class Response
@@ -133,6 +134,23 @@ class Response
         }
 
         return $this->parsedJsonData;
+    }
+
+    /**
+     * @return JSON
+     */
+    public function getXml(): JSON
+    {
+        try {
+            $xmlAsArray = Xml::dom2Array(Xml::createFromString($this->internalBody));
+        } catch (\Exception $exception) {
+            throw new Exception(
+                "Can't parse xml document from HTTP response. " .
+                "Details: {$exception->getMessage()}"
+            );
+        }
+
+        return new JSON($xmlAsArray);
     }
 
     /**

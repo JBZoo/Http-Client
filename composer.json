@@ -14,16 +14,16 @@
         }
     ],
     "require"           : {
-        "php"        : "^7.2",
-        "ext-json"   : "*",
+        "php"         : ">=7.2",
+        "ext-json"    : "*",
 
-        "jbzoo/data" : "^4.0.0"
+        "jbzoo/data"  : "^4.0.1",
+        "jbzoo/utils" : "^4.2.1"
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev" : "^2.1.0",
-        "jbzoo/utils"       : "^4.0.0",
-        "jbzoo/event"       : "^3.0.0",
+        "jbzoo/toolbox-dev" : "^2.4.0",
+        "jbzoo/event"       : "^3.0.1",
         "rmccue/requests"   : "^1.7.0",
         "guzzlehttp/guzzle" : "^6.4.1||^7.0"
     },

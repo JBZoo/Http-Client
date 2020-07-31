@@ -18,6 +18,7 @@ namespace JBZoo\PHPUnit;
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Url;
+use JBZoo\Utils\Xml;
 
 /**
  * Class DriverTest
@@ -293,6 +294,151 @@ abstract class AbstractDriverTest extends PHPUnit
 
         isSame(200, $result->code);
         isContain('google', $result->body);
+    }
+
+    public function testXmlAsResponse()
+    {
+        $result = $this->getClient()->request('https://httpbin.org/xml');
+
+        isSame(200, $result->code);
+        isSame('application/xml', $result->getHeader('Content-Type'));
+        isSame('Yours Truly', $result->getXml()->find('_children.0._attrs.author'));
+        isSame([
+            '_node'     => '#document',
+            '_text'     => null,
+            '_cdata'    => null,
+            '_attrs'    => [],
+            '_children' => [
+                [
+                    '_node'     => 'slideshow',
+                    '_text'     => null,
+                    '_cdata'    => null,
+                    '_attrs'    => [
+                        'title'  => 'Sample Slide Show',
+                        'date'   => 'Date of publication',
+                        'author' => 'Yours Truly',
+                    ],
+                    '_children' => [
+                        [
+                            '_node'     => 'slide',
+                            '_text'     => null,
+                            '_cdata'    => null,
+                            '_attrs'    => ['type' => 'all'],
+                            '_children' => [
+                                [
+                                    '_node'     => 'title',
+                                    '_text'     => 'Wake up to WonderWidgets!',
+                                    '_cdata'    => null,
+                                    '_attrs'    => [],
+                                    '_children' => [],
+                                ],
+                            ],
+                        ],
+                        [
+                            '_node'     => 'slide',
+                            '_text'     => null,
+                            '_cdata'    => null,
+                            '_attrs'    => ['type' => 'all',],
+                            '_children' => [
+                                [
+                                    '_node'     => 'title',
+                                    '_text'     => 'Overview',
+                                    '_cdata'    => null,
+                                    '_attrs'    => [],
+                                    '_children' => [],
+                                ],
+                                [
+                                    '_node'     => 'item',
+                                    '_text'     => null,
+                                    '_cdata'    => null,
+                                    '_attrs'    => [],
+                                    '_children' => [
+                                        [
+                                            '_node'     => '#text',
+                                            '_text'     => null,
+                                            '_cdata'    => null,
+                                            '_attrs'    => [],
+                                            '_children' => [],
+                                        ],
+                                        [
+                                            '_node'     => 'em',
+                                            '_text'     => 'WonderWidgets',
+                                            '_cdata'    => null,
+                                            '_attrs'    => [],
+                                            '_children' => [],
+                                        ],
+                                        [
+                                            '_node'     => '#text',
+                                            '_text'     => null,
+                                            '_cdata'    => null,
+                                            '_attrs'    => [],
+                                            '_children' => [],
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    '_node'     => 'item',
+                                    '_text'     => null,
+                                    '_cdata'    => null,
+                                    '_attrs'    => [],
+                                    '_children' => [],
+                                ],
+                                [
+                                    '_node'     => 'item',
+                                    '_text'     => null,
+                                    '_cdata'    => null,
+                                    '_attrs'    => [],
+                                    '_children' => [
+                                        [
+                                            '_node'     => '#text',
+                                            '_text'     => null,
+                                            '_cdata'    => null,
+                                            '_attrs'    => [],
+                                            '_children' => [],
+                                        ],
+                                        [
+                                            '_node'     => 'em',
+                                            '_text'     => 'buys',
+                                            '_cdata'    => null,
+                                            '_attrs'    => [],
+                                            '_children' => [],
+                                        ],
+                                        [
+                                            '_node'     => '#text',
+                                            '_text'     => null,
+                                            '_cdata'    => null,
+                                            '_attrs'    => [],
+                                            '_children' => [],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ], $result->getXml()->getArrayCopy());
+
+        // TODO: fix parser in \JBZoo\Utils\Xml to find text node mixed in tags
+        isSame(implode("\n", [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<slideshow title="Sample Slide Show" date="Date of publication" author="Yours Truly">',
+            '  <slide type="all">',
+            '    <title>Wake up to WonderWidgets!</title>',
+            '  </slide>',
+            '  <slide type="all">',
+            '    <title>Overview</title>',
+            '    <item>',
+            '      <em>WonderWidgets</em>',
+            '    </item>',
+            '    <item/>',
+            '    <item>',
+            '      <em>buys</em>',
+            '    </item>',
+            '  </slide>',
+            '</slideshow>',
+            '',
+        ]), Xml::array2Dom($result->getXml()->getArrayCopy())->saveXML());
     }
 
     public function testMultiRequest()
