@@ -24,7 +24,7 @@ use function GuzzleHttp\Promise\unwrap;
 
 /**
  * Class Guzzle
- * @package JBZoo\HttpClient
+ * @package JBZoo\HttpClient\Driver
  */
 class Guzzle extends AbstractDriver
 {

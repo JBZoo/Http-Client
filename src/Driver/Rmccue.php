@@ -23,7 +23,7 @@ use Requests;
 
 /**
  * Class Rmccue
- * @package JBZoo\HttpClient
+ * @package JBZoo\HttpClient\Driver
  */
 class Rmccue extends AbstractDriver
 {

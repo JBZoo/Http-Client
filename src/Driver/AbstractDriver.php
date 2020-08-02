@@ -20,7 +20,7 @@ use JBZoo\HttpClient\Response;
 
 /**
  * Class AbstractDriver
- * @package JBZoo\HttpClient
+ * @package JBZoo\HttpClient\Driver
  */
 abstract class AbstractDriver
 {

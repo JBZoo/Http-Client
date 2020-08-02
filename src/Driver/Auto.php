@@ -21,8 +21,7 @@ use JBZoo\HttpClient\Response;
 
 /**
  * Class Auto
- *
- * @package JBZoo\HttpClient
+ * @package JBZoo\HttpClient\Driver
  */
 class Auto extends AbstractDriver
 {
