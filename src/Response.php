@@ -32,32 +32,32 @@ class Response
     /**
      * @var int
      */
-    private $internalCode = 0;
+    protected $internalCode = 0;
 
     /**
      * @var string[]
      */
-    private $internalHeaders = [];
+    protected $internalHeaders = [];
 
     /**
      * @var string|null
      */
-    private $internalBody;
+    protected $internalBody;
 
     /**
      * @var JSON|null
      */
-    private $parsedJsonData;
+    protected $parsedJsonData;
 
     /**
      * @var float|null
      */
-    private $time;
+    protected $time;
 
     /**
      * @var Request|null
      */
-    private $originalRequest;
+    protected $originalRequest;
 
     /**
      * @param int $code
