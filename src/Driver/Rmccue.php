@@ -16,6 +16,7 @@
 namespace JBZoo\HttpClient\Driver;
 
 use JBZoo\HttpClient\Exception;
+use JBZoo\HttpClient\HttpCodes;
 use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
@@ -27,7 +28,7 @@ use Requests;
  */
 class Rmccue extends AbstractDriver
 {
-    private const INVALID_CODE_LINE = 400;
+    private const INVALID_CODE_LINE = HttpCodes::BAD_REQUEST;
 
     /**
      * @inheritDoc
