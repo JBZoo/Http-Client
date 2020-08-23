@@ -266,7 +266,8 @@ class OtherTest extends PHPUnit
     {
         isSame(true, HttpCodes::isSuccessful(200));
         isSame(true, HttpCodes::isRedirect(301));
-        isSame(true, HttpCodes::isError(404));
+        isSame(true, HttpCodes::isError(400));
+        isSame(true, HttpCodes::isNotFound(404));
         isSame(true, HttpCodes::isFatalError(500));
         isSame(true, HttpCodes::isForbidden(403));
         isSame(true, HttpCodes::isUnauthorized(401));
