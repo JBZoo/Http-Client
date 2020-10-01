@@ -272,6 +272,8 @@ class OtherTest extends PHPUnit
         isSame(true, HttpCodes::isForbidden(403));
         isSame(true, HttpCodes::isUnauthorized(401));
         isSame(true, HttpCodes::hasAccess(200));
+        isSame(false, HttpCodes::hasAccess(403));
+        isSame(false, HttpCodes::hasAccess(401));
         isSame('OK', HttpCodes::getDescriptionByCode(200));
         isSame(null, HttpCodes::getDescriptionByCode(2000));
     }
