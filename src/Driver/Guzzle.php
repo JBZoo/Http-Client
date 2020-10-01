@@ -16,11 +16,10 @@
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Utils;
 use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
-
-use function GuzzleHttp\Promise\unwrap;
 
 /**
  * Class Guzzle
@@ -77,7 +76,7 @@ class Guzzle extends AbstractDriver
             );
         }
 
-        $httpResults = unwrap($promises);
+        $httpResults = Utils::unwrap($promises);
 
         $result = [];
         foreach ($httpResults as $name => $httpResult) {
