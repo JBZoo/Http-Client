@@ -21,8 +21,6 @@ use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
 
-use function GuzzleHttp\Promise\unwrap;
-
 /**
  * Class Guzzle
  * @package JBZoo\HttpClient\Driver
@@ -59,7 +57,6 @@ class Guzzle extends AbstractDriver
 
     /**
      * @inheritDoc
-     * @psalm-suppress DeprecatedFunction
      */
     public function multiRequest(array $requestList): array
     {
@@ -79,12 +76,7 @@ class Guzzle extends AbstractDriver
             );
         }
 
-        if (function_exists('\GuzzleHttp\Promise\unwrap')) {
-            /** @phan-suppress-next-line PhanDeprecatedFunction */
-            $httpResults = unwrap($promises);
-        } else {
-            $httpResults = Utils::unwrap($promises);
-        }
+        $httpResults = Utils::unwrap($promises);
 
         $result = [];
         foreach ($httpResults as $name => $httpResult) {

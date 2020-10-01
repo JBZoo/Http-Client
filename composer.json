@@ -14,11 +14,12 @@
         }
     ],
     "require"           : {
-        "php"         : ">=7.2",
-        "ext-json"    : "*",
+        "php"                 : ">=7.2",
+        "ext-json"            : "*",
 
-        "jbzoo/data"  : "^4.0.1",
-        "jbzoo/utils" : "^4.2.1"
+        "jbzoo/data"          : "^4.0.1",
+        "jbzoo/utils"         : "^4.2.1",
+        "guzzlehttp/promises" : ">=1.4.0"
     },
 
     "require-dev"       : {
