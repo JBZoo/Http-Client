@@ -177,6 +177,15 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame(404, $result->code);
     }
 
+    public function testStatus404Body()
+    {
+        $result = $this->getClient()->request('https://run.mocky.io/v3/2c514476-819d-4208-a9fd-b9cc2155ecb4');
+
+        isSame(404, $result->code);
+        is("{\n  \"error\": \"mock_not_found\"\n}", $result->getBody());
+        isSame('123', $result->getHeader('x-custom_header'));
+    }
+
     public function testStatus404Exceptions()
     {
         $this->expectException(\JBZoo\HttpClient\Exception::class);
