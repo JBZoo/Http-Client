@@ -26,7 +26,7 @@
         "jbzoo/toolbox-dev" : "^2.6.2",
         "jbzoo/event"       : "^3.0.3",
         "rmccue/requests"   : "^1.7.0",
-        "guzzlehttp/guzzle" : "^6.5.5"
+        "guzzlehttp/guzzle" : ">=6.5.5"
     },
 
     "suggest"           : {

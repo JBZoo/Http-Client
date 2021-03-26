@@ -113,6 +113,7 @@ class Guzzle extends AbstractDriver
 
         return [
             'form_params'     => $formParams,
+            'http_errors'     => $options->allowException(),
             'body'            => $body,
             'headers'         => $headers,
             'connect_timeout' => $options->getTimeout(),
