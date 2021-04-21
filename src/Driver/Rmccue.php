@@ -97,7 +97,7 @@ final class Rmccue extends AbstractDriver
      * @param Options $options
      * @return array
      */
-    protected static function getDriverOptions(Options $options): array
+    private static function getDriverOptions(Options $options): array
     {
         return [
             'timeout'          => $options->getTimeout(),

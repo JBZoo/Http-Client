@@ -99,7 +99,7 @@ final class Guzzle extends AbstractDriver
      * @param string|array|null $args
      * @return array
      */
-    protected static function getDriverOptions(Options $options, array $headers, string $method, $args): array
+    private static function getDriverOptions(Options $options, array $headers, string $method, $args): array
     {
         $headers['User-Agent'] = $options->getUserAgent('Guzzle');
 
@@ -129,11 +129,11 @@ final class Guzzle extends AbstractDriver
 
     /**
      * @param Options $options
-     * @return array|bool
+     * @return array|null
      */
-    protected static function getAllowRedirects(Options $options)
+    private static function getAllowRedirects(Options $options): ?array
     {
-        $allowRedirects = false;
+        $allowRedirects = null;
 
         if ($options->isAllowRedirects()) {
             $allowRedirects = [

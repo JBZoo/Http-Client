@@ -154,7 +154,7 @@ final class HttpClient
      * @param EventManager $eManager
      * @return $this
      */
-    public function setEventManager(EventManager $eManager)
+    public function setEventManager(EventManager $eManager): self
     {
         $this->eManager = $eManager;
         return $this;
@@ -164,9 +164,9 @@ final class HttpClient
      * @param string        $eventName
      * @param array         $context
      * @param \Closure|null $callback
-     * @return int|string
+     * @return int
      */
-    public function trigger(string $eventName, array $context = [], ?\Closure $callback = null)
+    public function trigger(string $eventName, array $context = [], ?\Closure $callback = null): int
     {
         if (!$this->eManager) {
             return 0;
