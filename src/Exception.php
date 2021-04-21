@@ -23,7 +23,7 @@ use JBZoo\Event\EventManager;
  * Class Exception
  * @package JBZoo\HttpClient
  */
-class Exception extends \RuntimeException
+final class Exception extends \RuntimeException
 {
     /**
      * Exception constructor.

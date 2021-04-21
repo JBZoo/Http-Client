@@ -25,7 +25,7 @@ use JBZoo\HttpClient\Response;
  * Class Auto
  * @package JBZoo\HttpClient\Driver
  */
-class Auto extends AbstractDriver
+final class Auto extends AbstractDriver
 {
     /**
      * @inheritDoc

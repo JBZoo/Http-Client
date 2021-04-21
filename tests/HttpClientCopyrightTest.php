@@ -22,7 +22,7 @@ namespace JBZoo\PHPUnit;
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientCopyrightTest extends AbstractCopyrightTest
+final class HttpClientCopyrightTest extends AbstractCopyrightTest
 {
     /**
      * @var string

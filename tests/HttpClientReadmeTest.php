@@ -22,7 +22,7 @@ namespace JBZoo\PHPUnit;
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientReadmeTest extends AbstractReadmeTest
+final class HttpClientReadmeTest extends AbstractReadmeTest
 {
     protected $packageName = 'Http-Client';
 

@@ -24,7 +24,7 @@ use JBZoo\HttpClient\Driver\AbstractDriver;
  * Class HttpClient
  * @package JBZoo\HttpClient
  */
-class HttpClient
+final class HttpClient
 {
     /**
      * @var Options

@@ -21,7 +21,7 @@ namespace JBZoo\HttpClient;
  * Class HttpCodes
  * @package JBZoo\HttpClient
  */
-class HttpCodes
+final class HttpCodes
 {
     /**
      * @var string[]

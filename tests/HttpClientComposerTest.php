@@ -22,7 +22,7 @@ namespace JBZoo\PHPUnit;
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientComposerTest extends AbstractComposerTest
+final class HttpClientComposerTest extends AbstractComposerTest
 {
 
 }

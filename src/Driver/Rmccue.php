@@ -28,7 +28,7 @@ use Requests;
  * Class Rmccue
  * @package JBZoo\HttpClient\Driver
  */
-class Rmccue extends AbstractDriver
+final class Rmccue extends AbstractDriver
 {
     private const INVALID_CODE_LINE = HttpCodes::BAD_REQUEST;
 

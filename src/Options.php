@@ -26,7 +26,7 @@ use function JBZoo\Utils\int;
  * Class Options
  * @package JBZoo\HttpClient
  */
-class Options
+final class Options
 {
     public const DEFAULT_DRIVER          = 'Guzzle';
     public const DEFAULT_TIMEOUT         = 10;

@@ -27,7 +27,7 @@ use JBZoo\HttpClient\Response;
  * Class Guzzle
  * @package JBZoo\HttpClient\Driver
  */
-class Guzzle extends AbstractDriver
+final class Guzzle extends AbstractDriver
 {
     /**
      * @inheritDoc

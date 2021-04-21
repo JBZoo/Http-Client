@@ -23,7 +23,7 @@ use JBZoo\Utils\Url;
  * Class Request
  * @package JBZoo\HttpClient
  */
-class Request
+final class Request
 {
     public const GET    = 'GET';
     public const HEAD   = 'HEAD';

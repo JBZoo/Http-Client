@@ -22,6 +22,6 @@ namespace JBZoo\PHPUnit;
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientCodeStyleTest extends AbstractCodestyleTest
+final class HttpClientCodeStyleTest extends AbstractCodestyleTest
 {
 }
