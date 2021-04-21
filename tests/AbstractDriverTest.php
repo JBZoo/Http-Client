@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\HttpClient\HttpClient;
@@ -97,7 +99,7 @@ abstract class AbstractDriverTest extends PHPUnit
             }
 
             isSame(200, $result->getCode(), $message);
-            isContain('application/json', $result->getHeader('Content-Type'), $message);
+            isContain('application/json', $result->getHeader('Content-Type'), false, $message);
             isSame($method, $body->find('queryString.method'), $message);
             isSame($method, $body->find('method'), $message);
 

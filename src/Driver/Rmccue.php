@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient\Driver;
 
 use JBZoo\HttpClient\Exception;
@@ -39,7 +41,7 @@ class Rmccue extends AbstractDriver
 
         /**
          * @psalm-suppress PossiblyInvalidArgument
-         * @phan-suppress PhanPartialTypeMismatchArgument
+         * @phan-suppress  PhanPartialTypeMismatchArgument
          */
         $httpResult = Requests::request(
             $request->getUri(),
