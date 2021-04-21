@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient\Driver;
 
 use JBZoo\HttpClient\Exception;
@@ -26,7 +28,7 @@ use Requests;
  * Class Rmccue
  * @package JBZoo\HttpClient\Driver
  */
-class Rmccue extends AbstractDriver
+final class Rmccue extends AbstractDriver
 {
     private const INVALID_CODE_LINE = HttpCodes::BAD_REQUEST;
 
@@ -39,7 +41,7 @@ class Rmccue extends AbstractDriver
 
         /**
          * @psalm-suppress PossiblyInvalidArgument
-         * @phan-suppress PhanPartialTypeMismatchArgument
+         * @phan-suppress  PhanPartialTypeMismatchArgument
          */
         $httpResult = Requests::request(
             $request->getUri(),
@@ -95,7 +97,7 @@ class Rmccue extends AbstractDriver
      * @param Options $options
      * @return array
      */
-    protected static function getDriverOptions(Options $options): array
+    private static function getDriverOptions(Options $options): array
     {
         return [
             'timeout'          => $options->getTimeout(),

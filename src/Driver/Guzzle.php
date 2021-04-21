@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
@@ -25,7 +27,7 @@ use JBZoo\HttpClient\Response;
  * Class Guzzle
  * @package JBZoo\HttpClient\Driver
  */
-class Guzzle extends AbstractDriver
+final class Guzzle extends AbstractDriver
 {
     /**
      * @inheritDoc
@@ -97,7 +99,7 @@ class Guzzle extends AbstractDriver
      * @param string|array|null $args
      * @return array
      */
-    protected static function getDriverOptions(Options $options, array $headers, string $method, $args): array
+    private static function getDriverOptions(Options $options, array $headers, string $method, $args): array
     {
         $headers['User-Agent'] = $options->getUserAgent('Guzzle');
 
@@ -127,11 +129,11 @@ class Guzzle extends AbstractDriver
 
     /**
      * @param Options $options
-     * @return array|bool
+     * @return array|null
      */
-    protected static function getAllowRedirects(Options $options)
+    private static function getAllowRedirects(Options $options): ?array
     {
-        $allowRedirects = false;
+        $allowRedirects = null;
 
         if ($options->isAllowRedirects()) {
             $allowRedirects = [

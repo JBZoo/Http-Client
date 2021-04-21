@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient;
 
 use JBZoo\Utils\Url;
@@ -21,7 +23,7 @@ use JBZoo\Utils\Url;
  * Class Request
  * @package JBZoo\HttpClient
  */
-class Request
+final class Request
 {
     public const GET    = 'GET';
     public const HEAD   = 'HEAD';

@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 /**
@@ -20,7 +22,13 @@ namespace JBZoo\PHPUnit;
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientReadmeTest extends AbstractReadmeTest
+final class HttpClientReadmeTest extends AbstractReadmeTest
 {
     protected $packageName = 'Http-Client';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->params['strict_types'] = true;
+    }
 }

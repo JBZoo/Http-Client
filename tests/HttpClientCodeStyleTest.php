@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 /**
@@ -20,6 +22,6 @@ namespace JBZoo\PHPUnit;
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientCodeStyleTest extends AbstractCodestyleTest
+final class HttpClientCodeStyleTest extends AbstractCodestyleTest
 {
 }

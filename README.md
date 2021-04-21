@@ -1,6 +1,6 @@
 # JBZoo / Http-Client
 
-[![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg)](https://travis-ci.org/JBZoo/Http-Client)    [![Coverage Status](https://coveralls.io/repos/JBZoo/Http-Client/badge.svg)](https://coveralls.io/github/JBZoo/Http-Client)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    
+[![Build Status](https://travis-ci.org/JBZoo/Http-Client.svg)](https://travis-ci.org/JBZoo/Http-Client)    [![Coverage Status](https://coveralls.io/repos/JBZoo/Http-Client/badge.svg)](https://coveralls.io/github/JBZoo/Http-Client)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![PHP Strict Types](https://img.shields.io/badge/strict__types-%3D1-brightgreen)](https://www.php.net/manual/en/language.types.declarations.php#language.types.declarations.strict)    
 [![Stable Version](https://poser.pugx.org/jbzoo/http-client/version)](https://packagist.org/packages/jbzoo/http-client)    [![Latest Unstable Version](https://poser.pugx.org/jbzoo/http-client/v/unstable)](https://packagist.org/packages/jbzoo/http-client)    [![Dependents](https://poser.pugx.org/jbzoo/http-client/dependents)](https://packagist.org/packages/jbzoo/http-client/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/jbzoo/http-client)](https://github.com/JBZoo/Http-Client/issues)    [![Total Downloads](https://poser.pugx.org/jbzoo/http-client/downloads)](https://packagist.org/packages/jbzoo/http-client/stats)    [![GitHub License](https://img.shields.io/github/license/jbzoo/http-client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
 
 
@@ -10,7 +10,7 @@ Just make HTTP requests in one line and don't care about terrible syntax of Guzz
 
 ## Install
 ```sh
-composer require guzzlehttp/guzzle --no-update # Recomended, but not required
+composer require guzzlehttp/guzzle --no-update # Recommended, but not required
 composer require jbzoo/http-client
 ```
 
@@ -32,7 +32,7 @@ $httpClient = new HttpClient([
     'verify'          => false,     // Check cert for SSL
     'exceptions'      => false,     // Show exceptions for statuses 4xx and 5xx
     'allow_redirects' => true,      // Show real 3xx-header or result?
-    'max_redirects'   => 10,        // How much to reirect?
+    'max_redirects'   => 10,        // How much to redirect?
     'user_agent'      => "It's me", // Custom UserAgent
 ]);
 
@@ -70,7 +70,10 @@ $value = $json->find('key.nested', 'default', 'trim');
 
 
 ## Asynchronous requests (curl_multi_* for parallels)
+
 ```php
+use JBZoo\HttpClient\HttpClient;
+
 $httpClient = new HttpClient();
 
 $results = $httpClient->multiRequest(array(

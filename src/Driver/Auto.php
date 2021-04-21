@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient\Driver;
 
 use GuzzleHttp\Client;
@@ -23,7 +25,7 @@ use JBZoo\HttpClient\Response;
  * Class Auto
  * @package JBZoo\HttpClient\Driver
  */
-class Auto extends AbstractDriver
+final class Auto extends AbstractDriver
 {
     /**
      * @inheritDoc

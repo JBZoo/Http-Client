@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient;
 
 use JBZoo\Event\EventManager;
@@ -21,7 +23,7 @@ use JBZoo\Event\EventManager;
  * Class Exception
  * @package JBZoo\HttpClient
  */
-class Exception extends \RuntimeException
+final class Exception extends \RuntimeException
 {
     /**
      * Exception constructor.

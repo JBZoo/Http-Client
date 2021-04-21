@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient;
 
 use JBZoo\Event\EventManager;
@@ -22,7 +24,7 @@ use JBZoo\HttpClient\Driver\AbstractDriver;
  * Class HttpClient
  * @package JBZoo\HttpClient
  */
-class HttpClient
+final class HttpClient
 {
     /**
      * @var Options
@@ -152,7 +154,7 @@ class HttpClient
      * @param EventManager $eManager
      * @return $this
      */
-    public function setEventManager(EventManager $eManager)
+    public function setEventManager(EventManager $eManager): self
     {
         $this->eManager = $eManager;
         return $this;
@@ -162,9 +164,9 @@ class HttpClient
      * @param string        $eventName
      * @param array         $context
      * @param \Closure|null $callback
-     * @return int|string
+     * @return int
      */
-    public function trigger(string $eventName, array $context = [], ?\Closure $callback = null)
+    public function trigger(string $eventName, array $context = [], ?\Closure $callback = null): int
     {
         if (!$this->eManager) {
             return 0;

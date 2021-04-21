@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient;
 
 use JBZoo\Data\Data;
@@ -24,7 +26,7 @@ use function JBZoo\Utils\int;
  * Class Options
  * @package JBZoo\HttpClient
  */
-class Options
+final class Options
 {
     public const DEFAULT_DRIVER          = 'Guzzle';
     public const DEFAULT_TIMEOUT         = 10;

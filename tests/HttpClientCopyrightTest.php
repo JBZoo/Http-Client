@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 /**
@@ -20,10 +22,11 @@ namespace JBZoo\PHPUnit;
  *
  * @package JBZoo\PHPUnit
  */
-class HttpClientCopyrightTest extends AbstractCopyrightTest
+final class HttpClientCopyrightTest extends AbstractCopyrightTest
 {
     /**
      * @var string
      */
-    protected $packageName = 'Http-Client';
+    protected $packageName     = 'Http-Client';
+    protected $isPhpStrictType = true;
 }

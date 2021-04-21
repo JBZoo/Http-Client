@@ -13,13 +13,15 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 /**
  * Class DriverRmccueTest
  * @package JBZoo\PHPUnit
  */
-class DriverRmccueTest extends AbstractDriverTest
+final class DriverRmccueTest extends AbstractDriverTest
 {
     protected $driver = 'Rmccue';
 }

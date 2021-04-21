@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Event\EventManager;
@@ -22,10 +24,10 @@ use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
 
 /**
- * Class OtherTest
+ * Class HttpClientOtherTest
  * @package JBZoo\PHPUnit
  */
-class OtherTest extends PHPUnit
+final class HttpClientOtherTest extends PHPUnit
 {
     protected $jsonFixture = '{"key-1":"value-1","key-2":"value-2"}';
 

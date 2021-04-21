@@ -13,13 +13,15 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient;
 
 /**
  * Class HttpCodes
  * @package JBZoo\HttpClient
  */
-class HttpCodes
+final class HttpCodes
 {
     /**
      * @var string[]

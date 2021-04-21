@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Http-Client
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\HttpClient;
 
 use JBZoo\Data\JSON;
@@ -27,7 +29,7 @@ use JBZoo\Utils\Xml;
  * @property string     $body
  * @property float|null $time
  */
-class Response
+final class Response
 {
     /**
      * @var int
@@ -157,7 +159,7 @@ class Response
      * @param string $name
      * @return array|string|float|int|string[]|null
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         if ('code' === $name) {
             return $this->getCode();
