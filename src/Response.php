@@ -29,7 +29,7 @@ use JBZoo\Utils\Xml;
  * @property string     $body
  * @property float|null $time
  */
-final class Response
+class Response
 {
     /**
      * @var int
