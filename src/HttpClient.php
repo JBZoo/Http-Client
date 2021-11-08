@@ -134,8 +134,6 @@ final class HttpClient
     /**
      * @return AbstractDriver
      * @throws Exception
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
      */
     protected function getDriver(): AbstractDriver
     {
@@ -144,7 +142,9 @@ final class HttpClient
         $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
 
         if (class_exists($className)) {
-            return new $className();
+            /** @var AbstractDriver $driver */
+            $driver = new $className();
+            return $driver;
         }
 
         throw new Exception("Driver '{$driverName}' not found");
