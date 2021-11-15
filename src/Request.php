@@ -81,7 +81,7 @@ final class Request
         $this->setHeaders($headers);
 
         $this->options = new Options();
-        if (is_array($options)) {
+        if (\is_array($options)) {
             $this->setOptions($options);
         } else {
             $this->setOptions($options->toArray());
@@ -94,7 +94,7 @@ final class Request
      */
     public function setUrl(string $url): self
     {
-        $this->url = trim($url);
+        $this->url = \trim($url);
         return $this;
     }
 
@@ -124,7 +124,7 @@ final class Request
      */
     public function setMethod(string $method): self
     {
-        $method = strtoupper(trim($method)) ?: self::DEFAULT_METHOD;
+        $method = \strtoupper(\trim($method)) ?: self::DEFAULT_METHOD;
 
         $validMethods = [
             self::GET,
@@ -134,7 +134,7 @@ final class Request
             self::PATCH,
             self::DELETE
         ];
-        if (!in_array($method, $validMethods, true)) {
+        if (!\in_array($method, $validMethods, true)) {
             throw new Exception("Undefined HTTP method: {$method}");
         }
 
@@ -148,7 +148,7 @@ final class Request
      */
     public function setOptions(array $options): self
     {
-        $this->options = new Options(array_merge($this->options->toArray(), $options));
+        $this->options = new Options(\array_merge($this->options->toArray(), $options));
         return $this;
     }
 
@@ -185,7 +185,7 @@ final class Request
      */
     public function getHeaders(): array
     {
-        return array_merge($this->options->getHeaders(), $this->headers);
+        return \array_merge($this->options->getHeaders(), $this->headers);
     }
 
     /**

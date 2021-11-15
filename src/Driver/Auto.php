@@ -48,7 +48,7 @@ final class Auto extends AbstractDriver
      */
     protected static function getClient(): AbstractDriver
     {
-        if (class_exists(Client::class) && method_exists(Client::class, 'request')) {
+        if (\class_exists(Client::class) && \method_exists(Client::class, 'request')) {
             return new Guzzle();
         }
 

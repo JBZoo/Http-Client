@@ -36,7 +36,7 @@ final class Guzzle extends AbstractDriver
     {
         $client = new Client();
 
-        $start = microtime(true);
+        $start = \microtime(true);
 
         $httpResult = $client->request(
             $request->getMethod(),
@@ -54,7 +54,7 @@ final class Guzzle extends AbstractDriver
             ->setHeaders($httpResult->getHeaders())
             ->setBody($httpResult->getBody()->getContents())
             ->setRequest($request)
-            ->setTime(microtime(true) - $start);
+            ->setTime(\microtime(true) - $start);
     }
 
     /**
@@ -106,7 +106,7 @@ final class Guzzle extends AbstractDriver
         $body = $formParams = null;
 
         if (Request::GET !== $method) {
-            if (is_array($args)) {
+            if (\is_array($args)) {
                 $formParams = $args;
             } else {
                 $body = $args;

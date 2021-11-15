@@ -88,8 +88,8 @@ class Response
         $result = [];
 
         foreach ($headers as $key => $value) {
-            if (is_array($value)) {
-                $value = implode(';', $value);
+            if (\is_array($value)) {
+                $value = \implode(';', $value);
             }
 
             $result[$key] = $value;
@@ -189,9 +189,9 @@ class Response
     {
         if ($ignoreCase) {
             $headers = [];
-            $headerKey = strtolower($headerKey);
+            $headerKey = \strtolower($headerKey);
             foreach ($this->getHeaders() as $key => $value) {
-                $key = strtolower($key);
+                $key = \strtolower((string)$key);
                 $headers[$key] = $value;
             }
         } else {

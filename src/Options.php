@@ -47,7 +47,7 @@ final class Options
      */
     public function __construct(array $options = [])
     {
-        $this->options = new Data(array_merge([
+        $this->options = new Data(\array_merge([
             'auth'            => [],
             'headers'         => [],
             'driver'          => self::DEFAULT_DRIVER,

@@ -35,7 +35,7 @@ final class Exception extends \RuntimeException
     {
         parent::__construct($message, $code, $previous);
 
-        if (class_exists(EventManager::class) && $eManager = EventManager::getDefault()) {
+        if (\class_exists(EventManager::class) && $eManager = EventManager::getDefault()) {
             $eManager->trigger('jbzoo.http.exception', [$this]);
         }
     }

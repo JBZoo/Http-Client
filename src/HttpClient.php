@@ -72,9 +72,9 @@ final class HttpClient
             ->setUrl($url)
             ->setArgs($args)
             ->setMethod($method)
-            ->setOptions(array_merge($this->options->toArray(), $options));
+            ->setOptions(\array_merge($this->options->toArray(), $options));
 
-        $startTime = microtime(true);
+        $startTime = \microtime(true);
 
         try {
             $this->trigger('request.before', [$this->lastRequest]);
@@ -93,7 +93,7 @@ final class HttpClient
         }
 
         if (null === $response->time) {
-            $response->setTime(microtime(true) - $startTime);
+            $response->setTime(\microtime(true) - $startTime);
         }
 
         $this->lastResponse = $response;
@@ -112,7 +112,7 @@ final class HttpClient
         $cleanedRequestList = [];
 
         foreach ($requestList as $name => $requestData) {
-            $requestOptions = array_merge($this->options->toArray(), $options, (array)($requestData[3] ?? []));
+            $requestOptions = \array_merge($this->options->toArray(), $options, (array)($requestData[3] ?? []));
 
             $cleanedRequestList[$name] = (new Request())
                 ->setUrl($requestData[0] ?? '')
@@ -141,7 +141,7 @@ final class HttpClient
 
         $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
 
-        if (class_exists($className)) {
+        if (\class_exists($className)) {
             /** @var AbstractDriver $driver */
             $driver = new $className();
             return $driver;
@@ -172,7 +172,7 @@ final class HttpClient
             return 0;
         }
 
-        array_unshift($context, $this);
+        \array_unshift($context, $this);
 
         return $this->eManager->trigger("jbzoo.http.{$eventName}", $context, $callback);
     }
