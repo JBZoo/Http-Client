@@ -24,9 +24,6 @@ namespace JBZoo\PHPUnit;
  */
 final class HttpClientCopyrightTest extends AbstractCopyrightTest
 {
-    /**
-     * @var string
-     */
     protected $packageName     = 'Http-Client';
     protected $isPhpStrictType = true;
 }

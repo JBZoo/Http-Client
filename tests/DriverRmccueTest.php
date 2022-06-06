@@ -23,5 +23,5 @@ namespace JBZoo\PHPUnit;
  */
 final class DriverRmccueTest extends AbstractDriverTest
 {
-    protected $driver = 'Rmccue';
+    protected string $driver = 'Rmccue';
 }

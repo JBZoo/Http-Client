@@ -23,5 +23,5 @@ namespace JBZoo\PHPUnit;
  */
 final class DriverGuzzleTest extends AbstractDriverTest
 {
-    protected $driver = 'Guzzle';
+    protected string $driver = 'Guzzle';
 }

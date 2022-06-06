@@ -29,7 +29,7 @@ use JBZoo\HttpClient\Response;
  */
 final class HttpClientOtherTest extends PHPUnit
 {
-    protected $jsonFixture = '{"key-1":"value-1","key-2":"value-2"}';
+    protected string $jsonFixture = '{"key-1":"value-1","key-2":"value-2"}';
 
     public function testGetSameJSONFromResponse()
     {
