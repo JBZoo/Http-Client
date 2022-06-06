@@ -24,12 +24,5 @@ namespace JBZoo\PHPUnit;
  */
 final class HttpClientReadmeTest extends AbstractReadmeTest
 {
-    protected $packageName = 'Http-Client';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->params['strict_types'] = true;
-        $this->params['travis'] = false;
-    }
+    protected string $packageName = 'Http-Client';
 }

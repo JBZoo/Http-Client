@@ -32,12 +32,12 @@ abstract class AbstractDriverTest extends PHPUnit
     /**
      * @var string
      */
-    protected $driver = 'Auto';
+    protected string $driver = 'Auto';
 
     /**
      * @var array
      */
-    protected $methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'];
+    protected array $methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'];
 
     /**
      * @param array $options
