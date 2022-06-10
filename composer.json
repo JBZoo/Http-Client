@@ -24,7 +24,7 @@
 
     "require-dev"       : {
         "jbzoo/toolbox-dev" : "^3.1|^4.0.1",
-        "jbzoo/event"       : "^3.2|^4.0.0",
+        "jbzoo/event"       : "^3.2|^4.0.1",
         "rmccue/requests"   : "^1.7.0",
         "guzzlehttp/guzzle" : ">=6.5.5"
     },
