@@ -17,14 +17,14 @@
         "php"                 : ">=7.4",
         "ext-json"            : "*",
 
-        "jbzoo/data"          : "^4.3|^5.0",
-        "jbzoo/utils"         : "^4.5|^5.0",
+        "jbzoo/data"          : "7.x-dev",
+        "jbzoo/utils"         : "7.x-dev",
         "guzzlehttp/promises" : "^1.4.0"
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev" : "^3.1|^4.0.1",
-        "jbzoo/event"       : "^3.2|^4.0.1",
+        "jbzoo/toolbox-dev" : "7.x-dev",
+        "jbzoo/event"       : "7.x-dev",
         "rmccue/requests"   : "^1.7.0",
         "guzzlehttp/guzzle" : ">=6.5.5"
     },
@@ -54,7 +54,7 @@
 
     "extra"             : {
         "branch-alias" : {
-            "dev-master" : "3.x-dev"
+            "dev-master" : "7.x-dev"
         }
     }
 }
