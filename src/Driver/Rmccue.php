@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
@@ -22,18 +21,13 @@ use JBZoo\HttpClient\HttpCodes;
 use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
-use Requests;
 
-/**
- * Class Rmccue
- * @package JBZoo\HttpClient\Driver
- */
 final class Rmccue extends AbstractDriver
 {
     private const INVALID_CODE_LINE = HttpCodes::BAD_REQUEST;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function request(Request $request): Response
     {
@@ -43,12 +37,12 @@ final class Rmccue extends AbstractDriver
          * @psalm-suppress PossiblyInvalidArgument
          * @phan-suppress  PhanPartialTypeMismatchArgument
          */
-        $httpResult = Requests::request(
+        $httpResult = \Requests::request(
             $request->getUri(),
             $request->getHeaders(),
             $request->getArgs(), // @phpstan-ignore-line @phan-suppress-current-line PhanPartialTypeMismatchArgument
             $request->getMethod(),
-            self::getDriverOptions($options)
+            self::getDriverOptions($options),
         );
 
         if ($httpResult->status_code >= self::INVALID_CODE_LINE && $options->allowException()) {
@@ -64,11 +58,12 @@ final class Rmccue extends AbstractDriver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function multiRequest(array $requestList): array
     {
         $requestResults = [];
+
         foreach ($requestList as $name => $request) {
             $requestResults[$name] = [
                 'url'     => $request->getUri(),
@@ -79,9 +74,10 @@ final class Rmccue extends AbstractDriver
             ];
         }
 
-        $httpResults = Requests::request_multiple($requestResults);
+        $httpResults = \Requests::request_multiple($requestResults);
 
         $result = [];
+
         foreach ($httpResults as $name => $httpResult) {
             $result[$name] = (new Response())
                 ->setCode((int)$httpResult->status_code)
@@ -93,10 +89,6 @@ final class Rmccue extends AbstractDriver
         return $result;
     }
 
-    /**
-     * @param Options $options
-     * @return array
-     */
     private static function getDriverOptions(Options $options): array
     {
         return [

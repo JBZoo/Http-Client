@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
@@ -19,10 +18,6 @@ namespace JBZoo\HttpClient;
 
 use JBZoo\Utils\Url;
 
-/**
- * Class Request
- * @package JBZoo\HttpClient
- */
 final class Request
 {
     public const GET    = 'GET';
@@ -34,46 +29,31 @@ final class Request
 
     public const DEFAULT_METHOD = self::GET;
 
-    /**
-     * @var string
-     */
-    protected $url = '';
+    /** @var string */
+    private $url = '';
+
+    /** @var null|array|string */
+    private $args;
+
+    /** @var string */
+    private $method = self::GET;
+
+    /** @var array */
+    private $headers = [];
+
+    /** @var Options */
+    private $options;
 
     /**
-     * @var array|string|null
-     */
-    protected $args;
-
-    /**
-     * @var string
-     */
-    protected $method = self::GET;
-
-    /**
-     * @var array
-     */
-    protected $headers = [];
-
-    /**
-     * @var Options
-     */
-    protected $options;
-
-    /**
-     * Request constructor.
-     *
-     * @param string            $url
-     * @param array|string|null $args
-     * @param string            $method
-     * @param array             $headers
-     * @param Options|array     $options
+     * @param null|array|string $args
+     * @param array|Options     $options
      */
     public function __construct(
         string $url = '',
         $args = [],
         string $method = self::DEFAULT_METHOD,
         array $headers = [],
-        $options = []
+        $options = [],
     ) {
         $this->setUrl($url);
         $this->setArgs($args);
@@ -89,37 +69,37 @@ final class Request
     }
 
     /**
-     * @param string $url
      * @return $this
      */
     public function setUrl(string $url): self
     {
         $this->url = \trim($url);
+
         return $this;
     }
 
     /**
-     * @param array|string|null $args
+     * @param  null|array|string $args
      * @return $this
      */
     public function setArgs($args): self
     {
         $this->args = $args;
+
         return $this;
     }
 
     /**
-     * @param array $headers
      * @return $this
      */
     public function setHeaders(array $headers): self
     {
         $this->headers = $headers;
+
         return $this;
     }
 
     /**
-     * @param string $method
      * @return $this
      */
     public function setMethod(string $method): self
@@ -132,32 +112,30 @@ final class Request
             self::PUT,
             self::POST,
             self::PATCH,
-            self::DELETE
+            self::DELETE,
         ];
         if (!\in_array($method, $validMethods, true)) {
             throw new Exception("Undefined HTTP method: {$method}");
         }
 
         $this->method = $method;
+
         return $this;
     }
 
     /**
-     * @param array $options
      * @return $this
      */
     public function setOptions(array $options): self
     {
         $this->options = new Options(\array_merge($this->options->toArray(), $options));
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUri(): string
     {
-        if (self::GET === $this->method) {
+        if ($this->method === self::GET) {
             return Url::addArg((array)$this->args, $this->url);
         }
 
@@ -165,40 +143,28 @@ final class Request
     }
 
     /**
-     * @return array|string|null
+     * @return null|array|string
      */
     public function getArgs()
     {
-        return self::GET === $this->method ? null : $this->args;
+        return $this->method === self::GET ? null : $this->args;
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return \array_merge($this->options->getHeaders(), $this->headers);
     }
 
-    /**
-     * @return Options
-     */
     public function getOptions(): Options
     {
         return new Options($this->options->toArray());
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
@@ -206,7 +172,7 @@ final class Request
             'method'  => $this->getMethod(),
             'args'    => $this->getArgs(),
             'headers' => $this->getHeaders(),
-            'options' => $this->getOptions()->toArray()
+            'options' => $this->getOptions()->toArray(),
         ];
     }
 }

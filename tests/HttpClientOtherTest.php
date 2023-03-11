@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
@@ -23,15 +22,11 @@ use JBZoo\HttpClient\HttpCodes;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
 
-/**
- * Class HttpClientOtherTest
- * @package JBZoo\PHPUnit
- */
 final class HttpClientOtherTest extends PHPUnit
 {
     protected string $jsonFixture = '{"key-1":"value-1","key-2":"value-2"}';
 
-    public function testGetSameJSONFromResponse()
+    public function testGetSameJSONFromResponse(): void
     {
         $resp = new Response();
 
@@ -52,9 +47,9 @@ final class HttpClientOtherTest extends PHPUnit
         isSame($resp->getJSON(), $resp->getJSON());
     }
 
-    public function testGetRequestDefault()
+    public function testGetRequestDefault(): void
     {
-        $client = new HttpClient();
+        $client   = new HttpClient();
         $response = $client->request('https://httpbin.org/get');
 
         isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->find('headers.User-Agent'));
@@ -72,13 +67,13 @@ final class HttpClientOtherTest extends PHPUnit
             'exceptions'      => false,
             'allow_redirects' => true,
             'max_redirects'   => 10,
-            'user_agent'      => 'JBZoo/Http-Client'
+            'user_agent'      => 'JBZoo/Http-Client',
         ], $request->getOptions()->toArray());
     }
 
-    public function testGetRequestGlobalOptions()
+    public function testGetRequestGlobalOptions(): void
     {
-        $client = new HttpClient(['user_agent' => 'Qwerty Client']);
+        $client   = new HttpClient(['user_agent' => 'Qwerty Client']);
         $response = $client->request('https://httpbin.org/get', ['param' => 'value']);
 
         isSame('Qwerty Client', $response->getJSON()->find('headers.User-Agent'));
@@ -88,23 +83,23 @@ final class HttpClientOtherTest extends PHPUnit
         isSame(null, $request->getArgs());
         isSame('GET', $request->getMethod());
         isSame([
-            "auth"            => [],
-            "headers"         => [],
-            "driver"          => "Guzzle",
-            "timeout"         => 10,
-            "verify"          => true,
-            "exceptions"      => false,
-            "allow_redirects" => true,
-            "max_redirects"   => 10,
-            "user_agent"      => 'Qwerty Client'
+            'auth'            => [],
+            'headers'         => [],
+            'driver'          => 'Guzzle',
+            'timeout'         => 10,
+            'verify'          => true,
+            'exceptions'      => false,
+            'allow_redirects' => true,
+            'max_redirects'   => 10,
+            'user_agent'      => 'Qwerty Client',
         ], $request->getOptions()->toArray());
     }
 
-    public function testGetRequestRequestOptions()
+    public function testGetRequestRequestOptions(): void
     {
-        $client = new HttpClient();
+        $client   = new HttpClient();
         $response = $client->request('https://httpbin.org/post', ['param' => 'value'], 'POST', [
-            'user_agent' => 'Qwerty Client2'
+            'user_agent' => 'Qwerty Client2',
         ]);
 
         isSame('Qwerty Client2', $response->getJSON()->find('headers.User-Agent'));
@@ -114,23 +109,23 @@ final class HttpClientOtherTest extends PHPUnit
         isSame(['param' => 'value'], $request->getArgs());
         isSame('POST', $request->getMethod());
         isSame([
-            "auth"            => [],
-            "headers"         => [],
-            "driver"          => "Guzzle",
-            "timeout"         => 10,
-            "verify"          => true,
-            "exceptions"      => false,
-            "allow_redirects" => true,
-            "max_redirects"   => 10,
-            "user_agent"      => 'Qwerty Client2'
+            'auth'            => [],
+            'headers'         => [],
+            'driver'          => 'Guzzle',
+            'timeout'         => 10,
+            'verify'          => true,
+            'exceptions'      => false,
+            'allow_redirects' => true,
+            'max_redirects'   => 10,
+            'user_agent'      => 'Qwerty Client2',
         ], $request->getOptions()->toArray());
     }
 
-    public function testGetRequestRequestOptionsWithPostBody()
+    public function testGetRequestRequestOptionsWithPostBody(): void
     {
-        $client = new HttpClient();
+        $client   = new HttpClient();
         $response = $client->request('https://httpbin.org/post', 'qwerty', 'POST', [
-            'user_agent' => 'Qwerty Client2'
+            'user_agent' => 'Qwerty Client2',
         ]);
 
         isSame('Qwerty Client2', $response->getJSON()->find('headers.User-Agent'));
@@ -140,30 +135,30 @@ final class HttpClientOtherTest extends PHPUnit
         isSame('qwerty', $request->getArgs());
         isSame('POST', $request->getMethod());
         isSame([
-            "auth"            => [],
-            "headers"         => [],
-            "driver"          => "Guzzle",
-            "timeout"         => 10,
-            "verify"          => true,
-            "exceptions"      => false,
-            "allow_redirects" => true,
-            "max_redirects"   => 10,
-            "user_agent"      => 'Qwerty Client2'
+            'auth'            => [],
+            'headers'         => [],
+            'driver'          => 'Guzzle',
+            'timeout'         => 10,
+            'verify'          => true,
+            'exceptions'      => false,
+            'allow_redirects' => true,
+            'max_redirects'   => 10,
+            'user_agent'      => 'Qwerty Client2',
         ], $request->getOptions()->toArray());
     }
 
-    public function testGetRequestMergingOptions()
+    public function testGetRequestMergingOptions(): void
     {
-        $randomValue = random_int(0, 100000);
+        $randomValue = \random_int(0, 100000);
 
         $client = new HttpClient([
             'user_agent' => 'Qwerty Client3',
-            'driver'     => 'Rmccue'
+            'driver'     => 'Rmccue',
         ]);
 
         $response = $client->request('https://httpbin.org/get?key=val', ['param' => 'value'], 'GET', [
             'user_agent' => 'Custom Agent',
-            'headers'    => ['X-Custom-Header' => $randomValue]
+            'headers'    => ['X-Custom-Header' => $randomValue],
         ]);
 
         isSame($response->code, $response->getCode());
@@ -184,26 +179,25 @@ final class HttpClientOtherTest extends PHPUnit
         isSame(null, $request->getArgs());
         isSame('GET', $request->getMethod());
         isSame([
-            "auth"            => [],
-            "headers"         => ['X-Custom-Header' => $randomValue],
-            "driver"          => "Rmccue",
-            "timeout"         => 10,
-            "verify"          => true,
-            "exceptions"      => false,
-            "allow_redirects" => true,
-            "max_redirects"   => 10,
-            "user_agent"      => 'Custom Agent'
+            'auth'            => [],
+            'headers'         => ['X-Custom-Header' => $randomValue],
+            'driver'          => 'Rmccue',
+            'timeout'         => 10,
+            'verify'          => true,
+            'exceptions'      => false,
+            'allow_redirects' => true,
+            'max_redirects'   => 10,
+            'user_agent'      => 'Custom Agent',
         ], $request->getOptions()->toArray());
-
 
         isSame($request->toArray(), $response->toArray()['request']);
 
-        isSame(['uri', 'method', 'args', 'headers', 'options'], array_keys($request->toArray()));
-        isSame(['request', 'response'], array_keys($response->toArray()));
-        isSame(['code', 'body', 'headers', 'time'], array_keys($response->toArray()['response']));
+        isSame(['uri', 'method', 'args', 'headers', 'options'], \array_keys($request->toArray()));
+        isSame(['request', 'response'], \array_keys($response->toArray()));
+        isSame(['code', 'body', 'headers', 'time'], \array_keys($response->toArray()['response']));
     }
 
-    public function testCheckDefaultDriver()
+    public function testCheckDefaultDriver(): void
     {
         $client = new HttpClient();
 
@@ -211,7 +205,7 @@ final class HttpClientOtherTest extends PHPUnit
         isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->get('user-agent'));
     }
 
-    public function testEventManager()
+    public function testEventManager(): void
     {
         $eManager = new EventManager();
 
@@ -220,18 +214,20 @@ final class HttpClientOtherTest extends PHPUnit
 
         $counter = 0;
         $eManager
-            ->once('jbzoo.http.request.before', function (HttpClient $client, Request $request) use (&$counter) {
+            ->once('jbzoo.http.request.before', static function (HttpClient $client, Request $request) use (&$counter): void {
                 isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
                 isSame('https://httpbin.org/get', $request->getUri());
                 $counter++;
             })
-            ->once('jbzoo.http.request.after',
-                function (HttpClient $client, Response $response, Request $request) use (&$counter) {
+            ->once(
+                'jbzoo.http.request.after',
+                static function (HttpClient $client, Response $response, Request $request) use (&$counter): void {
                     isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
                     isSame('https://httpbin.org/get', $request->getUri());
                     isSame('httpbin.org', $response->getJSON()->find('headers.Host'));
                     $counter++;
-                });
+                },
+            );
 
         $response = $client->request('https://httpbin.org/get');
         isSame('httpbin.org', $response->getJSON()->find('headers.Host'));
@@ -239,7 +235,7 @@ final class HttpClientOtherTest extends PHPUnit
         isSame(2, $counter);
     }
 
-    public function testEventManagerException()
+    public function testEventManagerException(): void
     {
         $eManager = new EventManager();
         EventManager::setDefault($eManager);
@@ -249,7 +245,7 @@ final class HttpClientOtherTest extends PHPUnit
 
         $counter = 0;
         $eManager
-            ->once('jbzoo.http.exception', function (\Exception $exception) use (&$counter) {
+            ->once('jbzoo.http.exception', static function (\Exception $exception) use (&$counter): void {
                 isSame(404, $exception->getCode());
                 $counter++;
             });
@@ -264,7 +260,7 @@ final class HttpClientOtherTest extends PHPUnit
         isSame(1, $counter);
     }
 
-    public function testHttpCodes()
+    public function testHttpCodes(): void
     {
         isSame(true, HttpCodes::isSuccessful(200));
         isSame(true, HttpCodes::isRedirect(301));

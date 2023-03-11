@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
@@ -20,53 +19,33 @@ namespace JBZoo\HttpClient;
 use JBZoo\Event\EventManager;
 use JBZoo\HttpClient\Driver\AbstractDriver;
 
-/**
- * Class HttpClient
- * @package JBZoo\HttpClient
- */
 final class HttpClient
 {
-    /**
-     * @var Options
-     */
+    /** @var Options */
     private $options;
 
-    /**
-     * @var EventManager|null
-     */
+    /** @var null|EventManager */
     private $eManager;
 
-    /**
-     * @var Request|null
-     */
+    /** @var null|Request */
     private $lastRequest;
 
-    /**
-     * @var Response|null
-     */
+    /** @var null|Response */
     private $lastResponse;
 
-    /**
-     * HttpClient constructor.
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         $this->options = new Options($options);
     }
 
     /**
-     * @param string            $url
-     * @param string|array|null $args
-     * @param string            $method
-     * @param array             $options
-     * @return Response
+     * @param null|array|string $args
      */
     public function request(
         string $url,
         $args = null,
         string $method = Request::DEFAULT_METHOD,
-        array $options = []
+        array $options = [],
     ): Response {
         $this->lastRequest = (new Request())
             ->setUrl($url)
@@ -92,7 +71,7 @@ final class HttpClient
                 ->setRequest($this->lastRequest);
         }
 
-        if (null === $response->time) {
+        if ($response->time === null) {
             $response->setTime(\microtime(true) - $startTime);
         }
 
@@ -102,8 +81,6 @@ final class HttpClient
     }
 
     /**
-     * @param array $requestList
-     * @param array $options
      * @return Response[]
      */
     public function multiRequest(array $requestList, array $options = []): array
@@ -132,40 +109,15 @@ final class HttpClient
     }
 
     /**
-     * @return AbstractDriver
-     * @throws Exception
-     */
-    protected function getDriver(): AbstractDriver
-    {
-        $driverName = $this->options->getDriver();
-
-        $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
-
-        if (\class_exists($className)) {
-            /** @var AbstractDriver $driver */
-            $driver = new $className();
-            return $driver;
-        }
-
-        throw new Exception("Driver '{$driverName}' not found");
-    }
-
-    /**
-     * @param EventManager $eManager
      * @return $this
      */
     public function setEventManager(EventManager $eManager): self
     {
         $this->eManager = $eManager;
+
         return $this;
     }
 
-    /**
-     * @param string        $eventName
-     * @param array         $context
-     * @param \Closure|null $callback
-     * @return int
-     */
     public function trigger(string $eventName, array $context = [], ?\Closure $callback = null): int
     {
         if (!$this->eManager) {
@@ -177,19 +129,30 @@ final class HttpClient
         return $this->eManager->trigger("jbzoo.http.{$eventName}", $context, $callback);
     }
 
-    /**
-     * @return Response|null
-     */
     public function getLastResponse(): ?Response
     {
         return $this->lastResponse;
     }
 
-    /**
-     * @return Request|null
-     */
     public function getLastRequest(): ?Request
     {
         return $this->lastRequest;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getDriver(): AbstractDriver
+    {
+        $driverName = $this->options->getDriver();
+
+        $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
+
+        if (\class_exists($className)) {
+            /** @var AbstractDriver $driver */
+            return new $className();
+        }
+
+        throw new Exception("Driver '{$driverName}' not found");
     }
 }

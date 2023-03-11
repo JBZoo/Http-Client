@@ -4,8 +4,17 @@
     "description"       : "Simple HTTP-client, wrapper around Guzzle and rmccue/requests",
     "license"           : "MIT",
     "keywords"          : [
-        "http", "https", "client", "guzzle", "guzzlehttp", "curl", "request", "requests", "rmccue"
+        "http",
+        "https",
+        "client",
+        "guzzle",
+        "guzzlehttp",
+        "curl",
+        "request",
+        "requests",
+        "rmccue"
     ],
+
     "authors"           : [
         {
             "name"  : "Denis Smetannikov",
@@ -13,8 +22,12 @@
             "role"  : "lead"
         }
     ],
+
+    "minimum-stability" : "dev",
+    "prefer-stable"     : true,
+
     "require"           : {
-        "php"                 : ">=7.4",
+        "php"                 : "^8.1",
         "ext-json"            : "*",
 
         "jbzoo/data"          : "7.x-dev",
@@ -36,20 +49,16 @@
     },
 
     "autoload"          : {
-        "psr-4" : {
-            "JBZoo\\HttpClient\\" : "src"
-        }
+        "psr-4" : {"JBZoo\\HttpClient\\" : "src"}
     },
 
-    "minimum-stability" : "dev",
-    "prefer-stable"     : true,
-
     "autoload-dev"      : {
-        "classmap" : ["tests"]
+        "psr-4" : {"JBZoo\\PHPUnit\\" : "tests"}
     },
 
     "config"            : {
-        "optimize-autoloader" : true
+        "optimize-autoloader" : true,
+        "allow-plugins"       : {"composer/package-versions-deprecated" : true}
     },
 
     "extra"             : {

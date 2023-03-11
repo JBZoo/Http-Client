@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
@@ -23,14 +22,10 @@ use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
 
-/**
- * Class Guzzle
- * @package JBZoo\HttpClient\Driver
- */
 final class Guzzle extends AbstractDriver
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function request(Request $request): Response
     {
@@ -45,8 +40,8 @@ final class Guzzle extends AbstractDriver
                 $request->getOptions(),
                 $request->getHeaders(),
                 $request->getMethod(),
-                $request->getArgs()
-            )
+                $request->getArgs(),
+            ),
         );
 
         return (new Response())
@@ -58,13 +53,14 @@ final class Guzzle extends AbstractDriver
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function multiRequest(array $requestList): array
     {
         $client = new Client();
 
         $promises = [];
+
         foreach ($requestList as $name => $request) {
             $promises[$name] = $client->requestAsync(
                 $request->getMethod(),
@@ -73,14 +69,15 @@ final class Guzzle extends AbstractDriver
                     $request->getOptions(),
                     $request->getHeaders(),
                     $request->getMethod(),
-                    $request->getArgs()
-                )
+                    $request->getArgs(),
+                ),
             );
         }
 
         $httpResults = Utils::unwrap($promises);
 
         $result = [];
+
         foreach ($httpResults as $name => $httpResult) {
             $result[$name] = (new Response())
                 ->setCode($httpResult->getStatusCode())
@@ -93,11 +90,7 @@ final class Guzzle extends AbstractDriver
     }
 
     /**
-     * @param Options           $options
-     * @param array             $headers
-     * @param string            $method
-     * @param string|array|null $args
-     * @return array
+     * @param null|array|string $args
      */
     private static function getDriverOptions(Options $options, array $headers, string $method, $args): array
     {
@@ -105,7 +98,7 @@ final class Guzzle extends AbstractDriver
 
         $body = $formParams = null;
 
-        if (Request::GET !== $method) {
+        if ($method !== Request::GET) {
             if (\is_array($args)) {
                 $formParams = $args;
             } else {
@@ -123,14 +116,10 @@ final class Guzzle extends AbstractDriver
             'verify'          => $options->isVerify(),
             'exceptions'      => $options->allowException(),
             'auth'            => $options->getAuth(),
-            'allow_redirects' => self::getAllowRedirects($options)
+            'allow_redirects' => self::getAllowRedirects($options),
         ];
     }
 
-    /**
-     * @param Options $options
-     * @return array|null
-     */
     private static function getAllowRedirects(Options $options): ?array
     {
         $allowRedirects = null;
