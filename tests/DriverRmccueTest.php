@@ -19,4 +19,9 @@ namespace JBZoo\PHPUnit;
 final class DriverRmccueTest extends AbstractDriverTest
 {
     protected string $driver = 'Rmccue';
+
+    protected function setUp(): void
+    {
+        skip('Deprecated driver');
+    }
 }

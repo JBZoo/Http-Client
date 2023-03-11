@@ -94,7 +94,7 @@ class Response
 
     public function setBody(string $body): self
     {
-        $this->internalBody = $body;
+        $this->internalBody   = $body;
         $this->parsedJsonData = null;
 
         return $this;
@@ -131,11 +131,11 @@ class Response
     public function getHeader(string $headerKey, bool $ignoreCase = true): ?string
     {
         if ($ignoreCase) {
-            $headers = [];
+            $headers   = [];
             $headerKey = \strtolower($headerKey);
 
             foreach ($this->getHeaders() as $key => $value) {
-                $key = \strtolower((string)$key);
+                $key           = \strtolower((string)$key);
                 $headers[$key] = $value;
             }
         } else {
@@ -171,7 +171,7 @@ class Response
 
     public function toArray(bool $parseJson = false): array
     {
-        $request = $this->getRequest();
+        $request      = $this->getRequest();
         $requestArray = $request ? $request->toArray() : null;
 
         $body = $this->getBody();

@@ -153,7 +153,7 @@ final class HttpClientOtherTest extends PHPUnit
 
         $client = new HttpClient([
             'user_agent' => 'Qwerty Client3',
-            'driver'     => 'Rmccue',
+            'driver'     => 'Guzzle',
         ]);
 
         $response = $client->request('https://httpbin.org/get?key=val', ['param' => 'value'], 'GET', [
@@ -181,7 +181,7 @@ final class HttpClientOtherTest extends PHPUnit
         isSame([
             'auth'            => [],
             'headers'         => ['X-Custom-Header' => $randomValue],
-            'driver'          => 'Rmccue',
+            'driver'          => 'Guzzle',
             'timeout'         => 10,
             'verify'          => true,
             'exceptions'      => false,
@@ -214,11 +214,14 @@ final class HttpClientOtherTest extends PHPUnit
 
         $counter = 0;
         $eManager
-            ->once('jbzoo.http.request.before', static function (HttpClient $client, Request $request) use (&$counter): void {
-                isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
-                isSame('https://httpbin.org/get', $request->getUri());
-                $counter++;
-            })
+            ->once(
+                'jbzoo.http.request.before',
+                static function (HttpClient $client, Request $request) use (&$counter): void {
+                    isSame('https://httpbin.org/get', $client->getLastRequest()->getUri());
+                    isSame('https://httpbin.org/get', $request->getUri());
+                    $counter++;
+                },
+            )
             ->once(
                 'jbzoo.http.request.after',
                 static function (HttpClient $client, Response $response, Request $request) use (&$counter): void {
