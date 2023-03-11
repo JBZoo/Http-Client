@@ -1,105 +1,23 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
 
 namespace JBZoo\HttpClient;
 
-/**
- * Class HttpCodes
- * @package JBZoo\HttpClient
- */
 final class HttpCodes
 {
-    /**
-     * @var string[]
-     */
-    private static $phrases = [
-        self::CONTINUE            => 'Continue',
-        self::SWITCHING_PROTOCOLS => 'Switching Protocols',
-        self::PROCESSING          => 'Processing',
-        self::EARLY_HINTS         => 'Early Hints',
-
-        self::OK                     => 'OK',
-        self::CREATED                => 'Created',
-        self::ACCEPTED               => 'Accepted',
-        self::NON_AUTHORITATIVE_INFO => 'Non-Authoritative Information',
-        self::NO_CONTENT             => 'No Content',
-        self::RESET_CONTENT          => 'Reset Content',
-        self::PARTIAL_CONTENT        => 'Partial Content',
-        self::MULTI_STATUS           => 'Multi-status',
-        self::ALREADY_REPORTED       => 'Already Reported',
-        self::IM_USED                => 'IM Used',
-
-        self::MULTIPLE_CHOICES   => 'Multiple Choices',
-        self::MOVED_PERMANENTLY  => 'Moved Permanently',
-        self::FOUND              => 'Found',
-        self::SEE_OTHER          => 'See Other',
-        self::NOT_MODIFIED       => 'Not Modified',
-        self::USE_PROXY          => 'Use Proxy',
-        self::SWITCH_PROXY       => 'Switch Proxy',
-        self::TEMPORARY_REDIRECT => 'Temporary Redirect',
-
-        self::BAD_REQUEST                     => 'Bad Request',
-        self::UNAUTHORIZED                    => 'Unauthorized',
-        self::PAYMENT_REQUIRED                => 'Payment Required',
-        self::FORBIDDEN                       => 'Forbidden',
-        self::NOT_FOUND                       => 'Not Found',
-        self::METHOD_NOT_ALLOWED              => 'Method Not Allowed',
-        self::NOT_ACCEPTABLE                  => 'Not Acceptable',
-        self::PROXY_AUTHENTICATION_REQUIRED   => 'Proxy Authentication Required',
-        self::REQUEST_TIMEOUT                 => 'Request Time-out',
-        self::CONFLICT                        => 'Conflict',
-        self::GONE                            => 'Gone',
-        self::LENGTH_REQUIRED                 => 'Length Required',
-        self::PRECONDITION_FAILED             => 'Precondition Failed',
-        self::REQUEST_ENTITY_TOO_LARGE        => 'Request Entity Too Large',
-        self::REQUEST_URI_TOO_LONG            => 'Request-URI Too Large',
-        self::UNSUPPORTED_MEDIA_TYPE          => 'Unsupported Media Type',
-        self::REQUESTED_RANGE_NOT_SATISFIABLE => 'Requested range not satisfiable',
-        self::EXPECTATION_FAILED              => 'Expectation Failed',
-        self::IM_A_TEAPOT                     => "I'm a teapot",
-        self::UNPROCESSABLE_ENTITY            => 'Unprocessable Entity',
-        self::LOCKED                          => 'Locked',
-        self::FAILED_DEPENDENCY               => 'Failed Dependency',
-        self::UNORDERED_COLLECTION            => 'Unordered Collection',
-        self::UPGRADE_REQUIRED                => 'Upgrade Required',
-        self::PRECONDITION_REQUIRED           => 'Precondition Required',
-        self::TOO_MANY_REQUESTS               => 'Too Many Requests',
-        self::REQUEST_HEADER_FIELDS_TOO_LARGE => 'Request Header Fields Too Large',
-        self::UNAVAILABLE_FOR_LEGAL_REASONS   => 'Unavailable For Legal Reasons',
-
-        self::INTERNAL_SERVER_ERROR           => 'Internal Server Error',
-        self::NOT_IMPLEMENTED                 => 'Not Implemented',
-        self::BAD_GATEWAY                     => 'Bad Gateway',
-        self::SERVICE_UNAVAILABLE             => 'Service Unavailable',
-        self::GATEWAY_TIMEOUT                 => 'Gateway Time-out',
-        self::VERSION_NOT_SUPPORTED           => 'HTTP Version not supported',
-        self::VARIANT_ALSO_NEGOTIATES         => 'Variant Also Negotiates',
-        self::INSUFFICIENT_STORAGE            => 'Insufficient Storage',
-        self::LOOP_DETECTED                   => 'Loop Detected',
-        self::NETWORK_AUTHENTICATION_REQUIRED => 'Network Authentication Required',
-        self::UNKNOWN_ERROR                   => 'Unknown Error',
-        self::WEB_SERVER_IS_DOWN              => 'Web Server Is Down',
-        self::CONNECTION_TIMED_OUT            => 'Connection Timed Out',
-        self::ORIGIN_IS_UNREACHABLE           => 'Origin Is Unreachable',
-        self::TIMEOUT_OCCURRED                => 'A Timeout Occurred',
-        self::SSL_HANDSHAKE_FAILED            => 'SSL Handshake Failed',
-        self::INVALID_SSL_CERTIFICATE         => 'Invalid SSL Certificate',
-    ];
-
     // 1xx informational response – the request was received, continuing process
     public const CONTINUE            = 100;
     public const SWITCHING_PROTOCOLS = 101;
@@ -178,82 +96,120 @@ final class HttpCodes
     public const SSL_HANDSHAKE_FAILED            = 525;
     public const INVALID_SSL_CERTIFICATE         = 526;
 
-    /**
-     * @param int $code
-     * @return bool
-     */
+    private static array $phrases = [
+        self::CONTINUE            => 'Continue',
+        self::SWITCHING_PROTOCOLS => 'Switching Protocols',
+        self::PROCESSING          => 'Processing',
+        self::EARLY_HINTS         => 'Early Hints',
+
+        self::OK                     => 'OK',
+        self::CREATED                => 'Created',
+        self::ACCEPTED               => 'Accepted',
+        self::NON_AUTHORITATIVE_INFO => 'Non-Authoritative Information',
+        self::NO_CONTENT             => 'No Content',
+        self::RESET_CONTENT          => 'Reset Content',
+        self::PARTIAL_CONTENT        => 'Partial Content',
+        self::MULTI_STATUS           => 'Multi-status',
+        self::ALREADY_REPORTED       => 'Already Reported',
+        self::IM_USED                => 'IM Used',
+
+        self::MULTIPLE_CHOICES   => 'Multiple Choices',
+        self::MOVED_PERMANENTLY  => 'Moved Permanently',
+        self::FOUND              => 'Found',
+        self::SEE_OTHER          => 'See Other',
+        self::NOT_MODIFIED       => 'Not Modified',
+        self::USE_PROXY          => 'Use Proxy',
+        self::SWITCH_PROXY       => 'Switch Proxy',
+        self::TEMPORARY_REDIRECT => 'Temporary Redirect',
+
+        self::BAD_REQUEST                     => 'Bad Request',
+        self::UNAUTHORIZED                    => 'Unauthorized',
+        self::PAYMENT_REQUIRED                => 'Payment Required',
+        self::FORBIDDEN                       => 'Forbidden',
+        self::NOT_FOUND                       => 'Not Found',
+        self::METHOD_NOT_ALLOWED              => 'Method Not Allowed',
+        self::NOT_ACCEPTABLE                  => 'Not Acceptable',
+        self::PROXY_AUTHENTICATION_REQUIRED   => 'Proxy Authentication Required',
+        self::REQUEST_TIMEOUT                 => 'Request Time-out',
+        self::CONFLICT                        => 'Conflict',
+        self::GONE                            => 'Gone',
+        self::LENGTH_REQUIRED                 => 'Length Required',
+        self::PRECONDITION_FAILED             => 'Precondition Failed',
+        self::REQUEST_ENTITY_TOO_LARGE        => 'Request Entity Too Large',
+        self::REQUEST_URI_TOO_LONG            => 'Request-URI Too Large',
+        self::UNSUPPORTED_MEDIA_TYPE          => 'Unsupported Media Type',
+        self::REQUESTED_RANGE_NOT_SATISFIABLE => 'Requested range not satisfiable',
+        self::EXPECTATION_FAILED              => 'Expectation Failed',
+        self::IM_A_TEAPOT                     => "I'm a teapot",
+        self::UNPROCESSABLE_ENTITY            => 'Unprocessable Entity',
+        self::LOCKED                          => 'Locked',
+        self::FAILED_DEPENDENCY               => 'Failed Dependency',
+        self::UNORDERED_COLLECTION            => 'Unordered Collection',
+        self::UPGRADE_REQUIRED                => 'Upgrade Required',
+        self::PRECONDITION_REQUIRED           => 'Precondition Required',
+        self::TOO_MANY_REQUESTS               => 'Too Many Requests',
+        self::REQUEST_HEADER_FIELDS_TOO_LARGE => 'Request Header Fields Too Large',
+        self::UNAVAILABLE_FOR_LEGAL_REASONS   => 'Unavailable For Legal Reasons',
+
+        self::INTERNAL_SERVER_ERROR           => 'Internal Server Error',
+        self::NOT_IMPLEMENTED                 => 'Not Implemented',
+        self::BAD_GATEWAY                     => 'Bad Gateway',
+        self::SERVICE_UNAVAILABLE             => 'Service Unavailable',
+        self::GATEWAY_TIMEOUT                 => 'Gateway Time-out',
+        self::VERSION_NOT_SUPPORTED           => 'HTTP Version not supported',
+        self::VARIANT_ALSO_NEGOTIATES         => 'Variant Also Negotiates',
+        self::INSUFFICIENT_STORAGE            => 'Insufficient Storage',
+        self::LOOP_DETECTED                   => 'Loop Detected',
+        self::NETWORK_AUTHENTICATION_REQUIRED => 'Network Authentication Required',
+        self::UNKNOWN_ERROR                   => 'Unknown Error',
+        self::WEB_SERVER_IS_DOWN              => 'Web Server Is Down',
+        self::CONNECTION_TIMED_OUT            => 'Connection Timed Out',
+        self::ORIGIN_IS_UNREACHABLE           => 'Origin Is Unreachable',
+        self::TIMEOUT_OCCURRED                => 'A Timeout Occurred',
+        self::SSL_HANDSHAKE_FAILED            => 'SSL Handshake Failed',
+        self::INVALID_SSL_CERTIFICATE         => 'Invalid SSL Certificate',
+    ];
+
     public static function isSuccessful(int $code): bool
     {
         return $code >= self::OK && $code < self::MULTIPLE_CHOICES;
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
     public static function isRedirect(int $code): bool
     {
         return $code >= self::MULTIPLE_CHOICES && $code < self::BAD_REQUEST;
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
     public static function isForbidden(int $code): bool
     {
         return $code === self::FORBIDDEN;
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
     public static function isNotFound(int $code): bool
     {
         return $code === self::NOT_FOUND;
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
     public static function isUnauthorized(int $code): bool
     {
         return $code === self::UNAUTHORIZED;
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
     public static function hasAccess(int $code): bool
     {
         return !self::isForbidden($code) && !self::isUnauthorized($code);
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
     public static function isError(int $code): bool
     {
         return $code >= self::BAD_REQUEST;
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
     public static function isFatalError(int $code): bool
     {
         return $code >= self::INTERNAL_SERVER_ERROR;
     }
 
-    /**
-     * @param int $code
-     * @return string|null
-     */
     public static function getDescriptionByCode(int $code): ?string
     {
         return self::$phrases[$code] ?? null;

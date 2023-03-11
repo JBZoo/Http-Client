@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
@@ -22,36 +21,15 @@ use JBZoo\HttpClient\Options;
 use JBZoo\Utils\Url;
 use JBZoo\Utils\Xml;
 
-/**
- * Class DriverTest
- *
- * @package JBZoo\PHPUnit
- */
 abstract class AbstractDriverTest extends PHPUnit
 {
-    /**
-     * @var string
-     */
     protected string $driver = 'Auto';
 
-    /**
-     * @var array
-     */
     protected array $methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'];
 
-    /**
-     * @param array $options
-     * @return HttpClient
-     */
-    protected function getClient(array $options = []): HttpClient
+    public function testSimple(): void
     {
-        $options['driver'] = $this->driver;
-        return new HttpClient($options);
-    }
-
-    public function testSimple()
-    {
-        $url = 'http://www.mocky.io/v2/579b43a91100006f1bcb7734';
+        $url    = 'http://www.mocky.io/v2/579b43a91100006f1bcb7734';
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
@@ -60,7 +38,7 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('{"great-answer": "42"}', $result->body);
     }
 
-    public function testBinaryData()
+    public function testBinaryData(): void
     {
         $result = $this->getClient()->request('https://httpbin.org/image/png');
 
@@ -69,30 +47,30 @@ abstract class AbstractDriverTest extends PHPUnit
         isContain('PNG', $result->getBody());
     }
 
-    public function testPOSTPayload()
+    public function testPOSTPayload(): void
     {
-        $uniq = uniqid('', true);
-        $payload = json_encode(['key' => $uniq]);
+        $uniq    = \uniqid('', true);
+        $payload = \json_encode(['key' => $uniq]);
 
-        $url = 'http://mockbin.org/request?key=value';
+        $url    = 'http://mockbin.org/request?key=value';
         $result = $this->getClient(['exceptions' => true])->request($url, $payload, 'post');
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame($payload, $body->find('postData.text'));
         isSame('value', $body->find('queryString.key'));
         isSame('POST', $body->find('method'));
     }
 
-    public function testAllMethods()
+    public function testAllMethods(): void
     {
         foreach ($this->methods as $method) {
-            $uniq = uniqid('', true);
-            $url = "http://mockbin.org/request?method={$method}&qwerty=remove_me";
-            $args = ['qwerty' => $uniq];
+            $uniq    = \uniqid('', true);
+            $url     = "http://mockbin.org/request?method={$method}&qwerty=remove_me";
+            $args    = ['qwerty' => $uniq];
             $message = 'Method: ' . $method;
 
             $result = $this->getClient()->request($url, $args, $method);
-            $body = $result->getJSON();
+            $body   = $result->getJSON();
 
             if (!$result->getCode()) {
                 fail($message . ' Body: ' . $result->getBody());
@@ -116,9 +94,9 @@ abstract class AbstractDriverTest extends PHPUnit
         }
     }
 
-    public function testAuth()
+    public function testAuth(): void
     {
-        $url = 'http://httpbin.org/basic-auth/user/passwd';
+        $url    = 'http://httpbin.org/basic-auth/user/passwd';
         $result = $this->getClient([
             'auth' => ['user', 'passwd'],
         ])->request($url);
@@ -128,14 +106,14 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('user', $result->getJSON()->get('user'));
     }
 
-    public function testGetQueryString()
+    public function testGetQueryString(): void
     {
-        $uniq = uniqid('', true);
+        $uniq = \uniqid('', true);
 
         $siteUrl = 'https://httpbin.org/get?key=value';
-        $args = ['qwerty' => $uniq];
-        $url = Url::addArg($args, $siteUrl);
-        $result = $this->getClient()->request($url, $args);
+        $args    = ['qwerty' => $uniq];
+        $url     = Url::addArg($args, $siteUrl);
+        $result  = $this->getClient()->request($url, $args);
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('Content-Type'));
@@ -146,24 +124,24 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('value', $body->find('args.key'));
     }
 
-    public function testUserAgent()
+    public function testUserAgent(): void
     {
         $result = $this->getClient()->request('https://httpbin.org/user-agent');
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('Content-Type'));
         isContain(Options::DEFAULT_USER_AGENT . ' (', $body->find('user-agent'));
     }
 
-    public function testPost()
+    public function testPost(): void
     {
-        $uniq = uniqid('', true);
-        $url = 'https://httpbin.org/post?key=value';
+        $uniq = \uniqid('', true);
+        $url  = 'https://httpbin.org/post?key=value';
         $args = ['qwerty' => $uniq];
 
         $result = $this->getClient()->request($url, $args, 'post');
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('content-type'));
@@ -172,14 +150,14 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('value', $body->find('args.key'));
     }
 
-    public function testStatus404()
+    public function testStatus404(): void
     {
         $result = $this->getClient()->request('http://httpbin.org/status/404');
 
         isSame(404, $result->code);
     }
 
-    public function testStatus404Body()
+    public function testStatus404Body(): void
     {
         $result = $this->getClient()->request('https://run.mocky.io/v3/2c514476-819d-4208-a9fd-b9cc2155ecb4');
 
@@ -188,7 +166,7 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('123', $result->getHeader('x-custom_header'));
     }
 
-    public function testStatus404Exceptions()
+    public function testStatus404Exceptions(): void
     {
         $this->expectException(\JBZoo\HttpClient\Exception::class);
 
@@ -197,13 +175,13 @@ abstract class AbstractDriverTest extends PHPUnit
         ])->request('http://httpbin.org/status/404');
     }
 
-    public function testStatus500()
+    public function testStatus500(): void
     {
         $result = $this->getClient()->request('http://httpbin.org/status/500');
         isSame(500, $result->code);
     }
 
-    public function testStatus500Exceptions()
+    public function testStatus500Exceptions(): void
     {
         $this->expectException(\JBZoo\HttpClient\Exception::class);
 
@@ -212,23 +190,22 @@ abstract class AbstractDriverTest extends PHPUnit
         ])->request('http://httpbin.org/status/500');
     }
 
-    public function testRedirect()
+    public function testRedirect(): void
     {
-        skip('Waiting for https://github.com/postmanlabs/httpbin/issues/617');
         $url = Url::addArg(['url' => 'https://google.com'], 'https://httpbin.org/redirect-to');
 
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
         isContain('text/html', $result->getHeader('content-type'));
-        isContain('Example', $result->body);
+        isContain('google.com', $result->body);
     }
 
-    public function testHeaders()
+    public function testHeaders(): void
     {
         $url = 'http://httpbin.org/headers';
 
-        $uniq = uniqid('', true);
+        $uniq   = \uniqid('', true);
         $result = $this->getClient([
             'headers' => ['X-Custom-Header' => $uniq],
         ])->request($url);
@@ -239,7 +216,7 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame($uniq, $body->find('headers.X-Custom-Header'));
     }
 
-    public function testGzip()
+    public function testGzip(): void
     {
         $url = 'http://httpbin.org/gzip';
 
@@ -249,18 +226,17 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame(true, $result->getJSON()->find('gzipped'));
     }
 
-    public function testMultiRedirects()
+    public function testMultiRedirects(): void
     {
-        skip('Waiting for https://github.com/postmanlabs/httpbin/issues/617');
-        $url = 'http://httpbin.org/absolute-redirect/9';
+        $url    = 'http://httpbin.org/absolute-redirect/9';
         $result = $this->getClient()->request($url);
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         $this->isSameUrl('http://httpbin.org/get', $body->get('url'));
     }
 
-    public function testDelayError()
+    public function testDelayError(): void
     {
         $this->expectException(\JBZoo\HttpClient\Exception::class);
 
@@ -270,7 +246,7 @@ abstract class AbstractDriverTest extends PHPUnit
         ])->request('http://httpbin.org/delay/5');
     }
 
-    public function testDelayErrorExceptionsDisable()
+    public function testDelayErrorExceptionsDisable(): void
     {
         $result = $this->getClient([
             'timeout'    => 2,
@@ -279,35 +255,35 @@ abstract class AbstractDriverTest extends PHPUnit
 
         isSame(0, $result->getCode());
         isSame([], $result->getHeaders());
-        isTrue(is_string($result->getBody()));
+        isTrue(\is_string($result->getBody()));
     }
 
-    public function testDelay()
+    public function testDelay(): void
     {
-        $url = 'https://httpbin.org/delay/5';
+        $url    = 'https://httpbin.org/delay/5';
         $result = $this->getClient()->request($url);
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         $this->isSameUrl($url, $body->get('url'));
     }
 
-    public function testSSL()
+    public function testSSL(): void
     {
-        $url = 'https://www.google.com';
+        $url    = 'https://www.google.com';
         $result = $this->getClient(['verify' => false])->request($url);
 
         isSame(200, $result->code);
         isContain('google', $result->body);
 
-        $url = 'https://www.google.com';
+        $url    = 'https://www.google.com';
         $result = $this->getClient(['verify' => true])->request($url);
 
         isSame(200, $result->code);
         isContain('google', $result->body);
     }
 
-    public function testXmlAsResponse()
+    public function testXmlAsResponse(): void
     {
         $result = $this->getClient()->request('https://httpbin.org/xml');
 
@@ -321,10 +297,10 @@ abstract class AbstractDriverTest extends PHPUnit
             '_attrs'    => [],
             '_children' => [
                 [
-                    '_node'     => 'slideshow',
-                    '_text'     => null,
-                    '_cdata'    => null,
-                    '_attrs'    => [
+                    '_node'  => 'slideshow',
+                    '_text'  => null,
+                    '_cdata' => null,
+                    '_attrs' => [
                         'title'  => 'Sample Slide Show',
                         'date'   => 'Date of publication',
                         'author' => 'Yours Truly',
@@ -349,7 +325,7 @@ abstract class AbstractDriverTest extends PHPUnit
                             '_node'     => 'slide',
                             '_text'     => null,
                             '_cdata'    => null,
-                            '_attrs'    => ['type' => 'all',],
+                            '_attrs'    => ['type' => 'all'],
                             '_children' => [
                                 [
                                     '_node'     => 'title',
@@ -431,28 +407,31 @@ abstract class AbstractDriverTest extends PHPUnit
         ], $result->getXml()->getArrayCopy());
 
         // TODO: fix parser in \JBZoo\Utils\Xml to find text node mixed in tags
-        isSame(implode("\n", [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<slideshow title="Sample Slide Show" date="Date of publication" author="Yours Truly">',
-            '  <slide type="all">',
-            '    <title>Wake up to WonderWidgets!</title>',
-            '  </slide>',
-            '  <slide type="all">',
-            '    <title>Overview</title>',
-            '    <item>',
-            '      <em>WonderWidgets</em>',
-            '    </item>',
-            '    <item/>',
-            '    <item>',
-            '      <em>buys</em>',
-            '    </item>',
-            '  </slide>',
-            '</slideshow>',
-            '',
-        ]), Xml::array2Dom($result->getXml()->getArrayCopy())->saveXML());
+        isSame(
+            \implode("\n", [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<slideshow title="Sample Slide Show" date="Date of publication" author="Yours Truly">',
+                '  <slide type="all">',
+                '    <title>Wake up to WonderWidgets!</title>',
+                '  </slide>',
+                '  <slide type="all">',
+                '    <title>Overview</title>',
+                '    <item>',
+                '      <em>WonderWidgets</em>',
+                '    </item>',
+                '    <item/>',
+                '    <item>',
+                '      <em>buys</em>',
+                '    </item>',
+                '  </slide>',
+                '</slideshow>',
+                '',
+            ]),
+            Xml::array2Dom($result->getXml()->getArrayCopy())->saveXML(),
+        );
     }
 
-    public function testMultiRequest()
+    public function testMultiRequest(): void
     {
         $responseList = $this->getClient(['user_agent' => 'Qwerty Agent v123'])->multiRequest([
             'request_0' => ['http://mockbin.org/request?qwerty=123456'],
@@ -464,9 +443,9 @@ abstract class AbstractDriverTest extends PHPUnit
                 [
                     'user_agent' => 'Qwerty Agent v456',
                     'headers'    => [
-                        'x-custom-header' => '123'
-                    ]
-                ]
+                        'x-custom-header' => '123',
+                    ],
+                ],
             ],
         ]);
 
@@ -481,7 +460,6 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('GET', $jsonBody0->find('method'));
         isSame('123456', $jsonBody0->find('queryString.qwerty'));
 
-
         // Response - 1
         $request1 = $responseList['request_1']->getRequest();
         isSame('http://mockbin.org/request?key=value', $request1->getUri());
@@ -492,7 +470,6 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('http://mockbin.org/request?key=value', $jsonBody1->find('url'));
         isSame('GET', $jsonBody1->find('method'));
         isSame('value', $jsonBody1->find('queryString.key'));
-
 
         // Response - 2
         $request2 = $responseList['request_2']->getRequest();
@@ -508,32 +485,29 @@ abstract class AbstractDriverTest extends PHPUnit
         isSame('value', $jsonBody2->find('postData.params.key'));
     }
 
-    /**
-     * @param string $expected
-     * @param string $actual
-     * @param string $message
-     */
-    private function isSameUrl(string $expected, string $actual, string $message = '')
+    protected function getClient(array $options = []): HttpClient
+    {
+        $options['driver'] = $this->driver;
+
+        return new HttpClient($options);
+    }
+
+    private function isSameUrl(string $expected, string $actual, string $message = ''): void
     {
         isSame(
-            str_replace(['https://', 'http://'], '//', $expected),
-            str_replace(['https://', 'http://'], '//', $actual),
-            $message
+            \str_replace(['https://', 'http://'], '//', $expected),
+            \str_replace(['https://', 'http://'], '//', $actual),
+            $message,
         );
     }
 
-    /**
-     * @param string $expected
-     * @param string $actual
-     * @param string $message
-     */
-    private function isContainUrl(string $expected, string $actual, string $message = '')
+    private function isContainUrl(string $expected, string $actual, string $message = ''): void
     {
         isContain(
-            str_replace(['https://', 'http://'], '//', $expected),
-            str_replace(['https://', 'http://'], '//', $actual),
+            \str_replace(['https://', 'http://'], '//', $expected),
+            \str_replace(['https://', 'http://'], '//', $actual),
             false,
-            $message
+            $message,
         );
     }
 }

@@ -4,8 +4,17 @@
     "description"       : "Simple HTTP-client, wrapper around Guzzle and rmccue/requests",
     "license"           : "MIT",
     "keywords"          : [
-        "http", "https", "client", "guzzle", "guzzlehttp", "curl", "request", "requests", "rmccue"
+        "http",
+        "https",
+        "client",
+        "guzzle",
+        "guzzlehttp",
+        "curl",
+        "request",
+        "requests",
+        "rmccue"
     ],
+
     "authors"           : [
         {
             "name"  : "Denis Smetannikov",
@@ -13,43 +22,42 @@
             "role"  : "lead"
         }
     ],
-    "require"           : {
-        "php"                 : ">=7.4",
-        "ext-json"            : "*",
-
-        "jbzoo/data"          : "7.x-dev",
-        "jbzoo/utils"         : "7.x-dev",
-        "guzzlehttp/promises" : "^1.4.0"
-    },
-
-    "require-dev"       : {
-        "jbzoo/toolbox-dev" : "7.x-dev",
-        "jbzoo/event"       : "7.x-dev",
-        "rmccue/requests"   : "^1.7.0",
-        "guzzlehttp/guzzle" : ">=6.5.5"
-    },
-
-    "suggest"           : {
-        "rmccue/requests"   : "Only if you can't use guzzle guzzlehttp/guzzle^6.4",
-        "guzzlehttp/guzzle" : "Recommended default http-driver",
-        "jbzoo/event"       : ">=3.0"
-    },
-
-    "autoload"          : {
-        "psr-4" : {
-            "JBZoo\\HttpClient\\" : "src"
-        }
-    },
 
     "minimum-stability" : "dev",
     "prefer-stable"     : true,
 
+    "require"           : {
+        "php"         : "^8.1",
+        "ext-json"    : "*",
+
+        "jbzoo/data"  : "7.x-dev",
+        "jbzoo/utils" : "7.x-dev",
+        "jbzoo/event" : "7.x-dev"
+    },
+
+    "require-dev"       : {
+        "jbzoo/toolbox-dev" : "7.x-dev",
+        "rmccue/requests"   : ">=2.0.5",
+        "guzzlehttp/guzzle" : ">=7.5.0"
+    },
+
+    "suggest"           : {
+        "rmccue/requests"   : "Only if you can't use guzzle guzzlehttp/guzzle^7.5.0",
+        "guzzlehttp/guzzle" : "Recommended default http-driver",
+        "jbzoo/event"       : "^7.0"
+    },
+
+    "autoload"          : {
+        "psr-4" : {"JBZoo\\HttpClient\\" : "src"}
+    },
+
     "autoload-dev"      : {
-        "classmap" : ["tests"]
+        "psr-4" : {"JBZoo\\PHPUnit\\" : "tests"}
     },
 
     "config"            : {
-        "optimize-autoloader" : true
+        "optimize-autoloader" : true,
+        "allow-plugins"       : {"composer/package-versions-deprecated" : true}
     },
 
     "extra"             : {

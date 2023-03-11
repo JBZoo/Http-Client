@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Http-Client
+ * JBZoo Toolbox - Http-Client.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Http-Client
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Http-Client
+ * @see        https://github.com/JBZoo/Http-Client
  */
 
 declare(strict_types=1);
@@ -21,68 +20,56 @@ use JBZoo\Data\JSON;
 use JBZoo\Utils\Xml;
 
 /**
- * Class Response
- * @package JBZoo\HttpClient
- *
  * @property int        $code
  * @property array      $headers
  * @property string     $body
- * @property float|null $time
+ * @property null|float $time
  */
 class Response
 {
-    /**
-     * @var int
-     */
-    protected $internalCode = 0;
+    protected int      $internalCode    = 0;
+    protected array    $internalHeaders = [];
+    protected ?string  $internalBody    = null;
+    protected ?JSON    $parsedJsonData  = null;
+    protected ?float   $time            = null;
+    protected ?Request $originalRequest = null;
 
     /**
-     * @var string[]
+     * @return null|array|float|int|string|string[]
      */
-    protected $internalHeaders = [];
+    public function __get(string $name)
+    {
+        if ($name === 'code') {
+            return $this->getCode();
+        }
 
-    /**
-     * @var string|null
-     */
-    protected $internalBody;
+        if ($name === 'headers') {
+            return $this->getHeaders();
+        }
 
-    /**
-     * @var JSON|null
-     */
-    protected $parsedJsonData;
+        if ($name === 'body') {
+            return $this->getBody();
+        }
 
-    /**
-     * @var float|null
-     */
-    protected $time;
+        if ($name === 'time') {
+            return $this->getTime();
+        }
 
-    /**
-     * @var Request|null
-     */
-    protected $originalRequest;
+        throw new Exception("Property '{$name}' not defined");
+    }
 
-    /**
-     * @param int $code
-     * @return $this
-     */
     public function setCode(int $code): self
     {
         $this->internalCode = $code;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCode(): int
     {
         return $this->internalCode;
     }
 
-    /**
-     * @param array $headers
-     * @return $this
-     */
     public function setHeaders(array $headers): self
     {
         $result = [];
@@ -96,51 +83,41 @@ class Response
         }
 
         $this->internalHeaders = $result;
+
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return $this->internalHeaders;
     }
 
-    /**
-     * @param string $body
-     * @return $this
-     */
     public function setBody(string $body): self
     {
-        $this->internalBody = $body;
+        $this->internalBody   = $body;
         $this->parsedJsonData = null;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBody(): ?string
     {
         return $this->internalBody;
     }
 
-    /**
-     * @return JSON|null
-     */
     public function getJSON(): ?JSON
     {
-        if (null === $this->parsedJsonData && $this->internalBody) {
+        if (
+            $this->parsedJsonData === null
+            && $this->internalBody !== null
+            && $this->internalBody !== ''
+        ) {
             $this->parsedJsonData = new JSON($this->internalBody);
         }
 
         return $this->parsedJsonData;
     }
 
-    /**
-     * @return JSON
-     */
     public function getXml(): JSON
     {
         try {
@@ -148,50 +125,21 @@ class Response
         } catch (\Exception $exception) {
             throw new Exception(
                 "Can't parse xml document from HTTP response. " .
-                "Details: {$exception->getMessage()}"
+                "Details: {$exception->getMessage()}",
             );
         }
 
         return new JSON($xmlAsArray);
     }
 
-    /**
-     * @param string $name
-     * @return array|string|float|int|string[]|null
-     */
-    public function __get(string $name)
-    {
-        if ('code' === $name) {
-            return $this->getCode();
-        }
-
-        if ('headers' === $name) {
-            return $this->getHeaders();
-        }
-
-        if ('body' === $name) {
-            return $this->getBody();
-        }
-
-        if ('time' === $name) {
-            return $this->getTime();
-        }
-
-        throw new Exception("Property '{$name}' not defined");
-    }
-
-    /**
-     * @param string $headerKey
-     * @param bool   $ignoreCase
-     * @return string|null
-     */
     public function getHeader(string $headerKey, bool $ignoreCase = true): ?string
     {
         if ($ignoreCase) {
-            $headers = [];
+            $headers   = [];
             $headerKey = \strtolower($headerKey);
+
             foreach ($this->getHeaders() as $key => $value) {
-                $key = \strtolower((string)$key);
+                $key           = \strtolower((string)$key);
                 $headers[$key] = $value;
             }
         } else {
@@ -201,64 +149,49 @@ class Response
         return $headers[$headerKey] ?? null;
     }
 
-    /**
-     * @param Request $request
-     * @return $this
-     */
     public function setRequest(Request $request): self
     {
         $this->originalRequest = $request;
+
         return $this;
     }
 
-    /**
-     * @return Request|null
-     */
     public function getRequest(): ?Request
     {
         return $this->originalRequest;
     }
 
-    /**
-     * @return float|null
-     */
     public function getTime(): ?float
     {
         return $this->time;
     }
 
-    /**
-     * @param float $time
-     * @return $this
-     */
     public function setTime(float $time): self
     {
         $this->time = $time;
+
         return $this;
     }
 
-    /**
-     * @param bool $parseJson
-     * @return array
-     */
     public function toArray(bool $parseJson = false): array
     {
-        $request = $this->getRequest();
-        $requestArray = $request ? $request->toArray() : null;
+        $request      = $this->getRequest();
+        $requestArray = $request?->toArray();
 
-        $body = $this->getBody();
-        if ($parseJson && $jsonBody = $this->getJSON()) {
-            $body = $jsonBody;
+        $bodyRaw  = $this->getBody();
+        $bodyJson = $this->getJSON();
+        if ($parseJson && $bodyJson !== null) {
+            $bodyRaw = $bodyJson;
         }
 
         return [
             'request'  => $requestArray,
             'response' => [
                 'code'    => $this->getCode(),
-                'body'    => $body,
+                'body'    => $bodyRaw,
                 'headers' => $this->getHeaders(),
                 'time'    => $this->getTime(),
-            ]
+            ],
         ];
     }
 }
