@@ -19,6 +19,9 @@ namespace JBZoo\HttpClient\Driver;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
 
+/**
+ * @psalm-consistent-constructor
+ */
 abstract class AbstractDriver
 {
     abstract public function request(Request $request): Response;

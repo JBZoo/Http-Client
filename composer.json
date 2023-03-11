@@ -31,13 +31,13 @@
         "ext-json"    : "*",
 
         "jbzoo/data"  : "7.x-dev",
-        "jbzoo/utils" : "7.x-dev"
+        "jbzoo/utils" : "7.x-dev",
+        "jbzoo/event" : "7.x-dev"
     },
 
     "require-dev"       : {
         "jbzoo/toolbox-dev" : "7.x-dev",
-        "jbzoo/event"       : "7.x-dev",
-        "rmccue/requests"   : "^1.8.1",
+        "rmccue/requests"   : ">=2.0.5",
         "guzzlehttp/guzzle" : ">=7.5.0"
     },
 

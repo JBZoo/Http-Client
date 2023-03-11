@@ -21,6 +21,7 @@ use JBZoo\HttpClient\HttpCodes;
 use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
+use \WpOrg\Requests\Requests;
 
 final class Rmccue extends AbstractDriver
 {
@@ -34,7 +35,7 @@ final class Rmccue extends AbstractDriver
          * @psalm-suppress PossiblyInvalidArgument
          * @phan-suppress  PhanPartialTypeMismatchArgument
          */
-        $httpResult = \Requests::request(
+        $httpResult = Requests::request(
             $request->getUri(),
             $request->getHeaders(),
             $request->getArgs(), // @phpstan-ignore-line @phan-suppress-current-line PhanPartialTypeMismatchArgument
@@ -68,7 +69,7 @@ final class Rmccue extends AbstractDriver
             ];
         }
 
-        $httpResults = \Requests::request_multiple($requestResults);
+        $httpResults = Requests::request_multiple($requestResults);
 
         $result = [];
 
@@ -85,14 +86,15 @@ final class Rmccue extends AbstractDriver
 
     private static function getDriverOptions(Options $options): array
     {
+        $auth = $options->getAuth();
+
         return [
             'timeout'          => $options->getTimeout(),
             'verify'           => $options->isVerify(),
             'follow_redirects' => $options->isAllowRedirects(),
             'redirects'        => $options->getMaxRedirects(),
             'useragent'        => $options->getUserAgent('Rmccue'),
-            'auth'             => $options->getAuth(),
-            'cookies'          => [],
+            'auth'             => $auth ?? false,
         ];
     }
 }

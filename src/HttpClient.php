@@ -17,9 +17,7 @@ declare(strict_types=1);
 namespace JBZoo\HttpClient;
 
 use JBZoo\Event\EventManager;
-use JBZoo\HttpClient\Driver\Auto;
-use JBZoo\HttpClient\Driver\Guzzle;
-use JBZoo\HttpClient\Driver\Rmccue;
+use JBZoo\HttpClient\Driver\AbstractDriver;
 
 final class HttpClient
 {
@@ -109,13 +107,13 @@ final class HttpClient
 
     public function trigger(string $eventName, array $context = [], ?\Closure $callback = null): int
     {
-        if ($this->eManager === null) {
-            return 0;
+        if ($this->eManager !== null) {
+            \array_unshift($context, $this);
+
+            return $this->eManager->trigger("jbzoo.http.{$eventName}", $context, $callback);
         }
 
-        \array_unshift($context, $this);
-
-        return $this->eManager->trigger("jbzoo.http.{$eventName}", $context, $callback);
+        return 0;
     }
 
     public function getLastResponse(): ?Response
@@ -128,13 +126,12 @@ final class HttpClient
         return $this->lastRequest;
     }
 
-    private function getDriver(): Guzzle|Rmccue|Auto
+    private function getDriver(): AbstractDriver
     {
         $driverName = $this->options->getDriver();
+        $className  = __NAMESPACE__ . "\\Driver\\{$driverName}";
 
-        $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
-
-        if (\class_exists($className)) {
+        if (\class_exists($className) && \is_subclass_of($className, AbstractDriver::class)) {
             return new $className();
         }
 
