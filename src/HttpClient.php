@@ -110,6 +110,7 @@ final class HttpClient
         if ($this->eManager !== null) {
             \array_unshift($context, $this);
 
+            // @phpstan-ignore-next-line
             return $this->eManager->trigger("jbzoo.http.{$eventName}", $context, $callback);
         }
 

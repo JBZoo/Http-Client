@@ -192,14 +192,13 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testRedirect(): void
     {
-        skip('Waiting for https://github.com/postmanlabs/httpbin/issues/617');
         $url = Url::addArg(['url' => 'https://google.com'], 'https://httpbin.org/redirect-to');
 
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
         isContain('text/html', $result->getHeader('content-type'));
-        isContain('Example', $result->body);
+        isContain('google.com', $result->body);
     }
 
     public function testHeaders(): void
@@ -229,7 +228,6 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testMultiRedirects(): void
     {
-        skip('Waiting for https://github.com/postmanlabs/httpbin/issues/617');
         $url    = 'http://httpbin.org/absolute-redirect/9';
         $result = $this->getClient()->request($url);
         $body   = $result->getJSON();
@@ -409,25 +407,28 @@ abstract class AbstractDriverTest extends PHPUnit
         ], $result->getXml()->getArrayCopy());
 
         // TODO: fix parser in \JBZoo\Utils\Xml to find text node mixed in tags
-        isSame(\implode("\n", [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<slideshow title="Sample Slide Show" date="Date of publication" author="Yours Truly">',
-            '  <slide type="all">',
-            '    <title>Wake up to WonderWidgets!</title>',
-            '  </slide>',
-            '  <slide type="all">',
-            '    <title>Overview</title>',
-            '    <item>',
-            '      <em>WonderWidgets</em>',
-            '    </item>',
-            '    <item/>',
-            '    <item>',
-            '      <em>buys</em>',
-            '    </item>',
-            '  </slide>',
-            '</slideshow>',
-            '',
-        ]), Xml::array2Dom($result->getXml()->getArrayCopy())->saveXML());
+        isSame(
+            \implode("\n", [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<slideshow title="Sample Slide Show" date="Date of publication" author="Yours Truly">',
+                '  <slide type="all">',
+                '    <title>Wake up to WonderWidgets!</title>',
+                '  </slide>',
+                '  <slide type="all">',
+                '    <title>Overview</title>',
+                '    <item>',
+                '      <em>WonderWidgets</em>',
+                '    </item>',
+                '    <item/>',
+                '    <item>',
+                '      <em>buys</em>',
+                '    </item>',
+                '  </slide>',
+                '</slideshow>',
+                '',
+            ]),
+            Xml::array2Dom($result->getXml()->getArrayCopy())->saveXML(),
+        );
     }
 
     public function testMultiRequest(): void

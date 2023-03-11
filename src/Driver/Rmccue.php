@@ -21,7 +21,7 @@ use JBZoo\HttpClient\HttpCodes;
 use JBZoo\HttpClient\Options;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
-use \WpOrg\Requests\Requests;
+use WpOrg\Requests\Requests;
 
 final class Rmccue extends AbstractDriver
 {
