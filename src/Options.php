@@ -31,8 +31,7 @@ final class Options
     public const DEFAULT_MAX_REDIRECTS   = 10;
     public const DEFAULT_USER_AGENT      = 'JBZoo/Http-Client';
 
-    /** @var Data */
-    private $options;
+    private Data $options;
 
     public function __construct(array $options = [])
     {

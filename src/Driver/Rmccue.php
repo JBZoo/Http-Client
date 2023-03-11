@@ -26,9 +26,6 @@ final class Rmccue extends AbstractDriver
 {
     private const INVALID_CODE_LINE = HttpCodes::BAD_REQUEST;
 
-    /**
-     * {@inheritDoc}
-     */
     public function request(Request $request): Response
     {
         $options = $request->getOptions();
@@ -57,9 +54,6 @@ final class Rmccue extends AbstractDriver
             ->setRequest($request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function multiRequest(array $requestList): array
     {
         $requestResults = [];

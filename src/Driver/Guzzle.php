@@ -24,9 +24,6 @@ use JBZoo\HttpClient\Response;
 
 final class Guzzle extends AbstractDriver
 {
-    /**
-     * {@inheritDoc}
-     */
     public function request(Request $request): Response
     {
         $client = new Client();
@@ -52,9 +49,6 @@ final class Guzzle extends AbstractDriver
             ->setTime(\microtime(true) - $start);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function multiRequest(array $requestList): array
     {
         $client = new Client();
@@ -89,11 +83,12 @@ final class Guzzle extends AbstractDriver
         return $result;
     }
 
-    /**
-     * @param null|array|string $args
-     */
-    private static function getDriverOptions(Options $options, array $headers, string $method, $args): array
-    {
+    private static function getDriverOptions(
+        Options $options,
+        array $headers,
+        string $method,
+        null|array|string $args,
+    ): array {
         $headers['User-Agent'] = $options->getUserAgent('Guzzle');
 
         $body = $formParams = null;

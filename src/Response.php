@@ -27,23 +27,12 @@ use JBZoo\Utils\Xml;
  */
 class Response
 {
-    /** @var int */
-    protected $internalCode = 0;
-
-    /** @var string[] */
-    protected $internalHeaders = [];
-
-    /** @var null|string */
-    protected $internalBody;
-
-    /** @var null|JSON */
-    protected $parsedJsonData;
-
-    /** @var null|float */
-    protected $time;
-
-    /** @var null|Request */
-    protected $originalRequest;
+    protected int      $internalCode    = 0;
+    protected array    $internalHeaders = [];
+    protected ?string  $internalBody    = null;
+    protected ?JSON    $parsedJsonData  = null;
+    protected ?float   $time            = null;
+    protected ?Request $originalRequest = null;
 
     /**
      * @return null|array|float|int|string|string[]
@@ -69,9 +58,6 @@ class Response
         throw new Exception("Property '{$name}' not defined");
     }
 
-    /**
-     * @return $this
-     */
     public function setCode(int $code): self
     {
         $this->internalCode = $code;
@@ -84,9 +70,6 @@ class Response
         return $this->internalCode;
     }
 
-    /**
-     * @return $this
-     */
     public function setHeaders(array $headers): self
     {
         $result = [];
@@ -109,12 +92,9 @@ class Response
         return $this->internalHeaders;
     }
 
-    /**
-     * @return $this
-     */
     public function setBody(string $body): self
     {
-        $this->internalBody   = $body;
+        $this->internalBody = $body;
         $this->parsedJsonData = null;
 
         return $this;
@@ -151,11 +131,11 @@ class Response
     public function getHeader(string $headerKey, bool $ignoreCase = true): ?string
     {
         if ($ignoreCase) {
-            $headers   = [];
+            $headers = [];
             $headerKey = \strtolower($headerKey);
 
             foreach ($this->getHeaders() as $key => $value) {
-                $key           = \strtolower((string)$key);
+                $key = \strtolower((string)$key);
                 $headers[$key] = $value;
             }
         } else {
@@ -165,9 +145,6 @@ class Response
         return $headers[$headerKey] ?? null;
     }
 
-    /**
-     * @return $this
-     */
     public function setRequest(Request $request): self
     {
         $this->originalRequest = $request;
@@ -185,9 +162,6 @@ class Response
         return $this->time;
     }
 
-    /**
-     * @return $this
-     */
     public function setTime(float $time): self
     {
         $this->time = $time;
@@ -197,7 +171,7 @@ class Response
 
     public function toArray(bool $parseJson = false): array
     {
-        $request      = $this->getRequest();
+        $request = $this->getRequest();
         $requestArray = $request ? $request->toArray() : null;
 
         $body = $this->getBody();

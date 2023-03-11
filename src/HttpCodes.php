@@ -96,8 +96,7 @@ final class HttpCodes
     public const SSL_HANDSHAKE_FAILED            = 525;
     public const INVALID_SSL_CERTIFICATE         = 526;
 
-    /** @var string[] */
-    private static $phrases = [
+    private static array $phrases = [
         self::CONTINUE            => 'Continue',
         self::SWITCHING_PROTOCOLS => 'Switching Protocols',
         self::PROCESSING          => 'Processing',

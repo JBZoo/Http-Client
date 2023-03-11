@@ -29,31 +29,18 @@ final class Request
 
     public const DEFAULT_METHOD = self::GET;
 
-    /** @var string */
-    private $url = '';
+    private string            $url     = '';
+    private string|array|null $args    = null;
+    private string            $method  = self::GET;
+    private array             $headers = [];
+    private Options           $options;
 
-    /** @var null|array|string */
-    private $args;
-
-    /** @var string */
-    private $method = self::GET;
-
-    /** @var array */
-    private $headers = [];
-
-    /** @var Options */
-    private $options;
-
-    /**
-     * @param null|array|string $args
-     * @param array|Options     $options
-     */
     public function __construct(
         string $url = '',
-        $args = [],
+        array|string|null $args = [],
         string $method = self::DEFAULT_METHOD,
         array $headers = [],
-        $options = [],
+        array|Options $options = [],
     ) {
         $this->setUrl($url);
         $this->setArgs($args);
@@ -68,9 +55,6 @@ final class Request
         }
     }
 
-    /**
-     * @return $this
-     */
     public function setUrl(string $url): self
     {
         $this->url = \trim($url);
@@ -78,20 +62,13 @@ final class Request
         return $this;
     }
 
-    /**
-     * @param  null|array|string $args
-     * @return $this
-     */
-    public function setArgs($args): self
+    public function setArgs(array|string|null $args): self
     {
         $this->args = $args;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function setHeaders(array $headers): self
     {
         $this->headers = $headers;
@@ -99,9 +76,6 @@ final class Request
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function setMethod(string $method): self
     {
         $method = \strtoupper(\trim($method)) ?: self::DEFAULT_METHOD;
@@ -123,9 +97,6 @@ final class Request
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function setOptions(array $options): self
     {
         $this->options = new Options(\array_merge($this->options->toArray(), $options));
@@ -142,10 +113,7 @@ final class Request
         return $this->url;
     }
 
-    /**
-     * @return null|array|string
-     */
-    public function getArgs()
+    public function getArgs(): array|string|null
     {
         return $this->method === self::GET ? null : $this->args;
     }

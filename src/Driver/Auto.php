@@ -22,17 +22,11 @@ use JBZoo\HttpClient\Response;
 
 final class Auto extends AbstractDriver
 {
-    /**
-     * {@inheritDoc}
-     */
     public function request(Request $request): Response
     {
         return self::getClient()->request($request);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function multiRequest(array $requestList): array
     {
         return self::getClient()->multiRequest($requestList);
@@ -40,7 +34,7 @@ final class Auto extends AbstractDriver
 
     protected static function getClient(): AbstractDriver
     {
-        if (\class_exists(Client::class) && \method_exists(Client::class, 'request')) {
+        if (\class_exists(Client::class)) {
             return new Guzzle();
         }
 

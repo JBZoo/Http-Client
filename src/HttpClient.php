@@ -21,29 +21,19 @@ use JBZoo\HttpClient\Driver\AbstractDriver;
 
 final class HttpClient
 {
-    /** @var Options */
-    private $options;
-
-    /** @var null|EventManager */
-    private $eManager;
-
-    /** @var null|Request */
-    private $lastRequest;
-
-    /** @var null|Response */
-    private $lastResponse;
+    private Options       $options;
+    private ?EventManager $eManager     = null;
+    private ?Request      $lastRequest  = null;
+    private ?Response     $lastResponse = null;
 
     public function __construct(array $options = [])
     {
         $this->options = new Options($options);
     }
 
-    /**
-     * @param null|array|string $args
-     */
     public function request(
         string $url,
-        $args = null,
+        array|string $args = null,
         string $method = Request::DEFAULT_METHOD,
         array $options = [],
     ): Response {
@@ -108,9 +98,6 @@ final class HttpClient
         return $responseList;
     }
 
-    /**
-     * @return $this
-     */
     public function setEventManager(EventManager $eManager): self
     {
         $this->eManager = $eManager;
