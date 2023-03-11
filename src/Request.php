@@ -78,7 +78,8 @@ final class Request
 
     public function setMethod(string $method): self
     {
-        $method = \strtoupper(\trim($method)) ?: self::DEFAULT_METHOD;
+        $method = \strtoupper(\trim($method));
+        $method = $method === '' ? self::DEFAULT_METHOD : $method;
 
         $validMethods = [
             self::GET,

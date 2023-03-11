@@ -107,7 +107,11 @@ class Response
 
     public function getJSON(): ?JSON
     {
-        if ($this->parsedJsonData === null && $this->internalBody) {
+        if (
+            $this->parsedJsonData === null
+            && $this->internalBody !== null
+            && $this->internalBody !== ''
+        ) {
             $this->parsedJsonData = new JSON($this->internalBody);
         }
 
@@ -172,18 +176,19 @@ class Response
     public function toArray(bool $parseJson = false): array
     {
         $request      = $this->getRequest();
-        $requestArray = $request ? $request->toArray() : null;
+        $requestArray = $request?->toArray();
 
-        $body = $this->getBody();
-        if ($parseJson && $jsonBody = $this->getJSON()) {
-            $body = $jsonBody;
+        $bodyRaw  = $this->getBody();
+        $bodyJson = $this->getJSON();
+        if ($parseJson && $bodyJson !== null) {
+            $bodyRaw = $bodyJson;
         }
 
         return [
             'request'  => $requestArray,
             'response' => [
                 'code'    => $this->getCode(),
-                'body'    => $body,
+                'body'    => $bodyRaw,
                 'headers' => $this->getHeaders(),
                 'time'    => $this->getTime(),
             ],

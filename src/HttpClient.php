@@ -17,7 +17,9 @@ declare(strict_types=1);
 namespace JBZoo\HttpClient;
 
 use JBZoo\Event\EventManager;
-use JBZoo\HttpClient\Driver\AbstractDriver;
+use JBZoo\HttpClient\Driver\Auto;
+use JBZoo\HttpClient\Driver\Guzzle;
+use JBZoo\HttpClient\Driver\Rmccue;
 
 final class HttpClient
 {
@@ -107,7 +109,7 @@ final class HttpClient
 
     public function trigger(string $eventName, array $context = [], ?\Closure $callback = null): int
     {
-        if (!$this->eManager) {
+        if ($this->eManager === null) {
             return 0;
         }
 
@@ -126,17 +128,13 @@ final class HttpClient
         return $this->lastRequest;
     }
 
-    /**
-     * @throws Exception
-     */
-    private function getDriver(): AbstractDriver
+    private function getDriver(): Guzzle|Rmccue|Auto
     {
         $driverName = $this->options->getDriver();
 
         $className = __NAMESPACE__ . "\\Driver\\{$driverName}";
 
         if (\class_exists($className)) {
-            /** @var AbstractDriver $driver */
             return new $className();
         }
 

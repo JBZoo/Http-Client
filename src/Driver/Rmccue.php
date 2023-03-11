@@ -91,7 +91,7 @@ final class Rmccue extends AbstractDriver
             'follow_redirects' => $options->isAllowRedirects(),
             'redirects'        => $options->getMaxRedirects(),
             'useragent'        => $options->getUserAgent('Rmccue'),
-            'auth'             => $options->getAuth() ?: false,
+            'auth'             => $options->getAuth(),
             'cookies'          => [],
         ];
     }

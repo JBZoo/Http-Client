@@ -20,15 +20,13 @@ use JBZoo\Event\EventManager;
 
 final class Exception extends \RuntimeException
 {
-    /**
-     * @param string $message
-     * @param int    $code
-     */
-    public function __construct($message = '', $code = 0, ?\Throwable $previous = null)
+    public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
-        if (\class_exists(EventManager::class) && $eManager = EventManager::getDefault()) {
+        $eManager = EventManager::getDefault();
+
+        if (\class_exists(EventManager::class) && $eManager !== null) {
             $eManager->trigger('jbzoo.http.exception', [$this]);
         }
     }

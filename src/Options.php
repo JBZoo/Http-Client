@@ -18,9 +18,6 @@ namespace JBZoo\HttpClient;
 
 use JBZoo\Data\Data;
 
-use function JBZoo\Utils\bool;
-use function JBZoo\Utils\int;
-
 final class Options
 {
     public const DEFAULT_DRIVER          = 'Guzzle';
@@ -35,63 +32,72 @@ final class Options
 
     public function __construct(array $options = [])
     {
-        $this->options = new Data(\array_merge([
-            'auth'            => [],
-            'headers'         => [],
-            'driver'          => self::DEFAULT_DRIVER,
-            'timeout'         => self::DEFAULT_TIMEOUT,
-            'verify'          => self::DEFAULT_VERIFY,
-            'exceptions'      => self::DEFAULT_EXCEPTIONS,
-            'allow_redirects' => self::DEFAULT_ALLOW_REDIRECTS,
-            'max_redirects'   => self::DEFAULT_MAX_REDIRECTS,
-            'user_agent'      => self::DEFAULT_USER_AGENT,
-        ], $options));
+        $this->options = new Data(
+            \array_merge([
+                'auth'            => [],
+                'headers'         => [],
+                'driver'          => self::DEFAULT_DRIVER,
+                'timeout'         => self::DEFAULT_TIMEOUT,
+                'verify'          => self::DEFAULT_VERIFY,
+                'exceptions'      => self::DEFAULT_EXCEPTIONS,
+                'allow_redirects' => self::DEFAULT_ALLOW_REDIRECTS,
+                'max_redirects'   => self::DEFAULT_MAX_REDIRECTS,
+                'user_agent'      => self::DEFAULT_USER_AGENT,
+            ], $options),
+        );
     }
 
     public function getAuth(): ?array
     {
-        return (array)$this->options->get('auth', []) ?: null;
+        $auth = $this->options->getArray('auth');
+
+        return \count($auth) > 0 ? $auth : null;
     }
 
     public function getHeaders(): array
     {
-        return (array)$this->options->get('headers', []);
+        return $this->options->getArray('headers');
     }
 
     public function getDriver(): string
     {
-        return (string)$this->options->get('driver', self::DEFAULT_DRIVER, 'ucfirst');
+        return \ucfirst($this->options->getString('driver', self::DEFAULT_DRIVER));
     }
 
     public function getTimeout(): int
     {
-        return int($this->options->get('timeout', self::DEFAULT_TIMEOUT, 'int'));
+        return $this->options->getInt('timeout', self::DEFAULT_TIMEOUT);
     }
 
     public function isVerify(): bool
     {
-        return bool($this->options->get('verify', self::DEFAULT_VERIFY, 'bool'));
+        return $this->options->getBool('verify', self::DEFAULT_VERIFY);
     }
 
     public function allowException(): bool
     {
-        return bool($this->options->get('exceptions', self::DEFAULT_EXCEPTIONS, 'bool'));
+        return $this->options->getBool('exceptions', self::DEFAULT_EXCEPTIONS);
     }
 
     public function isAllowRedirects(): bool
     {
-        return bool($this->options->get('allow_redirects', self::DEFAULT_ALLOW_REDIRECTS, 'bool'));
+        return $this->options->getBool('allow_redirects', self::DEFAULT_ALLOW_REDIRECTS);
     }
 
     public function getMaxRedirects(): int
     {
-        return int($this->options->get('max_redirects', self::DEFAULT_MAX_REDIRECTS, 'int'));
+        return $this->options->getInt('max_redirects', self::DEFAULT_MAX_REDIRECTS);
     }
 
     public function getUserAgent(?string $suffix = null): string
     {
-        $userAgent = (string)$this->options->get('user_agent', self::DEFAULT_USER_AGENT);
-        if ($suffix && $userAgent === self::DEFAULT_USER_AGENT) {
+        $userAgent = $this->options->getString('user_agent', self::DEFAULT_USER_AGENT);
+
+        if (
+            $suffix !== null
+            && $suffix !== ''
+            && $userAgent === self::DEFAULT_USER_AGENT
+        ) {
             return "{$userAgent} ({$suffix})";
         }
 
