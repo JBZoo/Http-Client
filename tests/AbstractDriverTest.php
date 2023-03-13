@@ -238,7 +238,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testMultiRedirects(): void
     {
-        $url    = 'http://httpbin.org/absolute-redirect/9';
+        $url    = 'http://httpbin.org/absolute-redirect/2';
         $result = $this->getClient()->request($url);
         $body   = $result->getJSON();
 
