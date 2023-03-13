@@ -33,7 +33,7 @@ abstract class AbstractDriverTest extends PHPUnit
         parent::setUp();
 
         if (Env::bool('GITHUB_ACTIONS')) {
-            \sleep(\random_int(1, 10));
+            \sleep(\random_int(0, 2));
         }
     }
 
