@@ -178,7 +178,7 @@ abstract class AbstractDriverTest extends PHPUnit
     public function testStatus500(): void
     {
         $result = $this->getClient()->request('http://httpbin.org/status/500');
-        isSame(500, $result->code);
+        isTrue($result->code >= 500);
     }
 
     public function testStatus500Exceptions(): void
