@@ -18,6 +18,7 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
+use JBZoo\Utils\Env;
 use JBZoo\Utils\Url;
 use JBZoo\Utils\Xml;
 
@@ -26,6 +27,15 @@ abstract class AbstractDriverTest extends PHPUnit
     protected string $driver = 'Auto';
 
     protected array $methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (Env::bool('GITHUB_ACTIONS')) {
+            \sleep(\random_int(1, 10));
+        }
+    }
 
     public function testSimple(): void
     {
