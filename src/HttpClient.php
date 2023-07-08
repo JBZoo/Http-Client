@@ -33,7 +33,7 @@ final class HttpClient
 
     public function request(
         string $url,
-        array|string $args = null,
+        array|string|null $args = null,
         string $method = Request::DEFAULT_METHOD,
         array $options = [],
     ): Response {
