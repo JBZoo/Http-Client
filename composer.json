@@ -37,7 +37,7 @@
 
     "require-dev"       : {
         "jbzoo/toolbox-dev" : "7.x-dev",
-        "rmccue/requests"   : ">=2.0.5",
+        "rmccue/requests"   : ">=2.0.7",
         "guzzlehttp/guzzle" : ">=7.5.0"
     },
 

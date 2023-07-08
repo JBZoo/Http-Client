@@ -18,14 +18,13 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\HttpClient\HttpClient;
 use JBZoo\HttpClient\Options;
-use JBZoo\Utils\Env;
 use JBZoo\Utils\Url;
 use JBZoo\Utils\Xml;
 
 abstract class AbstractDriverTest extends PHPUnit
 {
-    protected string $driver      = 'Auto';
-    protected array  $methods     = [
+    protected string $driver  = 'Auto';
+    protected array  $methods = [
         'GET',
         'POST',
         'PATCH',
@@ -36,7 +35,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testSimple(): void
     {
-        $url = 'http://www.mocky.io/v2/579b43a91100006f1bcb7734';
+        $url    = 'http://www.mocky.io/v2/579b43a91100006f1bcb7734';
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
@@ -60,12 +59,12 @@ abstract class AbstractDriverTest extends PHPUnit
             skip('Curl driver does not support post payload');
         }
 
-        $uniq = \uniqid('', true);
-        $payload = \json_encode(['key' => $uniq], JSON_THROW_ON_ERROR);
+        $uniq    = \uniqid('', true);
+        $payload = \json_encode(['key' => $uniq], \JSON_THROW_ON_ERROR);
 
-        $url = "{$this->httpBinHost}/anything?key=value";
+        $url    = "{$this->httpBinHost}/anything?key=value";
         $result = $this->getClient(['exceptions' => true])->request($url, $payload, 'post');
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame($payload, $body->find('data'));
         isSame('value', $body->find('args.key'));
@@ -75,13 +74,13 @@ abstract class AbstractDriverTest extends PHPUnit
     {
         foreach ($this->methods as $method) {
             $uniq = \uniqid('', true);
-            $url = "{$this->httpBinHost}/anything?method={$method}&qwerty=remove_me";
+            $url  = "{$this->httpBinHost}/anything?method={$method}&qwerty=remove_me";
 
-            $args = ['qwerty' => $uniq];
+            $args    = ['qwerty' => $uniq];
             $message = 'Method: ' . $method;
 
             $result = $this->getClient()->request($url, $args, $method);
-            $body = $result->getJSON();
+            $body   = $result->getJSON();
 
             if (!$result->getCode()) {
                 fail($message . ' Body: ' . $result->getBody());
@@ -91,7 +90,6 @@ abstract class AbstractDriverTest extends PHPUnit
             isContain('application/json', $result->getHeader('Content-Type'), false, $message);
             isSame($method, $body->find('args.method'), $message);
             isSame($method, $body->find('method'), $message);
-
 
             if ($method === 'GET') {
                 $this->isSameUrl(Url::addArg($args, $url), $body->find('url'), $message);
@@ -109,7 +107,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testAuth(): void
     {
-        $url = "{$this->httpBinHost}/basic-auth/user/passwd";
+        $url    = "{$this->httpBinHost}/basic-auth/user/passwd";
         $result = $this->getClient([
             'auth' => ['user', 'passwd'],
         ])->request($url);
@@ -124,9 +122,9 @@ abstract class AbstractDriverTest extends PHPUnit
         $uniq = \uniqid('', true);
 
         $siteUrl = "{$this->httpBinHost}/get?key=value";
-        $args = ['qwerty' => $uniq];
-        $url = Url::addArg($args, $siteUrl);
-        $result = $this->getClient()->request($url, $args);
+        $args    = ['qwerty' => $uniq];
+        $url     = Url::addArg($args, $siteUrl);
+        $result  = $this->getClient()->request($url, $args);
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('Content-Type'));
@@ -140,7 +138,7 @@ abstract class AbstractDriverTest extends PHPUnit
     public function testUserAgent(): void
     {
         $result = $this->getClient()->request("{$this->httpBinHost}/user-agent");
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('Content-Type'));
@@ -150,11 +148,11 @@ abstract class AbstractDriverTest extends PHPUnit
     public function testPost(): void
     {
         $uniq = \uniqid('', true);
-        $url = "{$this->httpBinHost}/post?key=value";
+        $url  = "{$this->httpBinHost}/post?key=value";
         $args = ['qwerty' => $uniq];
 
         $result = $this->getClient()->request($url, $args, 'post');
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('content-type'));
@@ -218,7 +216,7 @@ abstract class AbstractDriverTest extends PHPUnit
     {
         $url = "{$this->httpBinHost}/headers";
 
-        $uniq = \uniqid('', true);
+        $uniq   = \uniqid('', true);
         $result = $this->getClient([
             'headers' => ['X-Custom-Header' => $uniq],
         ])->request($url);
@@ -241,9 +239,9 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testMultiRedirects(): void
     {
-        $url = "{$this->httpBinHost}/absolute-redirect/2";
+        $url    = "{$this->httpBinHost}/absolute-redirect/2";
         $result = $this->getClient()->request($url);
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         $this->isSameUrl("{$this->httpBinHost}/get", $body->get('url'));
@@ -273,9 +271,9 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testDelay(): void
     {
-        $url = "{$this->httpBinHost}/delay/5";
+        $url    = "{$this->httpBinHost}/delay/5";
         $result = $this->getClient()->request($url);
-        $body = $result->getJSON();
+        $body   = $result->getJSON();
 
         isSame(200, $result->code);
         $this->isSameUrl($url, $body->get('url'));
@@ -308,10 +306,10 @@ abstract class AbstractDriverTest extends PHPUnit
             '_attrs'    => [],
             '_children' => [
                 [
-                    '_node'     => 'slideshow',
-                    '_text'     => null,
-                    '_cdata'    => null,
-                    '_attrs'    => [
+                    '_node'  => 'slideshow',
+                    '_text'  => null,
+                    '_cdata' => null,
+                    '_attrs' => [
                         'title'  => 'Sample Slide Show',
                         'date'   => 'Date of publication',
                         'author' => 'Yours Truly',

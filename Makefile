@@ -28,4 +28,4 @@ test-all: ##@Project Run all project tests at once
 
 start-mock-server: ##@Project Start mock server. See: http://httpbin.org/
 	@echo "Start mock server"
-	@docker run -d -p 8087:80 kennethreitz/httpbin
+	@docker run -d --name httpbin -p 8087:80 kennethreitz/httpbin
