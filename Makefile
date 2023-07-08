@@ -24,3 +24,8 @@ update: ##@Project Install/Update all 3rd party dependencies
 test-all: ##@Project Run all project tests at once
 	@make test
 	@make codestyle
+
+
+start-mock-server: ##@Project Start mock server. See: http://httpbin.org/
+	@echo "Start mock server"
+	@docker run -d --name httpbin -p 8087:80 kennethreitz/httpbin
