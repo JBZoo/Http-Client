@@ -38,7 +38,7 @@ final class Rmccue extends AbstractDriver
         $httpResult = Requests::request(
             $request->getUri(),
             $request->getHeaders(),
-            $request->getArgs(), // @phpstan-ignore-line @phan-suppress-current-line PhanPartialTypeMismatchArgument
+            $request->getArgs(), // @phan-suppress-current-line PhanPartialTypeMismatchArgument
             $request->getMethod(),
             self::getDriverOptions($options),
         );
