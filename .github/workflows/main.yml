@@ -54,6 +54,9 @@ jobs:
       - name: Build the Project
         run: make update --no-print-directory
 
+      - name: Start HTTP Mock Server
+        run: make start-mock-server --no-print-directory
+
       - name: 🧪 PHPUnit Tests
         run: make test --no-print-directory
 

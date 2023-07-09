@@ -19,4 +19,12 @@ namespace JBZoo\PHPUnit;
 final class HttpClientPackageTest extends \JBZoo\Codestyle\PHPUnit\AbstractPackageTest
 {
     protected string $packageName = 'Http-Client';
+
+    protected static function stepBeforeTests(): ?array
+    {
+        return [
+            'name' => 'Start HTTP Mock Server',
+            'run'  => 'make start-mock-server --no-print-directory',
+        ];
+    }
 }
