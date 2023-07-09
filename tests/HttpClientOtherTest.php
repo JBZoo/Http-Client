@@ -52,12 +52,12 @@ final class HttpClientOtherTest extends PHPUnit
     public function testGetRequestDefault(): void
     {
         $client   = new HttpClient();
-        $response = $client->request("{$this->httpBinHost}/get");
+        $response = $client->request("{$this->mockServerUrl}/get");
 
         isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame("{$this->httpBinHost}/get", $request->getUri());
+        isSame("{$this->mockServerUrl}/get", $request->getUri());
         isSame(null, $request->getArgs());
         isSame('GET', $request->getMethod());
         isSame([
@@ -76,12 +76,12 @@ final class HttpClientOtherTest extends PHPUnit
     public function testGetRequestGlobalOptions(): void
     {
         $client   = new HttpClient(['user_agent' => 'Qwerty Client']);
-        $response = $client->request("{$this->httpBinHost}/get", ['param' => 'value']);
+        $response = $client->request("{$this->mockServerUrl}/get", ['param' => 'value']);
 
         isSame('Qwerty Client', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame("{$this->httpBinHost}/get?param=value", $request->getUri());
+        isSame("{$this->mockServerUrl}/get?param=value", $request->getUri());
         isSame(null, $request->getArgs());
         isSame('GET', $request->getMethod());
         isSame([
@@ -100,14 +100,14 @@ final class HttpClientOtherTest extends PHPUnit
     public function testGetRequestRequestOptions(): void
     {
         $client   = new HttpClient();
-        $response = $client->request("{$this->httpBinHost}/post", ['param' => 'value'], 'POST', [
+        $response = $client->request("{$this->mockServerUrl}/post", ['param' => 'value'], 'POST', [
             'user_agent' => 'Qwerty Client2',
         ]);
 
         isSame('Qwerty Client2', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame("{$this->httpBinHost}/post", $request->getUri());
+        isSame("{$this->mockServerUrl}/post", $request->getUri());
         isSame(['param' => 'value'], $request->getArgs());
         isSame('POST', $request->getMethod());
         isSame([
@@ -126,14 +126,14 @@ final class HttpClientOtherTest extends PHPUnit
     public function testGetRequestRequestOptionsWithPostBody(): void
     {
         $client   = new HttpClient();
-        $response = $client->request("{$this->httpBinHost}/post", 'qwerty', 'POST', [
+        $response = $client->request("{$this->mockServerUrl}/post", 'qwerty', 'POST', [
             'user_agent' => 'Qwerty Client2',
         ]);
 
         isSame('Qwerty Client2', $response->getJSON()->find('headers.User-Agent'));
 
         $request = $response->getRequest();
-        isSame("{$this->httpBinHost}/post", $request->getUri());
+        isSame("{$this->mockServerUrl}/post", $request->getUri());
         isSame('qwerty', $request->getArgs());
         isSame('POST', $request->getMethod());
         isSame([
@@ -158,7 +158,7 @@ final class HttpClientOtherTest extends PHPUnit
             'driver'     => 'Guzzle',
         ]);
 
-        $response = $client->request("{$this->httpBinHost}/get?key=val", ['param' => 'value'], 'GET', [
+        $response = $client->request("{$this->mockServerUrl}/get?key=val", ['param' => 'value'], 'GET', [
             'user_agent' => 'Custom Agent',
             'headers'    => ['X-Custom-Header' => $randomValue],
         ]);
@@ -177,7 +177,7 @@ final class HttpClientOtherTest extends PHPUnit
         isSame((string)$randomValue, $client->getLastResponse()->getJSON()->find('headers.X-Custom-Header'));
 
         $request = $client->getLastRequest();
-        isSame("{$this->httpBinHost}/get?key=val&param=value", $request->getUri());
+        isSame("{$this->mockServerUrl}/get?key=val&param=value", $request->getUri());
         isSame(null, $request->getArgs());
         isSame('GET', $request->getMethod());
         isSame([
@@ -203,7 +203,7 @@ final class HttpClientOtherTest extends PHPUnit
     {
         $client = new HttpClient();
 
-        $response = $client->request("{$this->httpBinHost}/user-agent");
+        $response = $client->request("{$this->mockServerUrl}/user-agent");
         isSame('JBZoo/Http-Client (Guzzle)', $response->getJSON()->get('user-agent'));
     }
 
@@ -214,7 +214,7 @@ final class HttpClientOtherTest extends PHPUnit
         $client = new HttpClient();
         $client->setEventManager($eManager);
 
-        $urlToTestGet = "{$this->httpBinHost}/get";
+        $urlToTestGet = "{$this->mockServerUrl}/get";
 
         $counter = 0;
         $eManager
@@ -258,7 +258,7 @@ final class HttpClientOtherTest extends PHPUnit
             });
 
         try {
-            $client->request("{$this->httpBinHost}/status/404");
+            $client->request("{$this->mockServerUrl}/status/404");
             fail();
         } catch (\Exception $exception) {
             success();
