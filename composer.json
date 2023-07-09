@@ -30,13 +30,13 @@
         "php"         : "^8.1",
         "ext-json"    : "*",
 
-        "jbzoo/data"  : "7.x-dev",
-        "jbzoo/utils" : "7.x-dev",
-        "jbzoo/event" : "7.x-dev"
+        "jbzoo/data"  : "^7.0",
+        "jbzoo/utils" : "^7.0",
+        "jbzoo/event" : "^7.0"
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev" : "7.x-dev",
+        "jbzoo/toolbox-dev" : "^7.0",
         "rmccue/requests"   : ">=2.0.7",
         "guzzlehttp/guzzle" : ">=7.5.0"
     },
