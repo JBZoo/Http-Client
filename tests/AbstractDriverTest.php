@@ -31,7 +31,8 @@ abstract class AbstractDriverTest extends PHPUnit
         'PUT',
         'DELETE', // must be the last in the list
     ];
-    protected string $httpBinHost = 'http://0.0.0.0:8087';
+
+    protected string $mockServerUrl = 'http://0.0.0.0:8087';
 
     public function testSimple(): void
     {
@@ -46,7 +47,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testBinaryData(): void
     {
-        $result = $this->getClient()->request("{$this->httpBinHost}/image/png");
+        $result = $this->getClient()->request("{$this->mockServerUrl}/image/png");
 
         isSame(200, $result->getCode());
         isSame('image/png', $result->getHeader('CONTENT-TYPE'));
@@ -62,7 +63,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $uniq    = \uniqid('', true);
         $payload = \json_encode(['key' => $uniq], \JSON_THROW_ON_ERROR);
 
-        $url    = "{$this->httpBinHost}/anything?key=value";
+        $url    = "{$this->mockServerUrl}/anything?key=value";
         $result = $this->getClient(['exceptions' => true])->request($url, $payload, 'post');
         $body   = $result->getJSON();
 
@@ -74,7 +75,7 @@ abstract class AbstractDriverTest extends PHPUnit
     {
         foreach ($this->methods as $method) {
             $uniq = \uniqid('', true);
-            $url  = "{$this->httpBinHost}/anything?method={$method}&qwerty=remove_me";
+            $url  = "{$this->mockServerUrl}/anything?method={$method}&qwerty=remove_me";
 
             $args    = ['qwerty' => $uniq];
             $message = 'Method: ' . $method;
@@ -107,7 +108,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testAuth(): void
     {
-        $url    = "{$this->httpBinHost}/basic-auth/user/passwd";
+        $url    = "{$this->mockServerUrl}/basic-auth/user/passwd";
         $result = $this->getClient([
             'auth' => ['user', 'passwd'],
         ])->request($url);
@@ -121,7 +122,7 @@ abstract class AbstractDriverTest extends PHPUnit
     {
         $uniq = \uniqid('', true);
 
-        $siteUrl = "{$this->httpBinHost}/get?key=value";
+        $siteUrl = "{$this->mockServerUrl}/get?key=value";
         $args    = ['qwerty' => $uniq];
         $url     = Url::addArg($args, $siteUrl);
         $result  = $this->getClient()->request($url, $args);
@@ -137,7 +138,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testUserAgent(): void
     {
-        $result = $this->getClient()->request("{$this->httpBinHost}/user-agent");
+        $result = $this->getClient()->request("{$this->mockServerUrl}/user-agent");
         $body   = $result->getJSON();
 
         isSame(200, $result->code);
@@ -148,7 +149,7 @@ abstract class AbstractDriverTest extends PHPUnit
     public function testPost(): void
     {
         $uniq = \uniqid('', true);
-        $url  = "{$this->httpBinHost}/post?key=value";
+        $url  = "{$this->mockServerUrl}/post?key=value";
         $args = ['qwerty' => $uniq];
 
         $result = $this->getClient()->request($url, $args, 'post');
@@ -156,14 +157,14 @@ abstract class AbstractDriverTest extends PHPUnit
 
         isSame(200, $result->code);
         isContain('application/json', $result->getHeader('content-type'));
-        $this->isSameUrl("{$this->httpBinHost}/post?key=value", $body->find('url'));
+        $this->isSameUrl("{$this->mockServerUrl}/post?key=value", $body->find('url'));
         isSame($uniq, $body->find('form.qwerty'));
         isSame('value', $body->find('args.key'));
     }
 
     public function testStatus404(): void
     {
-        $result = $this->getClient()->request("{$this->httpBinHost}/status/404");
+        $result = $this->getClient()->request("{$this->mockServerUrl}/status/404");
 
         isSame(404, $result->code);
     }
@@ -183,12 +184,12 @@ abstract class AbstractDriverTest extends PHPUnit
 
         $this->getClient([
             'exceptions' => true,
-        ])->request("{$this->httpBinHost}/status/404");
+        ])->request("{$this->mockServerUrl}/status/404");
     }
 
     public function testStatus500(): void
     {
-        $result = $this->getClient()->request("{$this->httpBinHost}/status/500");
+        $result = $this->getClient()->request("{$this->mockServerUrl}/status/500");
         isTrue($result->code >= 500);
     }
 
@@ -198,12 +199,12 @@ abstract class AbstractDriverTest extends PHPUnit
 
         $this->getClient([
             'exceptions' => true,
-        ])->request("{$this->httpBinHost}/status/500");
+        ])->request("{$this->mockServerUrl}/status/500");
     }
 
     public function testRedirect(): void
     {
-        $url = Url::addArg(['url' => 'https://google.com'], "{$this->httpBinHost}/redirect-to");
+        $url = Url::addArg(['url' => 'https://google.com'], "{$this->mockServerUrl}/redirect-to");
 
         $result = $this->getClient()->request($url);
 
@@ -214,7 +215,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testHeaders(): void
     {
-        $url = "{$this->httpBinHost}/headers";
+        $url = "{$this->mockServerUrl}/headers";
 
         $uniq   = \uniqid('', true);
         $result = $this->getClient([
@@ -229,7 +230,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testGzip(): void
     {
-        $url = "{$this->httpBinHost}/gzip";
+        $url = "{$this->mockServerUrl}/gzip";
 
         $result = $this->getClient()->request($url);
 
@@ -239,12 +240,12 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testMultiRedirects(): void
     {
-        $url    = "{$this->httpBinHost}/absolute-redirect/2";
+        $url    = "{$this->mockServerUrl}/absolute-redirect/2";
         $result = $this->getClient()->request($url);
         $body   = $result->getJSON();
 
         isSame(200, $result->code);
-        $this->isSameUrl("{$this->httpBinHost}/get", $body->get('url'));
+        $this->isSameUrl("{$this->mockServerUrl}/get", $body->get('url'));
     }
 
     public function testDelayError(): void
@@ -254,7 +255,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $this->getClient([
             'timeout'    => 2,
             'exceptions' => true,
-        ])->request("{$this->httpBinHost}/delay/5");
+        ])->request("{$this->mockServerUrl}/delay/5");
     }
 
     public function testDelayErrorExceptionsDisable(): void
@@ -262,7 +263,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $result = $this->getClient([
             'timeout'    => 2,
             'exceptions' => false,
-        ])->request("{$this->httpBinHost}/delay/5");
+        ])->request("{$this->mockServerUrl}/delay/5");
 
         isSame(0, $result->getCode());
         isSame([], $result->getHeaders());
@@ -271,7 +272,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testDelay(): void
     {
-        $url    = "{$this->httpBinHost}/delay/5";
+        $url    = "{$this->mockServerUrl}/delay/5";
         $result = $this->getClient()->request($url);
         $body   = $result->getJSON();
 
@@ -294,7 +295,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testXmlAsResponse(): void
     {
-        $result = $this->getClient()->request("{$this->httpBinHost}/xml");
+        $result = $this->getClient()->request("{$this->mockServerUrl}/xml");
 
         isSame(200, $result->code);
         isSame('application/xml', $result->getHeader('Content-Type'));
@@ -443,10 +444,10 @@ abstract class AbstractDriverTest extends PHPUnit
     public function testMultiRequest(): void
     {
         $responseList = $this->getClient(['user_agent' => 'Qwerty Agent v123'])->multiRequest([
-            'request_0' => ["{$this->httpBinHost}/anything?qwerty=123456"],
-            'request_1' => ["{$this->httpBinHost}/anything", ['key' => 'value']],
+            'request_0' => ["{$this->mockServerUrl}/anything?qwerty=123456"],
+            'request_1' => ["{$this->mockServerUrl}/anything", ['key' => 'value']],
             'request_2' => [
-                "{$this->httpBinHost}/anything",
+                "{$this->mockServerUrl}/anything",
                 ['key' => 'value'],
                 'post',
                 [
@@ -460,36 +461,36 @@ abstract class AbstractDriverTest extends PHPUnit
 
         // Response - 0
         $request0 = $responseList['request_0']->getRequest();
-        isSame("{$this->httpBinHost}/anything?qwerty=123456", $request0->getUri());
+        isSame("{$this->mockServerUrl}/anything?qwerty=123456", $request0->getUri());
         isSame('Qwerty Agent v123', $request0->getOptions()->getUserAgent());
         isSame('GET', $request0->getMethod());
 
         $jsonBody0 = $responseList['request_0']->getJSON();
-        isSame("{$this->httpBinHost}/anything?qwerty=123456", $jsonBody0->find('url'));
+        isSame("{$this->mockServerUrl}/anything?qwerty=123456", $jsonBody0->find('url'));
         isSame('GET', $jsonBody0->find('method'));
         isSame('123456', $jsonBody0->find('args.qwerty'));
 
         // Response - 1
         $request1 = $responseList['request_1']->getRequest();
-        isSame("{$this->httpBinHost}/anything?key=value", $request1->getUri());
+        isSame("{$this->mockServerUrl}/anything?key=value", $request1->getUri());
         isSame('Qwerty Agent v123', $request1->getOptions()->getUserAgent());
         isSame('GET', $request1->getMethod());
 
         $jsonBody1 = $responseList['request_1']->getJSON();
-        isSame("{$this->httpBinHost}/anything?key=value", $jsonBody1->find('url'));
+        isSame("{$this->mockServerUrl}/anything?key=value", $jsonBody1->find('url'));
         isSame('GET', $jsonBody1->find('method'));
         isSame('value', $jsonBody1->find('args.key'));
 
         // Response - 2
         $request2 = $responseList['request_2']->getRequest();
-        isSame("{$this->httpBinHost}/anything", $request2->getUri());
+        isSame("{$this->mockServerUrl}/anything", $request2->getUri());
         isSame('Qwerty Agent v456', $request2->getOptions()->getUserAgent());
         isSame('123', $request2->getHeaders()['x-custom-header']);
         isSame('POST', $request2->getMethod());
 
         $jsonBody2 = $responseList['request_2']->getJSON();
         isSame('123', $jsonBody2->find('headers.X-Custom-Header'));
-        isSame("{$this->httpBinHost}/anything", $jsonBody2->find('url'));
+        isSame("{$this->mockServerUrl}/anything", $jsonBody2->find('url'));
         isSame('POST', $jsonBody2->find('method'));
         isSame('value', $jsonBody2->find('form.key'));
     }
