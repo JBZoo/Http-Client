@@ -174,7 +174,7 @@ abstract class AbstractDriverTest extends PHPUnit
         $result = $this->getClient()->request('https://run.mocky.io/v3/54bdf866-5da9-4e15-aeb4-4d51ee870dc4');
 
         isSame(404, $result->code);
-        is("{\"error\": \"mock_not_found\"}", $result->getBody());
+        is('{"error": "mock_not_found"}', $result->getBody());
         isSame('123', $result->getHeader('x-custom_header'));
     }
 
