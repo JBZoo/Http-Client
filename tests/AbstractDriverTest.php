@@ -171,10 +171,10 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testStatus404Body(): void
     {
-        $result = $this->getClient()->request('https://run.mocky.io/v3/2c514476-819d-4208-a9fd-b9cc2155ecb4');
+        $result = $this->getClient()->request('https://run.mocky.io/v3/54bdf866-5da9-4e15-aeb4-4d51ee870dc4');
 
         isSame(404, $result->code);
-        is("{\n  \"error\": \"mock_not_found\"\n}", $result->getBody());
+        is("{\"error\": \"mock_not_found\"}", $result->getBody());
         isSame('123', $result->getHeader('x-custom_header'));
     }
 
