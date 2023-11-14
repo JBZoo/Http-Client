@@ -36,7 +36,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testSimple(): void
     {
-        $url    = 'http://www.mocky.io/v2/579b43a91100006f1bcb7734';
+        $url    = 'https://run.mocky.io/v3/92e40ef8-6328-4b8e-af3c-9a26c72abd3c';
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
