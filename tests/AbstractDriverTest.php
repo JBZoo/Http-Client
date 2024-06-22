@@ -36,7 +36,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testSimple(): void
     {
-        $url    = 'https://run.mocky.io/v3/92e40ef8-6328-4b8e-af3c-9a26c72abd3c';
+        $url    = 'https://run.mocky.io/v3/965f7c10-5a16-4e13-a9b9-2bcfd30a25f2';
         $result = $this->getClient()->request($url);
 
         isSame(200, $result->code);
@@ -171,7 +171,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testStatus404Body(): void
     {
-        $result = $this->getClient()->request('https://run.mocky.io/v3/54bdf866-5da9-4e15-aeb4-4d51ee870dc4');
+        $result = $this->getClient()->request('https://run.mocky.io/v3/037dd813-edd9-4cc9-bab9-9244c0b5c5ec');
 
         isSame(404, $result->code);
         is('{"error": "mock_not_found"}', $result->getBody());
