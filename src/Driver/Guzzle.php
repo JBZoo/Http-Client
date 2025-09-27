@@ -87,7 +87,7 @@ final class Guzzle extends AbstractDriver
         Options $options,
         array $headers,
         string $method,
-        null|array|string $args,
+        array|string|null $args,
     ): array {
         $headers['User-Agent'] = $options->getUserAgent('Guzzle');
 

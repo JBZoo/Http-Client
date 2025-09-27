@@ -20,6 +20,9 @@ use GuzzleHttp\Client;
 use JBZoo\HttpClient\Request;
 use JBZoo\HttpClient\Response;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 final class Auto extends AbstractDriver
 {
     public function request(Request $request): Response

@@ -1,6 +1,6 @@
 # JBZoo / Http-Client
 
-[![CI](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml?query=branch%3Amaster)    [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Http-Client/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![Psalm Level](https://shepherd.dev/github/JBZoo/Http-Client/level.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![CodeFactor](https://www.codefactor.io/repository/github/jbzoo/http-client/badge)](https://www.codefactor.io/repository/github/jbzoo/http-client/issues)    
+[![CI](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml?query=branch%3Amaster)    [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Http-Client/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![Psalm Level](https://shepherd.dev/github/JBZoo/Http-Client/level.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![CodeFactor](https://www.codefactor.io/repository/github/jbzoo/http-client/badge)](https://www.codefactor.io/repository/github/jbzoo/http-client/issues)
 [![Stable Version](https://poser.pugx.org/jbzoo/http-client/version)](https://packagist.org/packages/jbzoo/http-client/)    [![Total Downloads](https://poser.pugx.org/jbzoo/http-client/downloads)](https://packagist.org/packages/jbzoo/http-client/stats)    [![Dependents](https://poser.pugx.org/jbzoo/http-client/dependents)](https://packagist.org/packages/jbzoo/http-client/dependents?order_by=downloads)    [![GitHub License](https://img.shields.io/github/license/jbzoo/http-client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
 
 
@@ -78,11 +78,11 @@ $httpClient = new HttpClient();
 
 $results = $httpClient->multiRequest(array(
     'request_0' => 'http://mockbin.org/request',
-    
+
     'request_1' => ['http://mockbin.org/request', [
         'args' => ['key' => 'value']
     ]],
-    
+
     'request_2' => ['http://mockbin.org/request', [
         'method' => 'post',
         'args'   => ['key' => 'value'],
@@ -93,13 +93,13 @@ $results = $httpClient->multiRequest(array(
         'verify'          => false,
         'exceptions'      => false,
         'allow_redirects' => true,
-        'max_redirects'   => 10, 
+        'max_redirects'   => 10,
         'user_agent'      => 'JBZoo/Http-Client v1.x-dev'
     ]]
 ]);
 
-$results['request_0']->getBody(); 
-$results['request_1']->getBody(); 
+$results['request_0']->getBody();
+$results['request_1']->getBody();
 $results['request_2']->getBody();
 ```
 
