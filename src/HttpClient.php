@@ -33,7 +33,7 @@ final class HttpClient
 
     public function request(
         string $url,
-        null|array|string $args = null,
+        array|string|null $args = null,
         string $method = Request::DEFAULT_METHOD,
         array $options = [],
     ): Response {
@@ -105,6 +105,9 @@ final class HttpClient
         return $this;
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedReturnValue
+     */
     public function trigger(string $eventName, array $context = [], ?\Closure $callback = null): int
     {
         if ($this->eManager !== null) {

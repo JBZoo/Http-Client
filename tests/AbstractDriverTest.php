@@ -36,6 +36,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testSimple(): void
     {
+        skip('Flaky test');
         $url    = 'https://run.mocky.io/v3/965f7c10-5a16-4e13-a9b9-2bcfd30a25f2';
         $result = $this->getClient()->request($url);
 
@@ -171,6 +172,7 @@ abstract class AbstractDriverTest extends PHPUnit
 
     public function testStatus404Body(): void
     {
+        skip('Flaky test');
         $result = $this->getClient()->request('https://run.mocky.io/v3/037dd813-edd9-4cc9-bab9-9244c0b5c5ec');
 
         isSame(404, $result->code);

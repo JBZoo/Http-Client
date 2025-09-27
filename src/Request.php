@@ -30,14 +30,14 @@ final class Request
     public const DEFAULT_METHOD = self::GET;
 
     private string            $url     = '';
-    private null|array|string $args    = null;
+    private array|string|null $args    = null;
     private string            $method  = self::GET;
     private array             $headers = [];
     private Options           $options;
 
     public function __construct(
         string $url = '',
-        null|array|string $args = [],
+        array|string|null $args = [],
         string $method = self::DEFAULT_METHOD,
         array $headers = [],
         array|Options $options = [],
@@ -62,7 +62,7 @@ final class Request
         return $this;
     }
 
-    public function setArgs(null|array|string $args): self
+    public function setArgs(array|string|null $args): self
     {
         $this->args = $args;
 
@@ -114,7 +114,7 @@ final class Request
         return $this->url;
     }
 
-    public function getArgs(): null|array|string
+    public function getArgs(): array|string|null
     {
         return $this->method === self::GET ? null : $this->args;
     }

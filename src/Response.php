@@ -25,17 +25,18 @@ use JBZoo\Utils\Xml;
  * @property string     $body
  * @property null|float $time
  */
-class Response
+final class Response
 {
-    protected int      $internalCode    = 0;
-    protected array    $internalHeaders = [];
-    protected ?string  $internalBody    = null;
-    protected ?JSON    $parsedJsonData  = null;
-    protected ?float   $time            = null;
-    protected ?Request $originalRequest = null;
+    private int      $internalCode    = 0;
+    private array    $internalHeaders = [];
+    private ?string  $internalBody    = null;
+    private ?JSON    $parsedJsonData  = null;
+    private ?float   $time            = null;
+    private ?Request $originalRequest = null;
 
     /**
      * @return null|array|float|int|string|string[]
+     * @psalm-suppress PossiblyUnusedReturnValue
      */
     public function __get(string $name)
     {
@@ -124,8 +125,8 @@ class Response
             $xmlAsArray = Xml::dom2Array(Xml::createFromString($this->internalBody));
         } catch (\Exception $exception) {
             throw new Exception(
-                "Can't parse xml document from HTTP response. " .
-                "Details: {$exception->getMessage()}",
+                "Can't parse xml document from HTTP response. "
+                . "Details: {$exception->getMessage()}",
             );
         }
 
