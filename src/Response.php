@@ -36,7 +36,6 @@ final class Response
 
     /**
      * @return null|array|float|int|string|string[]
-     * @psalm-suppress PossiblyUnusedReturnValue
      */
     public function __get(string $name)
     {

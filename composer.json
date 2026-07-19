@@ -27,16 +27,16 @@
     "prefer-stable"     : true,
 
     "require"           : {
-        "php"         : "^8.2",
+        "php"         : "^8.3",
         "ext-json"    : "*",
 
-        "jbzoo/data"  : "^7.2",
-        "jbzoo/utils" : "^7.3",
-        "jbzoo/event" : "^7.0.2"
+        "jbzoo/data"  : "^8.0",
+        "jbzoo/utils" : "^8.0",
+        "jbzoo/event" : "^8.0"
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev" : "^7.2",
+        "jbzoo/toolbox-dev" : "^8.0",
         "rmccue/requests"   : ">=2.0.15",
         "guzzlehttp/guzzle" : ">=7.10.0"
     },
@@ -62,7 +62,7 @@
 
     "extra"             : {
         "branch-alias" : {
-            "dev-master" : "7.x-dev"
+            "dev-master" : "8.x-dev"
         }
     }
 }

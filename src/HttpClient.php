@@ -105,9 +105,6 @@ final class HttpClient
         return $this;
     }
 
-    /**
-     * @psalm-suppress PossiblyUnusedReturnValue
-     */
     public function trigger(string $eventName, array $context = [], ?\Closure $callback = null): int
     {
         if ($this->eManager !== null) {
