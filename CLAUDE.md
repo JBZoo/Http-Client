@@ -69,7 +69,7 @@ src/
 ```
 
 ## Dependencies
-- **Required**: PHP 8.2+, jbzoo/data, jbzoo/utils, jbzoo/event
+- **Required**: PHP 8.3+, jbzoo/data, jbzoo/utils, jbzoo/event
 - **Suggested**: guzzlehttp/guzzle (recommended) or rmccue/requests (fallback)
 - **Dev Dependencies**: jbzoo/toolbox-dev for code quality tools
 
