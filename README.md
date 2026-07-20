@@ -1,7 +1,15 @@
 # JBZoo / Http-Client
 
-[![CI](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml?query=branch%3Amaster)    [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Http-Client/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![Psalm Level](https://shepherd.dev/github/JBZoo/Http-Client/level.svg)](https://shepherd.dev/github/JBZoo/Http-Client)    [![CodeFactor](https://www.codefactor.io/repository/github/jbzoo/http-client/badge)](https://www.codefactor.io/repository/github/jbzoo/http-client/issues)
-[![Stable Version](https://poser.pugx.org/jbzoo/http-client/version)](https://packagist.org/packages/jbzoo/http-client/)    [![Total Downloads](https://poser.pugx.org/jbzoo/http-client/downloads)](https://packagist.org/packages/jbzoo/http-client/stats)    [![Dependents](https://poser.pugx.org/jbzoo/http-client/dependents)](https://packagist.org/packages/jbzoo/http-client/dependents?order_by=downloads)    [![GitHub License](https://img.shields.io/github/license/jbzoo/http-client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
+[![CI](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/JBZoo/Http-Client/actions/workflows/main.yml?query=branch%3Amaster)
+[![Coverage Status](https://coveralls.io/repos/github/JBZoo/Http-Client/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Http-Client?branch=master)
+[![Psalm Coverage](https://shepherd.dev/github/JBZoo/Http-Client/coverage.svg)](https://shepherd.dev/github/JBZoo/Http-Client)
+[![Psalm Level](https://shepherd.dev/github/JBZoo/Http-Client/level.svg)](https://shepherd.dev/github/JBZoo/Http-Client)
+[![CodeFactor](https://www.codefactor.io/repository/github/jbzoo/http-client/badge)](https://www.codefactor.io/repository/github/jbzoo/http-client/issues)
+
+[![Stable Version](https://poser.pugx.org/jbzoo/http-client/version)](https://packagist.org/packages/jbzoo/http-client/)
+[![Total Downloads](https://poser.pugx.org/jbzoo/http-client/downloads)](https://packagist.org/packages/jbzoo/http-client/stats)
+[![Dependents](https://poser.pugx.org/jbzoo/http-client/dependents)](https://packagist.org/packages/jbzoo/http-client/dependents?order_by=downloads)
+[![GitHub License](https://img.shields.io/github/license/jbzoo/http-client)](https://github.com/JBZoo/Http-Client/blob/master/LICENSE)
 
 A simple, intuitive PHP HTTP client that provides a clean wrapper around popular HTTP libraries like Guzzle and rmccue/requests. Make HTTP requests with minimal code and maximum flexibility.
 
@@ -13,12 +21,12 @@ A simple, intuitive PHP HTTP client that provides a clean wrapper around popular
 - **Flexible Response Handling**: Access response data via methods, properties, or array syntax
 - **JSON Support**: Built-in JSON parsing with JBZoo/Data integration
 - **Event System**: Hook into request lifecycle with event listeners
-- **PHP 8.2+ Ready**: Modern PHP with strict typing and best practices
+- **PHP 8.3+ Ready**: Modern PHP with strict typing and best practices
 
 
 ## Requirements
 
-- PHP 8.2 or higher
+- PHP 8.3 or higher
 - ext-json
 
 ## Installation
